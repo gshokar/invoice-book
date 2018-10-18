@@ -1,0 +1,83 @@
+/*
+Copyright (c) 2017 Absolute Apogee Technologies Ltd. All rights reserved.
+
+=============================================================================
+Revision History:
+Date         Author          Detail
+-----------  --------------  ------------------------------------------------
+2017-Jan-24  GShokar         Created
+=============================================================================
+*/
+/* 
+    Created on : Jan 24, 2017, 8:33:12 PM
+    Author     : GShokar
+*/
+
+body,html,.row-offcanvas {
+    height:100%;
+}
+
+body {
+    padding-top: 50px;
+}
+
+#sidebar {
+    width: inherit;
+    min-width: 250px;
+    max-width: 250px;
+    background-color:#f5f5f5;
+    float: left;
+    height:100%;
+    position:relative;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+#sidebar-collapsed {
+    width: inherit;
+    min-width: 60px;
+    max-width: 60px;
+    background-color:#f5f5f5;
+    float: left;
+    height:100%;
+    position:relative;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+#mainView {
+    height:100%;
+}
+
+#centerView{
+    height:100%;
+    overflow:auto;
+    padding: 1px;
+}
+/*
+ * off Canvas sidebar
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 768px) {
+    .row-offcanvas {
+        position: relative;
+        -webkit-transition: all 0.25s ease-out;
+        -moz-transition: all 0.25s ease-out;
+        transition: all 0.25s ease-out;
+        width:calc(100% + 220px);
+    }
+
+    .row-offcanvas-left
+    {
+        left: -250px;
+    }
+
+    .row-offcanvas-left.active {
+        left: 0;
+    }
+
+    .sidebar-offcanvas {
+        position: absolute;
+        top: 0;
+    }
+}

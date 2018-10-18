@@ -1,0 +1,140 @@
+/*
+Copyright (c) 2016 Absolute Apogee Technologies Ltd. All rights reserved.
+
+=============================================================================
+Revision History:
+Date         Author          Detail
+-----------  --------------  ------------------------------------------------
+2016-Nov-26  GShokar         Created
+=============================================================================
+*/
+/* 
+    Created on : Nov 26, 2016, 10:48:53 AM
+    Author     : GShokar
+*/
+
+h1 {
+    color: #369;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 250%;
+}
+/*
+body {
+    margin: 2em;
+    overflow-x: hidden;
+}
+*/
+
+.vertical-center{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.login-panel{
+    margin: auto;
+    width: 400px;
+    padding-top: 200px;
+}
+
+/* Add a dark background color with a little bit see-through */ 
+.toolbar {
+    margin-bottom: 0;
+    background-color: #CCC;
+    border: 0;
+    font-size: 11px !important;
+    letter-spacing: 4px;
+    opacity:0.9;
+    height: 40px;
+    color: black;
+}
+
+.toolbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #CCC;
+}
+
+.toolbar li {
+    float: left;
+}
+
+.toolbar li a {
+    display: block;
+    color: black !important;
+    text-align: center;
+    padding: 12px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.toolbar li a:hover {
+    background-color: #111 !important;
+    color: white !important;
+}
+
+.toolbar li div {
+    display: block;
+    color: black !important;
+    text-align: center;
+    padding: 12px 16px;
+    text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.toolbar li div:hover {
+    background-color: #111 !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+.toolbarItemDisabled{
+    pointer-events: none;
+    color: #333;
+    text-shadow: 0px 1px 0px rgba(255,255,255,.5);
+}
+
+.result-table {
+    width:100%;
+}
+.result-table, .result-table-th, .result-table-td {
+    border: 1px solid lightgray;
+    border-collapse: collapse;
+}
+.result-table-th, .result-table-td {
+    padding: 5px;
+    text-align: left;
+}
+table#resultList tr:nth-child(even) {
+    background-color: #eee;
+}
+table#resultList tr:nth-child(odd) {
+   background-color:#fff;
+}
+
+table#resultList tr:active {
+   background-color:#4a90e2;
+   color: white;
+}
+
+table#resultList tr.selected {
+   background-color:#4a90e2;
+   color: white;
+}
+
+.result-table-th {
+    background-color: gray;
+    color: white;
+}
+
+.result-table-tr {
+    height: 30px;
+}
+
+.form-table-tr {
+    height: 38px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}

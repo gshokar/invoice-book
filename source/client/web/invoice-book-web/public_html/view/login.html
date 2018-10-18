@@ -1,0 +1,39 @@
+<div class="login-panel">
+        <div class="card">
+            <div class="card-header">Login</div>
+            <div class="card-body">
+                <div id="loginError" class="row" hidden="true">
+                    <div class="col-sm-12">
+                        <label id="errorMessage" class="alert alert-danger"></label>
+                    </div>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="loginId">Login ID</label>
+                                <input type="text" class="form-control" id="loginId" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <br />
+                                <button type="submit" class="btn btn-default" id="loginSubmit">Login</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-sm-12">
+                                <label id="loginProcess" hidden="true" >Please wait login in process ...</label>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
