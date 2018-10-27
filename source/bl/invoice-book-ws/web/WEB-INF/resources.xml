@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <Resource id="invoicebook-ds" type="javax.sql.DataSource">#Fri Oct 26 13:30:14 EDT 2018
+        password=IB20@)aatl
+        jdbcDriver=com.mysql.jdbc.Driver
+        jdbcUrl=jdbc\:mysql\://db.aatl.local\:3306/invoicebook_dev?zeroDateTimeBehavior\=convertToNull
+        userName=ibweb
+    </Resource>
+</resources>
