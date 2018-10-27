@@ -36,5 +36,10 @@ $aatl_ib.utils = {
         var today = new Date();
 
         return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    },
+    
+    isFunction: function(obj){
+          
+        return obj !== undefined && obj !== null && typeof obj === "function";
     }
 };
