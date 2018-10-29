@@ -35,7 +35,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(ca.aatl.app.invoicebook.bl.rest.CORSFilter.class);
-        resources.add(ca.aatl.app.invoicebook.bl.rest.service.AuthenticationService.class);
+        resources.add(ca.aatl.app.invoicebook.bl.rest.service.RouteService.class);
     }
     
 }

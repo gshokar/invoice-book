@@ -8,13 +8,13 @@
  * 2018-Oct-27  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.bl.rest;
+package ca.aatl.app.invoicebook.bl.rest.request;
 
 /**
  *
  * @author GShokar
  */
-public class JsonRequest {
+public class ServiceRequest {
     
     private String sessionId;
 
@@ -76,14 +76,14 @@ public class JsonRequest {
         this.dataType = dataType;
     }
 
-    private JsonRequestTypeEnum requestType;
+    private ServiceRequestTypeEnum requestType;
 
     /**
      * Get the value of requestType
      *
      * @return the value of requestType
      */
-    public JsonRequestTypeEnum getRequestType() {
+    public ServiceRequestTypeEnum getRequestType() {
         return requestType;
     }
 
@@ -92,7 +92,7 @@ public class JsonRequest {
      *
      * @param requestType new value of requestType
      */
-    public void setRequestType(JsonRequestTypeEnum requestType) {
+    public void setRequestType(ServiceRequestTypeEnum requestType) {
         this.requestType = requestType;
     }
 

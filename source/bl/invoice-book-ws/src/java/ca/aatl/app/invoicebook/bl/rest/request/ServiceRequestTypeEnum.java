@@ -8,12 +8,12 @@
  * 2018-Oct-27  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.bl.rest;
+package ca.aatl.app.invoicebook.bl.rest.request;
 
 /**
  *
  * @author GShokar
  */
-public enum JsonRequestTypeEnum {
+public enum ServiceRequestTypeEnum {
     Authenticate
 }
