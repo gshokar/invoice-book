@@ -1,7 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2018 Absolute Apogee Technologies Ltd. All rights reserved.
+ * 
+ * =============================================================================
+ * Revision History:
+ * Date         Author          Detail
+ * -----------  --------------  ------------------------------------------------
+ * 2018-Oct-28  GShokar         Created
+ * =============================================================================
  */
 package ca.aatl.app.invoicebook.bl.rest.service;
 
@@ -9,6 +14,7 @@ import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponseStatusEnum;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -47,16 +53,30 @@ public class RouteService {
         try {
             serviceRequest = gson.fromJson(request, ServiceRequest.class);
             
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException ex) {
             serviceResponse.setStatus(ServiceResponseStatusEnum.Failed);
             serviceResponse.setMessage("Error: Invalid Service Request - " + ex.getMessage() );
             //TODO: log the error message
         }
         
+        ResponseService service = getService();
         
-        //serviceResponse.setStatus(ServiceResponseStatusEnum.Success);
+        service.processRequest();
         
         return gson.toJson(serviceResponse);
     
+    }
+    
+    private ResponseService getService() {
+        
+        ResponseService service = null;
+        
+        switch(serviceRequest.getRequestType()){
+            case Authenticate:
+                service = new AuthenticationService(serviceRequest, serviceResponse);
+                break;
+        }
+        
+        return service;
     }
 }

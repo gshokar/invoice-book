@@ -1,8 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2018 Absolute Apogee Technologies Ltd. All rights reserved.
+ * 
+ * =============================================================================
+ * Revision History:
+ * Date         Author          Detail
+ * -----------  --------------  ------------------------------------------------
+ * 2018-Oct-28  GShokar         Created
+ * =============================================================================
  */
+
 package ca.aatl.app.invoicebook.bl.rest.service;
 
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
@@ -29,6 +35,8 @@ public abstract class ResponseService {
         this.request = request;
         this.response = response;
     }
+
+    public abstract void processRequest();
     
     
 }

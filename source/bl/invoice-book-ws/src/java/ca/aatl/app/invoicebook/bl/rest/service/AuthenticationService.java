@@ -15,6 +15,7 @@ import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponseStatusEnum;
 import ca.aatl.app.invoicebook.dto.AuthenticateDto;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /**
  *
@@ -27,22 +28,30 @@ public class AuthenticationService extends ResponseService{
         super(request, response);
     }
     
-    public void authenticate() {
+    private void authenticate(String loginId, String password) {
 
+        //getResponse().setStatus(ServiceResponseStatusEnum.Success);        
+        
+        //return gson.toJson(serviceResponse);
+    }
+
+    @Override
+    public void processRequest() {
+        
         Gson gson = new Gson();
         
+        AuthenticateDto dto = null;
+                
         try {
 
-            AuthenticateDto dto = gson.fromJson(getRequest().getData(), AuthenticateDto.class);
+            dto = gson.fromJson(getRequest().getData(), AuthenticateDto.class);
             
-        } catch (Exception ex) {
+        } catch (JsonSyntaxException ex) {
             getResponse().setStatus(ServiceResponseStatusEnum.Failed);
             getResponse().setMessage("Error: Invalid authentication data - " + ex.getMessage() );
             //TODO: log the error message
         }
         
-        getResponse().setStatus(ServiceResponseStatusEnum.Success);
-        
-        //return gson.toJson(serviceResponse);
+        authenticate(dto.getLoginId(), dto.getPassword());
     }
 }
