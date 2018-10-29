@@ -13,38 +13,34 @@
 "use strict";
 
 $aatl_ib.AuthService = {
-    
+
     user: null,
-    
-    isLoggedIn : function(){
-                    return user !== undefined && user !== null;
-                },
-                
-    login: function(loginId, password, callback){
-        
-                if(!$aatl_ib.utils.isFunction(callback)){
-                    console.log("$aatl_ib.service.AuthService.login(callback) - callback is not function");
-                    return;
-                }
-                
-                let postCall = {
-                                 url: "http://localhost:8080/invoicebookservice/service/authenticate",
-                                 method: "POST",
-                                 crossDomain: true,
-                                 contentType: "application/json; charset=utf-8", 
-                                 dataType: "json",
-                                 data: JSON.stringify({ loginId: loginId, password: password })
-                                };
-                
-                let request = $.ajax(postCall);
-                        
-                request.done(function(res){
-                            callback();
-                        });
-                
-                request.fail(function(jqXHR, textStatus){
-                            callback("Login request failed: " + textStatus);
-                        });
-                
-           }
+
+    isLoggedIn: function () {
+        return this.user !== undefined && this.user !== null;
+    },
+
+    getSessionId: function () {
+        return this.user.sessionId;
+    },
+
+    login: function (loginId, password, callback) {
+
+        if (!$aatl_ib.utils.isFunction(callback)) {
+            console.log("$aatl_ib.service.AuthService.login(callback) - callback is not function");
+            return;
+        }
+
+        $aatl_ib.ApiService.post("Authenticate",
+                {loginId: loginId, password: password},
+                function (res, err) {
+                    if (err) {
+                        callback("Login request failed: " + err);
+
+                    } else {
+                        callback();
+                    }
+                });
+
+    }
 };
