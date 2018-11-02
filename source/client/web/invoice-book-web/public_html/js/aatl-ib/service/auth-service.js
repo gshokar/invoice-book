@@ -31,14 +31,19 @@ $aatl_ib.AuthService = {
             return;
         }
 
-        $aatl_ib.ApiService.post("Authenticate",
+        $aatl_ib.ApiService.post("authenticate",
                 {loginId: loginId, password: password},
                 function (res, err) {
                     if (err) {
                         callback("Login request failed: " + err);
 
-                    } else {
+                    } else if(res.status === "failure"){
+                        callback(res.message);
+                    } else if(res.status === "success"){
+                        $aatl_ib.AuthService.user = JSON.parse(res.data);
                         callback();
+                        } else {
+                            callback("Invalid response from server")
                     }
                 });
 
