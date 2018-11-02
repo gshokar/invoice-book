@@ -5,18 +5,21 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Oct-27  GShokar         Created
+ * 2018-Oct-31  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.bl.rest.request;
+package ca.aatl.app.invoicebook.data.jpa.entity;
 
-import com.google.gson.annotations.SerializedName;
+import ca.aatl.app.invoicebook.data.jpa.entity.base.BaseEntity_;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
 
 /**
  *
  * @author GShokar
  */
-public enum ServiceRequestTypeEnum {
-    @SerializedName("authenticate")
-    Authenticate
+
+@StaticMetamodel(AppSession.class)
+public class AppSession_ extends BaseEntity_{
+    public static volatile SingularAttribute<AppSession, AppUser> user;
 }

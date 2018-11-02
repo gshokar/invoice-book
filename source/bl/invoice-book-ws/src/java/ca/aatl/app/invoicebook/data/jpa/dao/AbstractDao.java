@@ -5,18 +5,25 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Oct-27  GShokar         Created
+ * 2018-Oct-30  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.bl.rest.request;
+package ca.aatl.app.invoicebook.data.jpa.dao;
 
-import com.google.gson.annotations.SerializedName;
+import javax.persistence.EntityManager;
 
 /**
  *
  * @author GShokar
  */
-public enum ServiceRequestTypeEnum {
-    @SerializedName("authenticate")
-    Authenticate
+public abstract class AbstractDao {
+            
+    public final static String  PU_INVOICEBOOK = "invoicebook-pu";
+    
+    protected final EntityManager em;
+
+    public AbstractDao(EntityManager em) {
+        this.em = em;
+    }
+           
 }

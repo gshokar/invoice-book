@@ -10,10 +10,15 @@
  */
 package ca.aatl.app.invoicebook.bl.rest.response;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  *
  * @author gshokar
  */
 public enum ServiceResponseStatusEnum {
-    Success, Failed
+    @SerializedName("success")
+    Success, 
+    @SerializedName("failure")
+    Failure
 }

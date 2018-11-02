@@ -18,25 +18,15 @@ import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
  *
  * @author gshokar
  */
-public abstract class ResponseService {
- 
-    private final ServiceRequest request;
-    private final ServiceResponse response;
+public abstract class ResponseService extends RestService {
 
-    public ServiceRequest getRequest() {
-        return request;
-    }
-
-    public ServiceResponse getResponse() {
-        return response;
+    public ResponseService() {
     }
 
     public ResponseService(ServiceRequest request, ServiceResponse response) {
-        this.request = request;
-        this.response = response;
+        super(request, response);
     }
-
-    public abstract void processRequest();
     
+    public abstract void processRequest();
     
 }

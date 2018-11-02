@@ -10,48 +10,87 @@
  */
 package ca.aatl.app.invoicebook.bl.rest.service;
 
+import ca.aatl.app.invoicebook.bl.ejb.SessionService;
+import ca.aatl.app.invoicebook.bl.ejb.UserService;
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
-import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponseStatusEnum;
+import ca.aatl.app.invoicebook.data.jpa.entity.AppUser;
 import ca.aatl.app.invoicebook.dto.AuthenticateDto;
-import com.google.gson.Gson;
+import ca.aatl.app.invoicebook.dto.SessionDto;
+import ca.aatl.app.invoicebook.exception.DataValidationException;
 import com.google.gson.JsonSyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author GShokar
  */
 
-public class AuthenticationService extends ResponseService{
+@Stateless
+@LocalBean
+public class AuthenticationService extends ResponseService {
+
+    @EJB
+    private UserService userService;
+    
+    @EJB
+    private SessionService sessionService;
+
+    public AuthenticationService() {
+    }
 
     public AuthenticationService(ServiceRequest request, ServiceResponse response) {
         super(request, response);
     }
-    
-    private void authenticate(String loginId, String password) {
 
-        //getResponse().setStatus(ServiceResponseStatusEnum.Success);        
-        
-        //return gson.toJson(serviceResponse);
+    private void authenticate(String loginId, String password) throws Exception {
+
+        try{
+            
+            AppUser user = userService.validateLogin(loginId, password);
+            
+            SessionDto sessionDto = new SessionDto();
+                        
+            sessionDto.setUserName(user.getName());
+            sessionDto.setSessionId(sessionService.getSessionId(user, getRequest().getClientIP()));
+            
+            setResponseSuccess(sessionDto);
+            
+        }catch(DataValidationException ex){
+            
+            setResponseError(ex.getValidationMessage());
+            
+        }
     }
 
     @Override
     public void processRequest() {
-        
-        Gson gson = new Gson();
-        
+
         AuthenticateDto dto = null;
-                
+
         try {
 
-            dto = gson.fromJson(getRequest().getData(), AuthenticateDto.class);
-            
+            dto = getGson().fromJson(getRequest().getData(), AuthenticateDto.class);
+
         } catch (JsonSyntaxException ex) {
-            getResponse().setStatus(ServiceResponseStatusEnum.Failed);
-            getResponse().setMessage("Error: Invalid authentication data - " + ex.getMessage() );
-            //TODO: log the error message
+            
+            setResponseError("Invalid authentication data - " + ex.getMessage());
+            
+            Logger.getLogger(AuthenticationService.class.getName()).log(Level.INFO, "Invalid AuthenticationDto Json", ex);
         }
-        
-        authenticate(dto.getLoginId(), dto.getPassword());
+
+        try {
+
+            authenticate(dto.getLoginId(), dto.getPassword());
+
+        } catch (Exception ex) {
+            setResponseError("System error authentication failed - " + ex.getMessage());
+            
+            Logger.getLogger(AuthenticationService.class.getName()).log(Level.SEVERE, "System error authentication failed", ex);
+        }
     }
 }

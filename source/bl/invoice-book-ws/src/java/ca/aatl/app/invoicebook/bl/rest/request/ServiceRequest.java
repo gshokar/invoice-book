@@ -96,4 +96,24 @@ public class ServiceRequest {
         this.requestType = requestType;
     }
 
+    private String clientIP;
+
+    /**
+     * Get the value of clientIP
+     *
+     * @return the value of clientIP
+     */
+    public String getClientIP() {
+        return clientIP;
+    }
+
+    /**
+     * Set the value of clientIP
+     *
+     * @param clientIP new value of clientIP
+     */
+    public void setClientIP(String clientIP) {
+        this.clientIP = clientIP;
+    }
+
 }

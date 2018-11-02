@@ -5,18 +5,16 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Oct-27  GShokar         Created
+ * 2018-Nov-01  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.bl.rest.request;
-
-import com.google.gson.annotations.SerializedName;
+package ca.aatl.app.invoicebook.bl.rest.service;
 
 /**
  *
  * @author GShokar
  */
-public enum ServiceRequestTypeEnum {
-    @SerializedName("authenticate")
-    Authenticate
+class ResponseServiceRegistry {
+
+    //private static Map<ServiceRequestTye
 }

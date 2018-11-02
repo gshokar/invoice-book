@@ -5,18 +5,20 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Oct-27  GShokar         Created
+ * 2018-Nov-01  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.bl.rest.request;
+package ca.aatl.app.invoicebook.util;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.UUID;
 
 /**
  *
  * @author GShokar
  */
-public enum ServiceRequestTypeEnum {
-    @SerializedName("authenticate")
-    Authenticate
+public final class AppUtils {
+    
+    public static String getGUID(){
+        return UUID.randomUUID().toString().toUpperCase();
+    }
 }
