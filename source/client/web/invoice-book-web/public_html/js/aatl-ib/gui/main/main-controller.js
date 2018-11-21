@@ -14,14 +14,12 @@ $aatl_ib.MainController = (function () {
 
     function MainController() {
 
-        let sidebarComponent = new $aatl_ib.SidebarComponent('sidebar');
-        let centerComponent = new $aatl_ib.gui.ContainerComponent('centerView');
-
+        let component = new $aatl_ib.MainComponent();
         let panelComponents = [];
 
-        function actionItemClicked(actionItem){
-            
-            switch(actionItem.typeCode){
+        function actionItemClicked(actionItem) {
+
+            switch (actionItem.typeCode) {
                 case $aatl_ib.model.gui.ActionItemTypeCode.Home:
                     openHome(actionItem);
                     break;
@@ -30,21 +28,12 @@ $aatl_ib.MainController = (function () {
                     break;
             }
         }
-        
+
         this.init = function () {
 
-            sidebarComponent.bindEvents();
-            //centerComponent.bindEvents();
-            
-            let homeItem = new $aatl_ib.model.gui.ActionItem("Home", $aatl_ib.utils.createUniqueId(), $aatl_ib.model.gui.ActionItemTypeCode.Home);
-            let clientSearchItem = new $aatl_ib.model.gui.ActionItem("Client Search", $aatl_ib.utils.createUniqueId(), $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch);
-            
-            sidebarComponent.getActionGroupComponent().addActionItem(homeItem);
-            sidebarComponent.getActionGroupComponent().addActionItem(clientSearchItem);
-
-            sidebarComponent.getActionGroupComponent().registerOnClickActionItem(actionItemClicked);
-            
-            sidebarComponent.getActionGroupComponent().selectActionItem(homeItem);
+            component.init();
+            component.bindEvents(actionItemClicked);
+            component.setHomeView();
         };
 
         this.openPanel = function (panel) {
@@ -61,17 +50,17 @@ $aatl_ib.MainController = (function () {
                 switch (panel.typeCode) {
                     case $aatl_ib.model.gui.PanelTypeCode.Home:
                         openHome(panel);
-                         break;
+                        break;
                     case $aatl_ib.model.gui.PanelTypeCode.ClientSearch:
                         openClientSearch(panel);
-                         break;
+                        break;
                 }
 
                 controlId = panel.controlId;
             }
 
             if (controlId) {
-                centerComponent.showView(controlId);
+                component.showView(controlId);
             }
         };
 
@@ -80,33 +69,58 @@ $aatl_ib.MainController = (function () {
                 return panel.title === title;
             });
         }
-        
-        function addPanel(panel){
-            panel.controlId = $aatl_ib.utils.createUniqueId();
-            panelComponents.push(panel);
 
-            centerComponent.addView(panel.controlId);
+        function createPanel(panelTypeCode, actionItem) {
+
+            let panel = new $aatl_ib.model.gui.Panel(panelTypeCode, $aatl_ib.utils.createUniqueId());
+
+            if (actionItem !== undefined && actionItem !== null) {
+
+                panel.setLinkedActionItem(actionItem);
+                actionItem.linkedPanel = panel;
+            }
+
+            component.addView(panel.controlId);
+
+            return panel;
         }
-        
+
         function openHome(actionItem) {
 
-            if(actionItem.viewComponent === undefined){
-                actionItem.viewComponent = new $aatl_ib.gui.Component($aatl_ib.utils.createUniqueId(), centerComponent.getComponent);
-                centerComponent.addView(actionItem.viewComponent.getId());
-                actionItem.viewComponent.getControl().load($aatl_ib.viewController.getViewUrl("home"));
+            let panel = null;
+
+            if (actionItem.linkedPanel === undefined) {
+
+                panel = createPanel($aatl_ib.model.gui.PanelTypeCode.Home, actionItem);
+
+                panel.controller = new $aatl_ib.gui.HomeController(panel.controlId, component.getCenterView());
+
+                panel.controller.init();
+
+            } else {
+                panel = actionItem.linkedPanel;
             }
-            
-            centerComponent.showView(actionItem.viewComponent.getId());
+
+            component.showView(panel.controlId);
         }
 
         function openClientSearch(actionItem) {
-            
-            if(actionItem.viewComponent === undefined){
-                actionItem.viewComponent = new $aatl_ib.gui.Component($aatl_ib.utils.createUniqueId(), centerComponent.getComponent);
-                centerComponent.addView(actionItem.viewComponent.getId());
-                actionItem.viewComponent.getControl().load($aatl_ib.viewController.getViewUrl("clientSearch"));
+
+            let panel = null;
+
+            if (actionItem.linkedPanel === undefined) {
+
+                panel = createPanel($aatl_ib.model.gui.PanelTypeCode.ClientSearch, actionItem);
+
+                panel.controller = new $aatl_ib.gui.ClientSearchController(panel.controlId, component.getCenterView());
+
+                panel.controller.init();
+
+            } else {
+                panel = actionItem.linkedPanel;
             }
-            centerComponent.showView(actionItem.viewComponent.getId());
+
+            component.showView(panel.controlId);
         }
     }
 

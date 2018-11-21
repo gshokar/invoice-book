@@ -5,36 +5,34 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Jan-26  GShokar         Created
+ * 2018-Nov-11  GShokar         Created
  * =============================================================================
  */
 
-
 "use strict";
 
-$aatl_ib.model.gui.ActionItem = (function(){
+$aatl_ib.model.gui.PanelToolbarItem = (function(){
     
-    function ActionItem(text, id, typeCode, data){
+    function PanelToolbarItem(text, id, typeCode, data){
         this.text = text;
         this.id = id;
         this.typeCode = typeCode;
         this.controlId = "#" + id;
         this.viewComponent = undefined;
         this.data = data;
-        this.linkedPanel = undefined;
     }
     
-    return ActionItem;
+    return PanelToolbarItem;
     
 }());
 
-$aatl_ib.model.gui.ActionItemTypeCode = {
-
-    Home: "home",
-    ClientSearch: "clientSearch",
+$aatl_ib.model.gui.PanelToolbarItemTypeCode = {
+   
     Save:'save',
     Open: 'open',
     Close: 'close',
     New: 'new',
-    Reset: 'reset'
+    Reset: 'reset',
+    Find: 'find',
+    Clear: 'clear'
 };

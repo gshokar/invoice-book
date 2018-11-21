@@ -9,6 +9,7 @@
  * =============================================================================
  */
 
+"use strict";
 
 $aatl_ib.gui.HomeComponent = (function () {
 
@@ -33,6 +34,10 @@ $aatl_ib.gui.HomeComponent = (function () {
         
         this.bindEvents = function () {
 
+        };
+        
+        this.init = function(){
+            this.getComponent().load($aatl_ib.viewController.getViewUrl("home"));
         };
     }
 

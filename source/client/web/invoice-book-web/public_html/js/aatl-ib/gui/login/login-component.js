@@ -56,7 +56,7 @@ $aatl_ib.LoginComponent = (function () {
             return loginId && loginId.length > 0 && password && password.length > 0;
         };
 
-        errorControl = new $aatl_ib.ErrorComponent('#loginError', undefined);
+        var errorControl = new $aatl_ib.ErrorComponent('#loginError', undefined);
 
         formControlValueChanged = function () {
             buttonLoginSubmit().prop('disabled', !isFormValid());

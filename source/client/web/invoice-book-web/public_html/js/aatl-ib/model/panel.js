@@ -14,12 +14,20 @@
 
 $aatl_ib.model.gui.Panel = (function(){
     
-    function Panel(typeCode, title, controlId){
+    function Panel(typeCode, controlId){
         this.typeCode = typeCode;
-        this.title = title;
+        this.title = undefined;
         this.controlId = controlId;
         this.controller = undefined;
+        this.linkedActionItem = undefined;
+
+        
+        this.setLinkedActionItem = function(actionItem){
+            this.linkedActionItem = actionItem;
+        };
+    
     }
+
     
     return Panel;
     
@@ -28,5 +36,6 @@ $aatl_ib.model.gui.Panel = (function(){
 $aatl_ib.model.gui.PanelTypeCode = {
   
     Home: "home",
-    ClientSearch: "clientSearch"
+    ClientSearch: "clientSearch",
+    Client: "client"
 };
