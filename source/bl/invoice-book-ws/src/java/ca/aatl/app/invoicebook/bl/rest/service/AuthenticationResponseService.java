@@ -32,7 +32,7 @@ import javax.ejb.Stateless;
 
 @Stateless
 @LocalBean
-public class AuthenticationService extends ResponseService {
+public class AuthenticationResponseService extends ResponseService {
 
     @EJB
     private UserService userService;
@@ -40,10 +40,10 @@ public class AuthenticationService extends ResponseService {
     @EJB
     private SessionService sessionService;
 
-    public AuthenticationService() {
+    public AuthenticationResponseService() {
     }
 
-    public AuthenticationService(ServiceRequest request, ServiceResponse response) {
+    public AuthenticationResponseService(ServiceRequest request, ServiceResponse response) {
         super(request, response);
     }
 
@@ -70,27 +70,26 @@ public class AuthenticationService extends ResponseService {
     @Override
     public void processRequest() {
 
-        AuthenticateDto dto = null;
-
         try {
 
-            dto = getGson().fromJson(getRequest().getData(), AuthenticateDto.class);
-
-        } catch (JsonSyntaxException ex) {
-            
-            setResponseError("Invalid authentication data - " + ex.getMessage());
-            
-            Logger.getLogger(AuthenticationService.class.getName()).log(Level.INFO, "Invalid AuthenticationDto Json", ex);
-        }
-
-        try {
+            AuthenticateDto dto = getDto(AuthenticateDto.class);
 
             authenticate(dto.getLoginId(), dto.getPassword());
 
+        }catch (JsonSyntaxException ex) {
+            
+            setResponseError("Invalid authentication data - " + ex.getMessage());
+            
+            Logger.getLogger(AuthenticationResponseService.class.getName()).log(Level.INFO, "Invalid AuthenticationDto Json", ex);
         } catch (Exception ex) {
             setResponseError("System error authentication failed - " + ex.getMessage());
             
-            Logger.getLogger(AuthenticationService.class.getName()).log(Level.SEVERE, "System error authentication failed", ex);
+            Logger.getLogger(AuthenticationResponseService.class.getName()).log(Level.SEVERE, "System error authentication failed", ex);
         }
+    }
+
+    public boolean isValidRequest() {
+        
+        return sessionService.isExists(getRequest().getSessionId());
     }
 }

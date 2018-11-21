@@ -29,15 +29,8 @@ import javax.persistence.criteria.Root;
 
 @Stateless
 @LocalBean
-public class UserDao extends AbstractFacadeDao<AppUser>{
+public class UserDao extends AbstractDao<AppUser>{
 
-//    public UserDao(EntityManager em) {
-//        super(em);
-//    }
-
-//    @PersistenceContext(unitName = AbstractDao.PU_INVOICEBOOK)
-//    private EntityManager em;
-            
     public AppUser find(String loginId) {
         AppUser entity = null;
 
@@ -84,10 +77,4 @@ public class UserDao extends AbstractFacadeDao<AppUser>{
     public void beforeUpdate(AppUser entity) throws Exception {
         
     }
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-    
 }

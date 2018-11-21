@@ -56,14 +56,14 @@ public class ServiceRequest {
         this.data = data;
     }
 
-    private String dataType;
+    private ServiceRequestDataTypeEnum dataType;
 
     /**
      * Get the value of dataType
      *
      * @return the value of dataType
      */
-    public String getDataType() {
+    public ServiceRequestDataTypeEnum getDataType() {
         return dataType;
     }
 
@@ -72,7 +72,7 @@ public class ServiceRequest {
      *
      * @param dataType new value of dataType
      */
-    public void setDataType(String dataType) {
+    public void setDataType(ServiceRequestDataTypeEnum dataType) {
         this.dataType = dataType;
     }
 

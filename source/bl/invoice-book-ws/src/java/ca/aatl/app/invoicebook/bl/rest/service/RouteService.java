@@ -16,7 +16,7 @@ import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import com.google.gson.JsonSyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -37,6 +37,9 @@ public class RouteService extends RestService {
     @Context
     private HttpServletRequest httpRequest;
 
+    @EJB
+    private AuthenticationResponseService authService;
+    
     public RouteService() {
 
     }
@@ -55,39 +58,65 @@ public class RouteService extends RestService {
             getRequest().setClientIP(httpRequest.getRemoteAddr());
             
         } catch (JsonSyntaxException ex) {
-            setResponseError("Error: Invalid Service Request - " + ex.getMessage());
+            setResponseError("Error: Invalid Request - " + ex.getMessage());
             Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        processRequest();
+        
+        return getGson().toJson(getResponse());
+
+    }
+
+    private void processRequest() {
         try {
-
-            ResponseService service = getService();
-
-            service.processRequest();
+            
+            if( isRequestAuthenticated()){
+                
+                ResponseService service = getService();
+            
+                service.setRequest(getRequest());
+                service.setResponse(getResponse());
+        
+                service.processRequest();
+                
+            }else{
+                setResponseError("Invalid Request - session expired, please login.");
+            }
 
         } catch (Exception ex) {
             setResponseError("Error: Failed to process the request - " + ex.getMessage());
             Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return getGson().toJson(getResponse());
-
     }
 
-    private ResponseService getService() throws NamingException {
+    private ResponseService getService() throws Exception {
 
         ResponseService service = null;
 
         if (getRequest().getRequestType() == ServiceRequestTypeEnum.Authenticate) {
             
-            service = (ResponseService) InitialContext.doLookup("java:module/AuthenticationService");
+            service = authService;
             
-        } else {
+        } else  {
             
+            service = ServiceHandler.getInstance().getService(getRequest().getDataType());
         }
-        
-        service.setRequest(getRequest());
-        service.setResponse(getResponse());
 
         return service;
+    }
+
+    private boolean isRequestAuthenticated() throws NamingException {
+        
+        boolean authenticated = true;
+        
+        if (getRequest().getRequestType() != ServiceRequestTypeEnum.Authenticate) {
+            
+            authService.setRequest(getRequest());
+            
+            authenticated = authService.isValidRequest();
+        }        
+        
+        return authenticated;
     }
 }

@@ -5,7 +5,7 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Oct-27  GShokar         Created
+ * 2018-Nov-08  GShokar         Created
  * =============================================================================
  */
 package ca.aatl.app.invoicebook.bl.rest.request;
@@ -16,11 +16,10 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author GShokar
  */
-public enum ServiceRequestTypeEnum {
-    @SerializedName("authenticate")
-    Authenticate,
-    @SerializedName("update")
-    Update,
-    @SerializedName("get")
-    Get
+public enum ServiceRequestDataTypeEnum {
+    
+    @SerializedName("client")
+    Client,
+    @SerializedName("clientSearch")
+    ClientSearch,
 }

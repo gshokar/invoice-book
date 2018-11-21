@@ -1,16 +1,18 @@
 /*
- * Copyright (c) 2018 Absolute Apogee Technologies Ltd. All rights reserved.
+ * Copyright (c) 2014 Absolute Apogee Technologies Ltd. All rights reserved.
  * 
  * =============================================================================
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Oct-31  GShokar         Created
+ * 2014-Aug-07  GShokar         Created
  * =============================================================================
  */
+
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
-import ca.aatl.app.invoicebook.data.jpa.entity.base.BaseEntity_;
+import ca.aatl.app.invoicebook.data.jpa.entity.base.ProvinceEntity_;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -18,9 +20,9 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author GShokar
  */
-
-@StaticMetamodel(AppSession.class)
-public class AppSession_ extends BaseEntity_{
-    public static volatile SingularAttribute<AppSession, String> id;
-    public static volatile SingularAttribute<AppSession, AppUser> user;
+@StaticMetamodel(Province.class)
+public class Province_ extends ProvinceEntity_{
+    public static volatile ListAttribute<Province, Address> addresses;
+    public static volatile SingularAttribute<Province, Country> country;
+    
 }

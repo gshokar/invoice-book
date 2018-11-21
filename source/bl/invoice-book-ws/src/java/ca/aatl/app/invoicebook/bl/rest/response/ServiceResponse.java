@@ -11,6 +11,8 @@
 
 package ca.aatl.app.invoicebook.bl.rest.response;
 
+import java.util.List;
+
 /**
  *
  * @author gshokar
@@ -95,6 +97,26 @@ public class ServiceResponse {
      */
     public void setData(String data) {
         this.data = data;
+    }
+
+    private List<String> warningMessages;
+
+    /**
+     * Get the value of warningMessages
+     *
+     * @return the value of warningMessages
+     */
+    public List<String> getWarningMessages() {
+        return warningMessages;
+    }
+
+    /**
+     * Set the value of warningMessages
+     *
+     * @param warningMessages new value of warningMessages
+     */
+    public void setWarningMessages(List<String> warningMessages) {
+        this.warningMessages = warningMessages;
     }
 
 }

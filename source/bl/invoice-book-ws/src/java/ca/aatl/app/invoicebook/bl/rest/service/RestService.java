@@ -14,6 +14,8 @@ import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponseStatusEnum;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import java.util.ArrayList;
 
 /**
  *
@@ -69,5 +71,17 @@ public class RestService {
         this.response = response;
     }
 
+    protected <T extends Object> T getDto(Class<T> dtoClass)throws JsonSyntaxException{
+        
+        return getGson().fromJson(request.getData(), dtoClass);
+    }
     
+    protected void addWarningMessage(String message) {
+        
+        if(response.getWarningMessages() == null){
+            response.setWarningMessages(new ArrayList<>());
+        }
+        
+        response.getWarningMessages().add(message);
+    }
 }

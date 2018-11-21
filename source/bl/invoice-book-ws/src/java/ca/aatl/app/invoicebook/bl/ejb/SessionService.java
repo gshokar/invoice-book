@@ -69,4 +69,12 @@ public class SessionService {
         
         return session;
     }
+
+    public boolean isExists(String sessionId) {
+         return find(sessionId) != null;
+    }
+    
+    public AppSession find(String sessionId) {
+        return sessionDao.find(sessionId);
+    }
 }
