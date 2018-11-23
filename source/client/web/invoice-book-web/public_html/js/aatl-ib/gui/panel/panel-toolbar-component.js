@@ -12,23 +12,20 @@
 
 $aatl_ib.gui.PanelToolbarComponent = (function () {
 
-    function PanelToolbarComponent(componentId) {
+    function PanelToolbarComponent(componentId, parentComponent) {
 
-        let id = componentId;
-        let controlId = "#" + id;
+        let component = new $aatl_ib.gui.Component(componentId, parentComponent);
         
-        let toolbarComponentId = id + "-toolbar";
+        let toolbarComponentId = component.getId() + "-toolbar";
         let toolbarControlId = "#" + toolbarComponentId;
         let toolbarItems = [];
         let onClickAction = null;
 
         let toolbarView = '<div class="collapse navbar-collapse"><ul class="navbar-nav mr-auto" id="' + toolbarComponentId + '"></ul></div>';
 
-        //let actionGroupComponent = new $aatl_ib.gui.ActionGroupComponent("list-documents", getComponent);
-
         function getComponent() {
-            return $(controlId);
-        }
+            return component.getControl();
+        };
 
         function getToolbarComponent() {
             return getComponent().find(toolbarControlId);

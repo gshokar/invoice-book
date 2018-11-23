@@ -10,7 +10,7 @@
  */
 
 
-$aatl_ib.MainComponent = (function () {
+$aatl_ib.gui.MainComponent = (function () {
 
     function MainComponent() {
 
@@ -22,8 +22,8 @@ $aatl_ib.MainComponent = (function () {
 
             sidebarComponent.bindEvents();
                         
-            homeItem = new $aatl_ib.model.gui.ActionItem("Home", $aatl_ib.utils.createUniqueId(), $aatl_ib.model.gui.ActionItemTypeCode.Home);
-            let clientSearchItem = new $aatl_ib.model.gui.ActionItem("Client Search", $aatl_ib.utils.createUniqueId(), $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch);
+            homeItem = new $aatl_ib.model.gui.ActionItem("Home", $aatl_ib.model.gui.ActionItemTypeCode.Home, $aatl_ib.utils.createUniqueId());
+            let clientSearchItem = new $aatl_ib.model.gui.ActionItem("Client Search", $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch, $aatl_ib.utils.createUniqueId());
             
             sidebarComponent.getActionGroupComponent().addActionItem(homeItem);
             sidebarComponent.getActionGroupComponent().addActionItem(clientSearchItem);
@@ -48,6 +48,15 @@ $aatl_ib.MainComponent = (function () {
         
         this.setHomeView = function(){
             sidebarComponent.getActionGroupComponent().selectActionItem(homeItem);
+        };
+        
+        this.addActionItem = function(actionItem){
+            sidebarComponent.getActionGroupComponent().addActionItem(actionItem);
+            sidebarComponent.getActionGroupComponent().selectActionItem(actionItem);
+        };
+        
+        this.selectActionItem = function(actionItem){
+            sidebarComponent.getActionGroupComponent().selectActionItem(actionItem);
         };
     }
 

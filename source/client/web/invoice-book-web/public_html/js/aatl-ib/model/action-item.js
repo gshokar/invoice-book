@@ -12,9 +12,9 @@
 
 "use strict";
 
-$aatl_ib.model.gui.ActionItem = (function(){
-    
-    function ActionItem(text, id, typeCode, data){
+$aatl_ib.model.gui.ActionItem = (function () {
+
+    function ActionItem(text, typeCode, id, data) {
         this.text = text;
         this.id = id;
         this.typeCode = typeCode;
@@ -22,17 +22,23 @@ $aatl_ib.model.gui.ActionItem = (function(){
         this.viewComponent = undefined;
         this.data = data;
         this.linkedPanel = undefined;
+
+        this.setId = function (id) {
+            this.id = id;
+            this.controlId = "#" + id;
+        };
     }
-    
+
     return ActionItem;
-    
+
 }());
 
 $aatl_ib.model.gui.ActionItemTypeCode = {
 
     Home: "home",
     ClientSearch: "clientSearch",
-    Save:'save',
+    ClientDetail: 'clientDetail',
+    Save: 'save',
     Open: 'open',
     Close: 'close',
     New: 'new',

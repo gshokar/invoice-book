@@ -14,21 +14,57 @@ $aatl_ib.MainController = (function () {
 
     function MainController() {
 
-        let component = new $aatl_ib.MainComponent();
-        let panelComponents = [];
+        let component = new $aatl_ib.gui.MainComponent();
+        let panels = [];
 
         function actionItemClicked(actionItem) {
+            let existingPanel = findPanel(actionItem.text);
 
-            switch (actionItem.typeCode) {
-                case $aatl_ib.model.gui.ActionItemTypeCode.Home:
-                    openHome(actionItem);
-                    break;
-                case $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch:
-                    openClientSearch(actionItem);
-                    break;
+            if (existingPanel) {
+
+                component.showView(existingPanel.controlId);
+
+            } else {
+
+                openActionItemPanel(actionItem);
             }
         }
+        
+        function openActionItemPanel(actionItem) {
 
+            if (actionItem.id === undefined) {
+
+                addActionItem(actionItem);
+
+            } else {
+
+                let controlId = undefined;
+
+                switch (actionItem.typeCode) {
+                    case $aatl_ib.model.gui.ActionItemTypeCode.Home:
+                        controlId = openHome(actionItem);
+                        break;
+                    case $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch:
+                        controlId = openClientSearch(actionItem);
+                        break;
+                    case $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail:
+                        controlId = openClientDetail(actionItem);
+                        break;
+                }
+
+                if (controlId) {
+                    component.showView(controlId);
+                }
+            }
+        }
+        ;
+
+        function addActionItem(actionItem) {
+            actionItem.setId($aatl_ib.utils.createUniqueId());
+
+            component.addActionItem(actionItem);
+        }
+        
         this.init = function () {
 
             component.init();
@@ -36,36 +72,22 @@ $aatl_ib.MainController = (function () {
             component.setHomeView();
         };
 
-        this.openPanel = function (panel) {
-
-            // TODO: invalid Panel error code
-
-            let existingPanel = findPanel(panel);
-            let controlId = undefined;
+        this.openPanel = function (actionItem) {
+            let existingPanel = findPanel(actionItem.text);
 
             if (existingPanel) {
-                controlId = existingPanel.controlId;
+
+                component.selectActionItem(existingPanel.linkedActionItem);
+
             } else {
 
-                switch (panel.typeCode) {
-                    case $aatl_ib.model.gui.PanelTypeCode.Home:
-                        openHome(panel);
-                        break;
-                    case $aatl_ib.model.gui.PanelTypeCode.ClientSearch:
-                        openClientSearch(panel);
-                        break;
-                }
-
-                controlId = panel.controlId;
+                openActionItemPanel(actionItem);
             }
 
-            if (controlId) {
-                component.showView(controlId);
-            }
         };
 
         function findPanel(title) {
-            return panelComponents.find(function (panel) {
+            return panels.find(function (panel) {
                 return panel.title === title;
             });
         }
@@ -78,49 +100,46 @@ $aatl_ib.MainController = (function () {
 
                 panel.setLinkedActionItem(actionItem);
                 actionItem.linkedPanel = panel;
+                panel.title = actionItem.text;
             }
 
             component.addView(panel.controlId);
+            panels.push(panel);
 
             return panel;
         }
 
         function openHome(actionItem) {
 
-            let panel = null;
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.Home, actionItem);
 
-            if (actionItem.linkedPanel === undefined) {
+            panel.controller = new $aatl_ib.gui.HomeController(panel.controlId, component.getCenterView());
 
-                panel = createPanel($aatl_ib.model.gui.PanelTypeCode.Home, actionItem);
+            panel.controller.init();
 
-                panel.controller = new $aatl_ib.gui.HomeController(panel.controlId, component.getCenterView());
-
-                panel.controller.init();
-
-            } else {
-                panel = actionItem.linkedPanel;
-            }
-
-            component.showView(panel.controlId);
+            return panel.controlId;
         }
 
         function openClientSearch(actionItem) {
 
-            let panel = null;
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.ClientSearch, actionItem);
 
-            if (actionItem.linkedPanel === undefined) {
+            panel.controller = new $aatl_ib.gui.ClientSearchController(panel.controlId, component.getCenterView());
 
-                panel = createPanel($aatl_ib.model.gui.PanelTypeCode.ClientSearch, actionItem);
+            panel.controller.init();
 
-                panel.controller = new $aatl_ib.gui.ClientSearchController(panel.controlId, component.getCenterView());
+            return panel.controlId;
+        }
 
-                panel.controller.init();
+        function openClientDetail(actionItem) {
 
-            } else {
-                panel = actionItem.linkedPanel;
-            }
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.ClientDetail, actionItem);
 
-            component.showView(panel.controlId);
+            panel.controller = new $aatl_ib.gui.ClientDetailController(panel.controlId, component.getCenterView());
+
+            panel.controller.init();
+
+            return panel.controlId;
         }
     }
 

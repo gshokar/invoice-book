@@ -24,12 +24,17 @@ $aatl_ib.gui.ClientSearchController = (function () {
                     alert("Find");
                     break;
                 case $aatl_ib.model.gui.PanelToolbarItemTypeCode.New:
-                    alert("New");
+                    createNewClient();
                     break;
                 case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Clear:
                     alert("Clear");
                     break;
             }
+        };
+        
+        function createNewClient(){
+          let actionItem = new $aatl_ib.model.gui.ActionItem("Client - New", $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail);
+          $aatl_ib.viewController.mainController.openPanel(actionItem);
         };
         
         this.init = function () {

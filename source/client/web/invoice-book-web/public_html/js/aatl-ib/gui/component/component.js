@@ -31,9 +31,13 @@ $aatl_ib.gui.Component = (function () {
         this.getId = function(){
             return id;
         };
+    
+        this.getControlId = function(){
+            return controlId;
+        };
         
-        this.bindEvents = function () {
-
+        this.getParent = function(){
+            return parent;
         };
     }
 

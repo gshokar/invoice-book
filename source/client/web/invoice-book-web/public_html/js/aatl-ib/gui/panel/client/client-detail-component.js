@@ -5,38 +5,36 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Nov-11  GShokar         Created
+ * 2018-Nov-22  GShokar         Created
  * =============================================================================
  */
 
 "use strict";
 
-$aatl_ib.gui.ClientSearchComponent = (function () {
-    function ClientSearchComponent(componentId, parentComponent) {
+$aatl_ib.gui.ClientDetailComponent = (function () {
+    function ClientDetailComponent(componentId, parentComponent) {
 
         let component = new $aatl_ib.gui.Component(componentId, parentComponent);
 
         let toolbar = null;
         let onToolbarItemClicked = null;
-        
-        function afterLoad(){
-            toolbar = new $aatl_ib.gui.PanelToolbarComponent("clientSearchPanelToolbar", component.getControl);
+
+        function afterLoad() {
+            toolbar = new $aatl_ib.gui.PanelToolbarComponent("clientDetailPanelToolbar", component.getControl);
             toolbar.init();
             toolbar.registerOnClickActionItem(onToolbarItemClicked);
             addToolbarItems();
         }
-        
-        function addToolbarItems(){
-            
-            toolbar.addNewActionItem("Find", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Find);
-            toolbar.addNewActionItem("Open", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Open);
-            toolbar.addNewActionItem("New", $aatl_ib.model.gui.PanelToolbarItemTypeCode.New);
-            toolbar.addNewActionItem("Clear", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Clear);
+
+        function addToolbarItems() {
+
+            toolbar.addNewActionItem("Save", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Save);
+            toolbar.addNewActionItem("Close", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Close);
         };
-        
+
         this.init = function () {
-            this.getComponent().load($aatl_ib.viewController.getViewUrl("client-search"), afterLoad);
-            
+            this.getComponent().load($aatl_ib.viewController.getViewUrl("client-detail"), afterLoad);
+
         };
 
         this.registerOnToolbarItemClicked = function (actionItemClicked) {
@@ -44,12 +42,12 @@ $aatl_ib.gui.ClientSearchComponent = (function () {
         };
 
         this.getComponent = function () {
-            
-            return component.getControl();
-            
-        };
-      
-    }
 
-    return ClientSearchComponent;
+            return component.getControl();
+
+        };
+    }
+    
+    return ClientDetailComponent;
 }());
+
