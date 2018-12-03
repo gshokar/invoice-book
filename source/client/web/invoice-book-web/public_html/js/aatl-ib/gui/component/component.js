@@ -13,13 +13,14 @@
 
 $aatl_ib.gui.Component = (function () {
 
-    function Component(componentId, parentComponent) {
+    function Component(componentId, parentComponent, viewRefId) {
 
         let id = componentId;
         let controlId = "#" + id;
         let parent = parentComponent;
-        
-        this.getControl = function() {
+        let viewId = viewRefId;
+
+        this.getControl = function () {
 
             if (parent && typeof parent === 'function') {
                 return parent().find(controlId);
@@ -27,17 +28,33 @@ $aatl_ib.gui.Component = (function () {
 
             return $(controlId);
         };
-        
-        this.getId = function(){
+
+        this.getId = function () {
             return id;
         };
-    
-        this.getControlId = function(){
+
+        this.getControlId = function () {
             return controlId;
         };
-        
-        this.getParent = function(){
+
+        this.getParent = function () {
             return parent;
+        };
+
+        this.getViewId = function () {
+            return viewId;
+        };
+
+        this.setViewId = function (id) {
+            viewId = id;
+        };
+
+        this.updateElementId = function (html) {
+
+            if (viewId !== undefined && viewId !== null) {
+                return $aatl_ib.utils.replaceElementId(html, viewId, id);
+            }
+            return html;
         };
     }
 

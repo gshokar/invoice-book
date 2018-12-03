@@ -9,34 +9,46 @@
  * =============================================================================
  */
 
+"use strict"
 
 $aatl_ib.ErrorComponent = (function(){
     
-    function ErrorComponent(id, parent){
+    function ErrorComponent(parent){
         
-        var messageControlId = '#errorMessage';
+        let id = $aatl_ib.utils.createUniqueId();
         
-        function getComponent(){
+        let component = new $aatl_ib.gui.Component(id, parent, 'errorMessages');
+        
+        function getControl(){
+          
+            return component.getControl();
+        };
+                
+        function setMessage(control, messages){
             
-            return ((parent) ? parent.find(id) : $(id));
-        }
-        
-        function getMessageControl(){ 
-          return getComponent().find(messageControlId); 
+            $.each(messages, function(index, message){ 
+                control.append($('<label></label>').text(message));
+               
+            });
+            
         };
         
-        function setMessage(message){
-            getMessageControl().text(message);
-        };
-        
-        this.show = function(message){
-            setMessage(message);
-            getComponent().prop('hidden', false);
+        this.show = function(messages){
+            let control = getControl();
+            
+            control.empty();
+            
+            setMessage(control, messages);
+            
+            control.prop('hidden', false);
         };
         
         this.hide = function(){
-            getComponent().prop('hidden', true);
-            setMessage('');
+            getControl().prop('hidden', true);
+        };
+        
+        this.updateComponentIds = function(html){
+          return component.updateElementId(html);
         };
     };
     

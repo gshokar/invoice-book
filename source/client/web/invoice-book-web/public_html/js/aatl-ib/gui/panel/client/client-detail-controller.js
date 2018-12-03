@@ -46,14 +46,22 @@ $aatl_ib.gui.ClientDetailController = (function () {
         }
         function afterSave(client, err){
             
-            if(err === undefined){
+            if(err !== undefined){
+                component.showError(err);
+            }else{
                 component.setClient(client);
             }
             
         }
         
         function saveData(){
-            $aatl_ib.ClientService.save(component.getClient(), afterSave);
+            
+            let client = component.getClient();
+            
+            if(beforeSave(client)){
+                $aatl_ib.ClientService.save(client, afterSave);
+            }
+            
         }
         
         this.init = function () {

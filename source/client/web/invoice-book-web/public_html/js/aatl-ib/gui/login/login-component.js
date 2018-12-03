@@ -56,7 +56,7 @@ $aatl_ib.LoginComponent = (function () {
             return loginId && loginId.length > 0 && password && password.length > 0;
         };
 
-        var errorControl = new $aatl_ib.ErrorComponent('#loginError', undefined);
+        var errorComponent = new $aatl_ib.ErrorComponent();
 
         formControlValueChanged = function () {
             buttonLoginSubmit().prop('disabled', !isFormValid());
@@ -68,7 +68,7 @@ $aatl_ib.LoginComponent = (function () {
 
         this.showError = function(err){
             hideLoginProcess(true);
-            errorControl.show(err);
+            errorComponent.show(err.messages);
         };
         
         this.focus = function(){
@@ -95,7 +95,7 @@ $aatl_ib.LoginComponent = (function () {
                 event.preventDefault();
                 //sidebarController.toggleSidebar();
 
-                errorControl.hide();
+                errorComponent.hide();
 
                 hideLoginProcess(false);
 
@@ -106,7 +106,9 @@ $aatl_ib.LoginComponent = (function () {
             });
         };
 
-
+        this.updateComponentIds = function (html) {
+            return errorComponent.updateComponentIds(html);
+        };
     }
 
     return LoginComponent;

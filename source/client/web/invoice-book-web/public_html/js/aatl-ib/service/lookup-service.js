@@ -24,7 +24,7 @@ $aatl_ib.LookupService = {
             return;
         }
         
-        $.each($aatl_ib.LookupService.provinces, function(key, province){
+        $.each($aatl_ib.LookupService.provinces, function(index, province){
             control.append($('<option></option>').val(province.code).text(province.name));
         });
     }

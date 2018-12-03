@@ -82,6 +82,10 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             return getControl().find("#panelTitle");
         }
         
+        function getErrorControl(){
+            return getControl().find(".alert-danger");
+        }
+        
         function loadProvinceDropdownOptions(){
             $aatl_ib.LookupService.loadProvinces(getProvinceField());
         }
@@ -109,6 +113,10 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
                getPhoneField().val(client.contact.phone);
                getEmailField().val(client.contact.email);
            }
+        }
+        
+         function updateComponentIds(html) {
+            return errorComponent.updateComponentIds(html);
         }
         
         this.init = function () {
@@ -159,6 +167,25 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             afterInit = callback;
         };
         
+        this.showError = function(err){
+            let control = getErrorControl();
+            
+            control.empty();
+            
+            $.each(err.messages, function(index, message){ 
+                control.append(message);
+                
+                if(index < (err.messages.length -1) ){
+                    control.append("</br>");
+                }
+            });
+            
+            control.prop("hidden", false);
+        };
+        
+        this.hideError = function(){
+          getErrorControl().prop("hidden", true);
+        };
     }
     
     return ClientDetailComponent;

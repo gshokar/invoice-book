@@ -41,5 +41,10 @@ $aatl_ib.utils = {
     isFunction: function(obj){
           
         return obj !== undefined && obj !== null && typeof obj === "function";
+    },
+    
+    replaceElementId: function(html, oldId, newId){
+        
+        return html.replace('id="' + oldId + '" ', 'id="' + newId + '" ');
     }
 };

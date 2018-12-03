@@ -40,8 +40,10 @@ $aatl_ib.ClientService = {
     save: function(client, callback){
         
         client.number = "12345678";
-        
-        callback(client);
+        let err = {
+            messages: ["Please enter client name.", "Please enter client address city."]
+        };
+        callback(client, err);
     }
 };
 
