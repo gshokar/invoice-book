@@ -22,4 +22,6 @@ public enum ServiceRequestDataTypeEnum {
     Client,
     @SerializedName("clientSearch")
     ClientSearch,
+    @SerializedName("provinceList")
+    ProvinceList
 }
