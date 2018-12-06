@@ -13,20 +13,23 @@
 
 $aatl_ib.gui.Component = (function () {
 
-    function Component(componentId, parentComponent, viewRefId) {
+    function Component(componentId, parentComponent, componentName) {
 
         let id = componentId;
-        let controlId = "#" + id;
         let parent = parentComponent;
-        let viewId = viewRefId;
+        let name = componentName;
 
+        function controlId(){
+            return "#" + id;
+        }
+        
         this.getControl = function () {
 
             if (parent && typeof parent === 'function') {
-                return parent().find(controlId);
+                return parent().find(controlId());
             }
 
-            return $(controlId);
+            return $(controlId());
         };
 
         this.getId = function () {
@@ -34,25 +37,37 @@ $aatl_ib.gui.Component = (function () {
         };
 
         this.getControlId = function () {
-            return controlId;
+            return controlId();
         };
 
         this.getParent = function () {
             return parent;
         };
 
-        this.getViewId = function () {
-            return viewId;
+        this.setParent = function (parentComponent) {
+            parent = parentComponent;
+        };
+        
+        this.getName = function () {
+            return name;
         };
 
-        this.setViewId = function (id) {
-            viewId = id;
+        this.setName = function (value) {
+            name = value;
         };
 
-        this.updateElementId = function (html) {
+        this.updateElementId = function (html, newId, updateForAttributes) {
+           
+            if (newId !== undefined && newId !== null) {
+                let updatedHtml = $aatl_ib.utils.replaceElementId(html, id, newId);
+                
+                if(updateForAttributes === true){
+                    updatedHtml = $aatl_ib.utils.replaceElementAttributeFor(updatedHtml, id, newId);
+                }
+                
+                id = newId;
 
-            if (viewId !== undefined && viewId !== null) {
-                return $aatl_ib.utils.replaceElementId(html, viewId, id);
+                return updatedHtml;
             }
             return html;
         };

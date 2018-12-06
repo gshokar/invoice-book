@@ -16,8 +16,9 @@ $aatl_ib.ErrorComponent = (function(){
     function ErrorComponent(parent){
         
         let id = $aatl_ib.utils.createUniqueId();
+        let viewId = 'errorMessages';
         
-        let component = new $aatl_ib.gui.Component(id, parent, 'errorMessages');
+        let component = new $aatl_ib.gui.Component(viewId, parent,viewId);
         
         function getControl(){
           
@@ -48,7 +49,7 @@ $aatl_ib.ErrorComponent = (function(){
         };
         
         this.updateComponentIds = function(html){
-          return component.updateElementId(html);
+          return component.updateElementId(html, id);
         };
     };
     

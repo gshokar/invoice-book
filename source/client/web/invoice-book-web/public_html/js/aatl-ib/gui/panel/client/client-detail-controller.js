@@ -30,7 +30,13 @@ $aatl_ib.gui.ClientDetailController = (function () {
             }
         };
         
+        function loadProvinceDropdownOptions() {
+            $aatl_ib.LookupService.loadProvinces(component.getProvinceControl());
+        }
+        
         function afterInit(){
+            
+            loadProvinceDropdownOptions();
             
             component.setTitle(title);
             

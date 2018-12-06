@@ -37,14 +37,32 @@ $aatl_ib.utils = {
 
         return new Date(today.getFullYear(), today.getMonth(), today.getDate());
     },
-    
-    isFunction: function(obj){
-          
+
+    isFunction: function (obj) {
+
         return obj !== undefined && obj !== null && typeof obj === "function";
     },
-    
-    replaceElementId: function(html, oldId, newId){
+
+    replaceElementId: function (html, oldId, newId) {
         
-        return html.replace('id="' + oldId + '" ', 'id="' + newId + '" ');
+        return $aatl_ib.utils.replaceElementAttribute(html, 'id', oldId, newId);
+    },
+    
+    replaceElementAttribute: function (html, attribute, value, newValue) {
+
+        let currentAttribute = attribute +'="' + value + '" ';
+        let newAttribute = attribute +'="' + newValue + '" ';
+        
+        if (html.indexOf(currentAttribute) === -1) {
+            currentAttribute = attribute +'="' + value + '">';
+            newAttribute = attribute +'="' + newValue + '">';
+        }
+        
+        return html.replace(currentAttribute, newAttribute);
+    },
+    
+    replaceElementAttributeFor: function (html, value, newValue) {
+        
+        return $aatl_ib.utils.replaceElementAttribute(html, 'for', value, newValue);
     }
 };
