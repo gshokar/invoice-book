@@ -13,10 +13,11 @@
 
 $aatl_ib.ApiService = {
 
-    createRequestData: function (type, data) {
+    createRequestData: function (type, dataType, data) {
 
         let request = {
             requestType: type,
+            dataType: dataType,
             data: JSON.stringify(data)
         };
 
@@ -27,11 +28,11 @@ $aatl_ib.ApiService = {
         return request;
     },
 
-    post: function (type, data, callback) {
+    post: function (type, dataType, data, callback) {
 
         let isCallback = $aatl_ib.utils.isFunction(callback);
 
-        let requestData = this.createRequestData(type, data);
+        let requestData = this.createRequestData(type, dataType, data);
 
         let postCall = {
             url: "http://localhost:8080/invoicebookservice/service",
