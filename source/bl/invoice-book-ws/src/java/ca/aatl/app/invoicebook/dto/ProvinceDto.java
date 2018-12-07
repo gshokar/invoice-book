@@ -6,6 +6,14 @@ package ca.aatl.app.invoicebook.dto;
  * @author gshokar
  */
 public class ProvinceDto {
+
+    public ProvinceDto() {
+    }
+
+    public ProvinceDto(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
     
     private String code;
 
