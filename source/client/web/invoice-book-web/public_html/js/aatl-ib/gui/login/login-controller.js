@@ -24,7 +24,7 @@ $aatl_ib.LoginController = (function () {
         function login(loginId, password) {
             
              if (loginId === 'test' && password === "test") {
-             $aatl_ib.viewController.setMainView("mainComponent", new $aatl_ib.MainController());
+             $aatl_ib.viewController.setMainView("main-component", new $aatl_ib.MainController());
              } else {
              component.showError("Invalid loginId or password");
              }
