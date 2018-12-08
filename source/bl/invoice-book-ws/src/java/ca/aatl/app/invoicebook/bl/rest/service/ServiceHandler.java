@@ -50,5 +50,6 @@ class ServiceHandler {
     private void registerServices(){
         serviceMapper.put(ServiceRequestDataTypeEnum.Client, "ClientResponseService");
         serviceMapper.put(ServiceRequestDataTypeEnum.ClientSearch, "ClientResponseService");
+        serviceMapper.put(ServiceRequestDataTypeEnum.ProvinceList, "LookupResponseService");
     }
 }

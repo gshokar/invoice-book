@@ -136,7 +136,9 @@ $aatl_ib.MainController = (function () {
             let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.ClientDetail, actionItem);
 
             panel.controller = new $aatl_ib.gui.ClientDetailController(panel.controlId, component.getCenterView());
-
+            panel.controller.setTitle(actionItem.text);
+            panel.controller.setClientNumber(actionItem.data);
+            
             panel.controller.init();
 
             return panel.controlId;

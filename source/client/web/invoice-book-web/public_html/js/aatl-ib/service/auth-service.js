@@ -31,7 +31,7 @@ $aatl_ib.AuthService = {
             return;
         }
 
-        $aatl_ib.ApiService.post("authenticate",
+        $aatl_ib.ApiService.post("authenticate", null,
                 {loginId: loginId, password: password},
                 function (res, err) {
                     if (err) {

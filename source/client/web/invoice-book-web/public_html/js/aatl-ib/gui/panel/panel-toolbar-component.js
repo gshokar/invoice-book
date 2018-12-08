@@ -12,9 +12,9 @@
 
 $aatl_ib.gui.PanelToolbarComponent = (function () {
 
-    function PanelToolbarComponent(componentId, parentComponent) {
+    function PanelToolbarComponent(componentId, parentComponent, componentName) {
 
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent);
+        let component = new $aatl_ib.gui.Component(componentId, parentComponent, componentName);
         
         let toolbarComponentId = component.getId() + "-toolbar";
         let toolbarControlId = "#" + toolbarComponentId;
@@ -89,6 +89,25 @@ $aatl_ib.gui.PanelToolbarComponent = (function () {
         this.getControl = function(){
             
             return getToolbarComponent();
+        };
+        
+        this.updateElementId = function(html, newId){
+            
+          if (newId !== undefined && newId !== null) {
+               
+                let updatedHtml = component.updateElementId(html, newId);
+                
+                let currentToolbarComponentId = toolbarComponentId;
+                
+                toolbarComponentId = component.getId() + "-toolbar";
+                
+                toolbarControlId = "#" + toolbarComponentId;
+                
+                toolbarView = toolbarView.replace(currentToolbarComponentId, toolbarComponentId);
+                
+                return updatedHtml;
+            }
+            return html;  
         };
     }
 

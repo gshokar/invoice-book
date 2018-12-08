@@ -13,31 +13,63 @@
 
 $aatl_ib.gui.Component = (function () {
 
-    function Component(componentId, parentComponent) {
+    function Component(componentId, parentComponent, componentName) {
 
         let id = componentId;
-        let controlId = "#" + id;
         let parent = parentComponent;
+        let name = componentName;
+
+        function controlId(){
+            return "#" + id;
+        }
         
-        this.getControl = function() {
+        this.getControl = function () {
 
             if (parent && typeof parent === 'function') {
-                return parent().find(controlId);
+                return parent().find(controlId());
             }
 
-            return $(controlId);
+            return $(controlId());
         };
-        
-        this.getId = function(){
+
+        this.getId = function () {
             return id;
         };
-    
-        this.getControlId = function(){
-            return controlId;
+
+        this.getControlId = function () {
+            return controlId();
+        };
+
+        this.getParent = function () {
+            return parent;
+        };
+
+        this.setParent = function (parentComponent) {
+            parent = parentComponent;
         };
         
-        this.getParent = function(){
-            return parent;
+        this.getName = function () {
+            return name;
+        };
+
+        this.setName = function (value) {
+            name = value;
+        };
+
+        this.updateElementId = function (html, newId, updateForAttributes) {
+           
+            if (newId !== undefined && newId !== null) {
+                let updatedHtml = $aatl_ib.utils.replaceElementId(html, id, newId);
+                
+                if(updateForAttributes === true){
+                    updatedHtml = $aatl_ib.utils.replaceElementAttributeFor(updatedHtml, id, newId);
+                }
+                
+                id = newId;
+
+                return updatedHtml;
+            }
+            return html;
         };
     }
 

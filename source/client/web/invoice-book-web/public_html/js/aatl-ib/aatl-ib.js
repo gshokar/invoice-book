@@ -28,11 +28,21 @@ const $aatl_ib = {
             this.mainController = controller;
 
             $aatl_ib.mainView().empty();
-            $aatl_ib.mainView().load(this.getViewUrl(view), controller.init);
+
+            if (typeof controller.loadView !== 'function') {
+                $aatl_ib.mainView().load(this.getViewUrl(view), controller.init);
+            } else {
+                this.loadView(view, controller.loadView);
+            }
         },
 
         getViewUrl: function (view) {
             return "view/" + view + ".html";
+        },
+
+        loadView: function (view, callback) {
+
+            $.get(this.getViewUrl(view), callback);
         }
     },
     model: {
@@ -43,5 +53,5 @@ const $aatl_ib = {
 
 
 $(document).ready(() => {
-    $aatl_ib.viewController.setMainView("login", new $aatl_ib.LoginController());
+    $aatl_ib.viewController.setMainView("login", new $aatl_ib.LoginController($aatl_ib.mainView));
 });

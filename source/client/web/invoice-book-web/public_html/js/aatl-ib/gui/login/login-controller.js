@@ -11,22 +11,33 @@
 
 
 $aatl_ib.LoginController = (function () {
-    function LoginController() {
+    function LoginController(parent) {
 
         var component = new $aatl_ib.LoginComponent();
-
-        this.init = function () {
+        let parentComponent = parent;
+        
+        function initComponents(){
             component.setSubmitButtonEnabled(false);
             component.bindEvents(login);
             component.focus();
+        }
+        
+        this.init = function () {
+            initComponents();
         };
-
+        
+        this.loadView = function(html){
+            parentComponent().html(component.updateComponentIds(html));
+            initComponents();
+        };
+        
         function login(loginId, password) {
             
              if (loginId === 'test' && password === "test") {
              $aatl_ib.viewController.setMainView("main-component", new $aatl_ib.MainController());
              } else {
-             component.showError("Invalid loginId or password");
+                 let err = {messages: ["Invalid loginId or password"]};
+             component.showError(err);
              }
              
 
