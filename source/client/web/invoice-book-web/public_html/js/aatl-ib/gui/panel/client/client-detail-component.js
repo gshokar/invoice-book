@@ -211,7 +211,14 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         this.getProvinceControl = function(){
             
             return getProvinceField();
-        }
+        };
+        
+        this.selectProvince = function(){
+          
+            if(client !== undefined && client !== null && client.address !==undefined && client.address !== null){
+                getProvinceField().val(client.address.province);
+            }
+        };
     }
 
     return ClientDetailComponent;
