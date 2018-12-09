@@ -35,7 +35,7 @@ $aatl_ib.gui.ClientDetailController = (function () {
             $aatl_ib.LookupService.loadProvinces(function (provinces, err) {
 
                 if (err !== undefined && err !== null) {
-
+                    component.showError();
                 } else {
                     $aatl_ib.utils.addDropdownOptions(component.getProvinceControl(), provinces);
 
