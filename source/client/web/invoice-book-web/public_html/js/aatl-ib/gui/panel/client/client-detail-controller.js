@@ -17,10 +17,10 @@ $aatl_ib.gui.ClientDetailController = (function () {
         var component = new $aatl_ib.gui.ClientDetailComponent(componentId, parentComponent);
         let title = "";
         let clientNumber = null;
-        
-        function onToolbarItemClicked(toolbarItem){
-            
-            switch(toolbarItem.typeCode){
+
+        function onToolbarItemClicked(toolbarItem) {
+
+            switch (toolbarItem.typeCode) {
                 case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Save:
                     saveData();
                     break;
@@ -28,64 +28,75 @@ $aatl_ib.gui.ClientDetailController = (function () {
                     alert("Close");
                     break;
             }
-        };
-        
+        }
+        ;
+
         function loadProvinceDropdownOptions() {
-            $aatl_ib.LookupService.loadProvinces(component.getProvinceControl());
+            $aatl_ib.LookupService.loadProvinces(function (provinces, err) {
+
+                if (err !== undefined && err !== null) {
+                    component.showError();
+                } else {
+                    $aatl_ib.utils.addDropdownOptions(component.getProvinceControl(), provinces);
+
+                    component.selectProvince();
+
+                }
+            });
         }
-        
-        function afterInit(){
-            
+
+        function afterInit() {
+
             loadProvinceDropdownOptions();
-            
+
             component.setTitle(title);
-            
+
             $aatl_ib.ClientService.get(clientNumber, component.setClient);
-            
+
         }
-        
-        function beforeSave(client){
-            
+
+        function beforeSave(client) {
+
             let value = true;
-            
+
             return value;
         }
-        function afterSave(client, err){
-            
-            if(err !== undefined){
+        function afterSave(client, err) {
+
+            if (err !== undefined) {
                 component.showError(err);
-            }else{
+            } else {
                 component.setClient(client);
             }
-            
+
         }
-        
-        function saveData(){
-            
+
+        function saveData() {
+
             let client = component.getClient();
-            
-            if(beforeSave(client)){
+
+            if (beforeSave(client)) {
                 $aatl_ib.ClientService.save(client, afterSave);
             }
-            
+
         }
-        
+
         this.init = function () {
             component.setAfterInit(afterInit);
             component.init();
             component.registerOnToolbarItemClicked(onToolbarItemClicked);
         };
-        
-        this.getComponent = function(){
+
+        this.getComponent = function () {
             return component;
         };
-        
-        this.setTitle = function(value){
+
+        this.setTitle = function (value) {
             title = value;
         };
-        
-        this.setClientNumber = function(number){
-          clientNumber = number;  
+
+        this.setClientNumber = function (number) {
+            clientNumber = number;
         };
     }
 

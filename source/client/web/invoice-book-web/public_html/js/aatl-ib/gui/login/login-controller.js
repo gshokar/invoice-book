@@ -33,23 +33,23 @@ $aatl_ib.LoginController = (function () {
         
         function login(loginId, password) {
             
-             if (loginId === 'test' && password === "test") {
-             $aatl_ib.viewController.setMainView("main-component", new $aatl_ib.MainController());
-             } else {
-                 let err = {messages: ["Invalid loginId or password"]};
-             component.showError(err);
-             }
+//             if (loginId === 'test' && password === "test") {
+//             $aatl_ib.viewController.setMainView("main-component", new $aatl_ib.MainController());
+//             } else {
+//                 let err = {messages: ["Invalid loginId or password"]};
+//             component.showError(err);
+//             }
              
 
-//            $aatl_ib.AuthService.login(loginId, password,
-//                    function (err) {
-//
-//                        if (err) {
-//                            component.showError(err);
-//                        } else {
-//                            $aatl_ib.viewController.setMainView("mainComponent", new $aatl_ib.MainController());
-//                        }
-//                    });
+            $aatl_ib.AuthService.login(loginId, password,
+                    function (err) {
+
+                        if (err) {
+                            component.showError(err);
+                        } else {
+                            $aatl_ib.viewController.setMainView("main-component", new $aatl_ib.MainController());
+                        }
+                    });
         }
     }
 

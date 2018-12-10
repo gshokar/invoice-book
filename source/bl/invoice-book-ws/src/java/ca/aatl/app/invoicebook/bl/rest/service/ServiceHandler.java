@@ -21,7 +21,7 @@ import javax.naming.InitialContext;
  */
 class ServiceHandler {
 
-    private final static String JAVA_MODULE_LOOKUP_FORMAT = "java:module/$1s";
+    private final static String JAVA_MODULE_LOOKUP_FORMAT = "java:module/%1$s";
     private final Map<ServiceRequestDataTypeEnum, String> serviceMapper = new HashMap<>();
     
     private static ServiceHandler handler;
@@ -43,6 +43,7 @@ class ServiceHandler {
         if(!serviceMapper.containsKey(dataType)){
             throw new Exception("Unregistered service: " + dataType.name());
         }
+        String test = String.format(JAVA_MODULE_LOOKUP_FORMAT, serviceMapper.get(dataType));
         
         return InitialContext.doLookup(String.format(JAVA_MODULE_LOOKUP_FORMAT, serviceMapper.get(dataType)));
     }

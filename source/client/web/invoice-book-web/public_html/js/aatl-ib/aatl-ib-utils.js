@@ -44,25 +44,33 @@ $aatl_ib.utils = {
     },
 
     replaceElementId: function (html, oldId, newId) {
-        
+
         return $aatl_ib.utils.replaceElementAttribute(html, 'id', oldId, newId);
     },
-    
+
     replaceElementAttribute: function (html, attribute, value, newValue) {
 
-        let currentAttribute = attribute +'="' + value + '" ';
-        let newAttribute = attribute +'="' + newValue + '" ';
-        
+        let currentAttribute = attribute + '="' + value + '" ';
+        let newAttribute = attribute + '="' + newValue + '" ';
+
         if (html.indexOf(currentAttribute) === -1) {
-            currentAttribute = attribute +'="' + value + '">';
-            newAttribute = attribute +'="' + newValue + '">';
+            currentAttribute = attribute + '="' + value + '">';
+            newAttribute = attribute + '="' + newValue + '">';
         }
-        
+
         return html.replace(currentAttribute, newAttribute);
     },
-    
+
     replaceElementAttributeFor: function (html, value, newValue) {
-        
+
         return $aatl_ib.utils.replaceElementAttribute(html, 'for', value, newValue);
+    },
+
+    addDropdownOptions: function (control, options) {
+        control.empty();
+
+        $.each(options, function (index, option) {
+            control.append($('<option></option>').val(option.code).text(option.name));
+        });
     }
 };
