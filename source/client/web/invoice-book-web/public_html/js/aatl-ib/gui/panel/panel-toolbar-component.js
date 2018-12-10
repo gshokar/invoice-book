@@ -15,7 +15,7 @@ $aatl_ib.gui.PanelToolbarComponent = (function () {
     function PanelToolbarComponent(componentId, parentComponent, componentName) {
 
         let component = new $aatl_ib.gui.Component(componentId, parentComponent, componentName);
-        
+
         let toolbarComponentId = component.getId() + "-toolbar";
         let toolbarControlId = "#" + toolbarComponentId;
         let toolbarItems = [];
@@ -25,7 +25,8 @@ $aatl_ib.gui.PanelToolbarComponent = (function () {
 
         function getComponent() {
             return component.getControl();
-        };
+        }
+        ;
 
         function getToolbarComponent() {
             return getComponent().find(toolbarControlId);
@@ -45,6 +46,14 @@ $aatl_ib.gui.PanelToolbarComponent = (function () {
             if (onClickAction && typeof onClickAction === 'function') {
                 onClickAction(actionItem);
             }
+        }
+
+        function getToolbarItem(actionType) {
+
+            return toolbarItems.find(function (item) {
+                return item.typeCode === actionType;
+            });
+
         }
 
         this.init = function () {
@@ -69,45 +78,58 @@ $aatl_ib.gui.PanelToolbarComponent = (function () {
                 control.on('click', function (e) {
                     e.preventDefault();
 
-                    let itemId = $(this).attr("id");
+                    let $element = $(this);
 
-                    let actionItem = toolbarItems.find(function (item) {
-                        return item.id === itemId;
-                    });
+                    if ($element.prop('disabled') !== true) {
 
-                    onClickActionItem(actionItem);
+
+                        let itemId = $element.attr("id");
+
+                        let actionItem = toolbarItems.find(function (item) {
+                            return item.id === itemId;
+                        });
+
+                        onClickActionItem(actionItem);
+                    }
                 });
             }
         };
-        
-        this.addNewActionItem = function(actionText, actionType){
-          let toolbarItem = new $aatl_ib.model.gui.PanelToolbarItem(actionText, $aatl_ib.utils.createUniqueId(), actionType, null);  
-          
-          this.addActionItem(toolbarItem);
+
+        this.addNewActionItem = function (actionText, actionType) {
+            let toolbarItem = new $aatl_ib.model.gui.PanelToolbarItem(actionText, $aatl_ib.utils.createUniqueId(), actionType, null);
+
+            this.addActionItem(toolbarItem);
         };
-        
-        this.getControl = function(){
-            
+
+        this.getControl = function () {
+
             return getToolbarComponent();
         };
-        
-        this.updateElementId = function(html, newId){
-            
-          if (newId !== undefined && newId !== null) {
-               
+
+        this.updateElementId = function (html, newId) {
+
+            if (newId !== undefined && newId !== null) {
+
                 let updatedHtml = component.updateElementId(html, newId);
-                
+
                 let currentToolbarComponentId = toolbarComponentId;
-                
+
                 toolbarComponentId = component.getId() + "-toolbar";
-                
+
                 toolbarControlId = "#" + toolbarComponentId;
-                
+
                 toolbarView = toolbarView.replace(currentToolbarComponentId, toolbarComponentId);
-                
+
                 return updatedHtml;
             }
-            return html;  
+            return html;
+        };
+
+        this.getActionItemControl = function (actionType) {
+
+            let toolbarItem = getToolbarItem(actionType);
+
+            return getToolbarItemControl(toolbarItem.controlId);
         };
     }
 

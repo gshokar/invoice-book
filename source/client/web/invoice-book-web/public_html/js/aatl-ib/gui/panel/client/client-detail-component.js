@@ -18,6 +18,7 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         let client = null;
         let onToolbarItemClicked = null;
         let afterInit = null;
+        let isFormLoading = false;
 
         let toolbar = new $aatl_ib.gui.PanelToolbarComponent("clientDetailPanelToolbar", component.getControl, "clientDetailPanelToolbar");
         let numberField = new $aatl_ib.gui.Component("clientNumber", component.getControl, "clientNumber");
@@ -34,10 +35,13 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             toolbar.init();
             toolbar.registerOnClickActionItem(onToolbarItemClicked);
             addToolbarItems();
-
+            bindEvents();
+            
             if (afterInit !== null && typeof afterInit === "function") {
                 afterInit();
             }
+            
+            setModified(false);
         }
 
         function getControl() {
@@ -94,8 +98,56 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             return getControl().find(".alert-danger");
         }
 
+        function setModified(value) {
+
+            if (typeof value === "boolean") {
+                
+                toolbar.getActionItemControl($aatl_ib.model.gui.PanelToolbarItemTypeCode.Save).prop('disabled', !value);
+                component.setModified(value);
+            }
+        }
+        
+        function bindEvents(){
+          
+            getNameField().change(() => {
+                onFieldValueChanged();
+            });
+            getAddress1Field().change(() => {
+                onFieldValueChanged();
+            });
+            getAddress2Field().change(() => {
+                onFieldValueChanged();
+            });
+            getCityField().change(() => {
+                onFieldValueChanged();
+            });
+            getProvinceField().change(() => {
+                onFieldValueChanged();
+            });
+            getPostalCodeField().change(() => {
+                onFieldValueChanged();
+            });
+            getPhoneField().change(() => {
+                onFieldValueChanged();
+            });
+            getEmailField().change(() => {
+                onFieldValueChanged();
+            });
+        }
+        
+        function onFieldValueChanged() {
+
+            if (isFormLoading === false) {
+                setModified(true);
+            }
+        }
+
         function onClientChanged() {
 
+            setModified(false);
+            
+            isFormLoading = true;
+            
             if (client === null || client === undefined) {
                 getNumberField().val("");
                 getNameField().val("");
@@ -117,6 +169,8 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
                 getPhoneField().val(client.contact.phone);
                 getEmailField().val(client.contact.email);
             }
+            
+            isFormLoading = false;
         }
 
         function updateElementIds(html) {
@@ -131,7 +185,7 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             updatedHtml = postalCodeField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
             updatedHtml = emailField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
             updatedHtml = phoneField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            
+
             return updatedHtml;
         }
 
@@ -207,15 +261,15 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         this.hideError = function () {
             getErrorControl().prop("hidden", true);
         };
-        
-        this.getProvinceControl = function(){
-            
+
+        this.getProvinceControl = function () {
+
             return getProvinceField();
         };
-        
-        this.selectProvince = function(){
-          
-            if(client !== undefined && client !== null && client.address !==undefined && client.address !== null){
+
+        this.selectProvince = function () {
+
+            if (client !== undefined && client !== null && client.address !== undefined && client.address !== null) {
                 getProvinceField().val(client.address.province);
             }
         };

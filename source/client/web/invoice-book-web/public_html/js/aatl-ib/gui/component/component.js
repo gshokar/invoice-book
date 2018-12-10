@@ -18,11 +18,12 @@ $aatl_ib.gui.Component = (function () {
         let id = componentId;
         let parent = parentComponent;
         let name = componentName;
+        let valueChanged = false;
 
-        function controlId(){
+        function controlId() {
             return "#" + id;
         }
-        
+
         this.getControl = function () {
 
             if (parent && typeof parent === 'function') {
@@ -47,7 +48,7 @@ $aatl_ib.gui.Component = (function () {
         this.setParent = function (parentComponent) {
             parent = parentComponent;
         };
-        
+
         this.getName = function () {
             return name;
         };
@@ -57,19 +58,31 @@ $aatl_ib.gui.Component = (function () {
         };
 
         this.updateElementId = function (html, newId, updateForAttributes) {
-           
+
             if (newId !== undefined && newId !== null) {
                 let updatedHtml = $aatl_ib.utils.replaceElementId(html, id, newId);
-                
-                if(updateForAttributes === true){
+
+                if (updateForAttributes === true) {
                     updatedHtml = $aatl_ib.utils.replaceElementAttributeFor(updatedHtml, id, newId);
                 }
-                
+
                 id = newId;
 
                 return updatedHtml;
             }
             return html;
+        };
+
+        this.isModified = function () {
+
+            return valueChanged;
+        };
+
+        this.setModified = function (value) {
+
+            if (typeof value === 'boolean') {
+                valueChanged = value;
+            }
         };
     }
 
