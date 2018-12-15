@@ -39,11 +39,68 @@ $aatl_ib.ClientService = {
     
     save: function(client, callback){
         
-        client.number = "12345678";
-        let err = {
-            messages: ["Please enter client name.", "Please enter client address city."]
-        };
+        let err = $aatl_ib.ClientService.validate(client);
+        
+        if(err.messages.length === 0){
+            $aatl_ib.ApiService.update("client",
+                    client,
+                    function (res, serverErr) {
+                        if (serverErr) {
+                            
+                            err.messages.push("Failed to save the client: " + serverErr);
+                            callback(client, err);
+
+                        } else if (res.status === "failure") {
+                            
+                            err.messages.push(res.message);
+                            callback(client, err);
+                            
+                        } else if (res.status === "success") {
+                            
+                            if(Array.isArray(res.warningMessages) && res.warningMessages.length > 0){
+                                err.messages = res.warningMessages;
+                            }
+                            
+                            callback(JSON.parse(res.data), err);
+                        } else {
+                            callback(client, "Invalid response from server");
+                        }
+                    });
+
+            return;
+        }
+        
         callback(client, err);
+    },
+    
+    validate: function(client){
+      
+        let err = { messages: [] };
+        
+        if(client){
+            
+            if(typeof client.name !== 'string' || client.name.trim().length === 0){
+                err.messages.push("Please enter client name.");
+            }
+            
+            if(client.address && typeof client.address.address1 !== 'string' || client.address.address1.trim().length === 0){
+                err.messages.push("Please enter address line 1.");
+            }
+            
+            if(client.address && typeof client.address.city !== 'string' || client.address.city.trim().length === 0){
+                err.messages.push("Please enter city.");
+            }
+            
+            if(client.address && typeof client.address.province !== 'string' || client.address.province.trim().length === 0){
+                err.messages.push("Please enter province.");
+            }
+            
+            if(client.address && typeof client.address.postalCode !== 'string' || client.address.postalCode.trim().length === 0){
+                err.messages.push("Please enter postal code.");
+            }
+        }
+        
+        return err;
     }
 };
 

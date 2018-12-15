@@ -22,7 +22,7 @@ provinces:[],
         
         if ($aatl_ib.LookupService.provinces.length === 0) {
 
-            $aatl_ib.ApiService.post("get","provinceList",
+            $aatl_ib.ApiService.get("provinceList",
                     {},
                     function (res, err) {
                         if (err) {

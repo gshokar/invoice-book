@@ -56,5 +56,15 @@ $aatl_ib.ApiService = {
                 callback(null, textStatus);
             }
         });
+    },
+    
+    get: function(dataType, data, callback){
+        
+        $aatl_ib.ApiService.post('get', dataType, data, callback);
+    },
+    
+    update: function(dataType, data, callback){
+        
+        $aatl_ib.ApiService.post('update', dataType, data, callback);
     }
 };

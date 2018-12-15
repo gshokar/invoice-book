@@ -58,12 +58,14 @@ $aatl_ib.gui.ClientDetailController = (function () {
         function beforeSave(client) {
 
             let value = true;
-
+            
+            component.hideError();
+            
             return value;
         }
         function afterSave(client, err) {
 
-            if (err !== undefined) {
+            if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
             } else {
                 component.setClient(client);
