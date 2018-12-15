@@ -1,8 +1,6 @@
 
 package ca.aatl.app.invoicebook.data.jpa.dao;
 
-import ca.aatl.app.invoicebook.data.jpa.entity.AppUser;
-import ca.aatl.app.invoicebook.data.jpa.entity.AppUser_;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province_;
 import java.util.List;
@@ -21,22 +19,7 @@ import javax.persistence.criteria.Root;
 
 @Stateless
 @LocalBean
-public class ProvinceDao extends AbstractDao<Province>{
-
-    @Override
-    public void save(Province entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void beforeCreate(Province entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void beforeUpdate(Province entity) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class ProvinceDao extends BaseDao{
 
     public List<Province> list() throws Exception{
         
@@ -61,6 +44,30 @@ public class ProvinceDao extends AbstractDao<Province>{
         }
         
         return list;
+    }
+
+    public Province findByCode(String code) {
+        Province province = null;
+
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+
+            CriteriaQuery<Province> cq = cb.createQuery(Province.class);
+
+            Root<Province> root = cq.from(Province.class);
+
+            cq.select(root);
+            cq.where(cb.equal(root.get(Province_.code), code));
+
+            TypedQuery<Province> q = em.createQuery(cq);
+
+            province =  q.getSingleResult();
+            
+        } catch (NoResultException ex) {
+
+        }
+        
+        return province;
     }
     
 }

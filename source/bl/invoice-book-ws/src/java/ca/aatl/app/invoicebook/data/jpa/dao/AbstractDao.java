@@ -11,19 +11,14 @@
 package ca.aatl.app.invoicebook.data.jpa.dao;
 
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author GShokar
  */
 
-public abstract class AbstractDao<T>{
-  
-    @PersistenceContext(unitName = "invoicebook-pu")
-    protected EntityManager em;
-    
+public abstract class AbstractDao<T> extends BaseDao{
+      
     public abstract void save(T entity) throws Exception;
 
     public abstract void beforeCreate(T entity) throws Exception;

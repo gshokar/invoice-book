@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -21,8 +23,12 @@ public class BusinessEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EntityId", unique = true, nullable = false)
     protected Integer id;
+    
+    @NotNull(message = "Please provide the name")
+    @Size(min =1, max = 150)
     @Column(name = "Name", nullable = false, length = 150)
     protected String name;
+    
     @Column(name = "EntityNumber", nullable = true, length = 12)
     protected String number;
     @Basic(optional = false)

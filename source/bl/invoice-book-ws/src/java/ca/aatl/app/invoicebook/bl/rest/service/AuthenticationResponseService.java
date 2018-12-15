@@ -14,6 +14,7 @@ import ca.aatl.app.invoicebook.bl.ejb.SessionService;
 import ca.aatl.app.invoicebook.bl.ejb.UserService;
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
+import ca.aatl.app.invoicebook.data.jpa.entity.AppSession;
 import ca.aatl.app.invoicebook.data.jpa.entity.AppUser;
 import ca.aatl.app.invoicebook.dto.AuthenticateDto;
 import ca.aatl.app.invoicebook.dto.SessionDto;
@@ -92,4 +93,12 @@ public class AuthenticationResponseService extends ResponseService {
         
         return sessionService.isExists(getRequest().getSessionId());
     }
+
+    @Override
+    public AppSession getSession() {
+        
+        return sessionService.find(getRequest().getSessionId());
+    }
+    
+   
 }

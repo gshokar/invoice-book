@@ -11,11 +11,13 @@
 
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
-import ca.aatl.app.invoicebook.data.jpa.entity.Province;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.AddressEntity;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -48,30 +50,18 @@ public class Address extends AddressEntity {
     public void setProvince(Province province) {
         this.province = province;
     }
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "address")
-//    private List<AgentAddress> agentAddresses;
-//    
-//    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "address")
-//    private List<InstitutionAddress> institutionAddress;
-//
-//    @XmlTransient
-//    public List<AgentAddress> getAgentAddresses() {
-//        return agentAddresses;
-//    }
-//
-//    public void setAgentAddresses(List<AgentAddress> agentAddresses) {
-//        this.agentAddresses = agentAddresses;
-//    }
-//
-//    @XmlTransient
-//    public List<InstitutionAddress> getInstitutionAddress() {
-//        return institutionAddress;
-//    }
-//
-//    public void setInstitutionAddress(List<InstitutionAddress> institutionAddress) {
-//        this.institutionAddress = institutionAddress;
-//    }
     
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "address")
+    private List<ClientAddress> clientAddresses;
+
+    public List<ClientAddress> getClientAddresses() {
+        return clientAddresses;
+    }
+
+    public void setClientAddresses(List<ClientAddress> clientAddresses) {
+        this.clientAddresses = clientAddresses;
+    }
+   
     public String cityProvince(){
         String value = this.city;
 

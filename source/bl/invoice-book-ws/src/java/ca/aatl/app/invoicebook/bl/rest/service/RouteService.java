@@ -39,7 +39,7 @@ public class RouteService extends RestService {
 
     @EJB
     private AuthenticationResponseService authService;
-    
+
     public RouteService() {
 
     }
@@ -54,33 +54,33 @@ public class RouteService extends RestService {
 
         try {
             setRequest(getGson().fromJson(jsonRequest, ServiceRequest.class));
-            
+
             getRequest().setClientIP(httpRequest.getRemoteAddr());
-            
+
         } catch (JsonSyntaxException ex) {
             setResponseError("Error: Invalid Request - " + ex.getMessage());
             Logger.getLogger(RouteService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         processRequest();
-        
+
         return getGson().toJson(getResponse());
 
     }
 
     private void processRequest() {
         try {
-            
-            if( isRequestAuthenticated()){
-                
+
+            if (isRequestAuthenticated()) {
+
                 ResponseService service = getService();
-            
+
                 service.setRequest(getRequest());
                 service.setResponse(getResponse());
-        
+
                 service.processRequest();
-                
-            }else{
+
+            } else {
                 setResponseError("Invalid Request - session expired, please login.");
             }
 
@@ -95,28 +95,31 @@ public class RouteService extends RestService {
         ResponseService service = null;
 
         if (getRequest().getRequestType() == ServiceRequestTypeEnum.Authenticate) {
-            
+
             service = authService;
-            
-        } else  {
-            
+
+        } else {
+
             service = ServiceHandler.getInstance().getService(getRequest().getDataType());
+
+            // AuthService have override method getSession to set the session from SessionService
+            service.setSession(authService.getSession());
         }
 
         return service;
     }
 
     private boolean isRequestAuthenticated() throws NamingException {
-        
+
         boolean authenticated = true;
-        
+
         if (getRequest().getRequestType() != ServiceRequestTypeEnum.Authenticate) {
-            
+
             authService.setRequest(getRequest());
-            
+
             authenticated = authService.isValidRequest();
-        }        
-        
+        }
+
         return authenticated;
     }
 }

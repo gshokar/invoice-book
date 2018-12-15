@@ -74,4 +74,14 @@ public class Client extends BusinessEntity{
         }
         return ca;
     }
+    
+    public boolean hasAddress(){
+        ClientAddress ca = primaryAddress();
+        return ca != null && ca.getAddress() != null;
+    }
+    
+    public boolean hasContact(){
+        ClientContact cc = primaryContact();
+        return cc != null && cc.getContact() != null;
+    }
 }

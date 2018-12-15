@@ -75,13 +75,4 @@ public class RestService {
         
         return getGson().fromJson(request.getData(), dtoClass);
     }
-    
-    protected void addWarningMessage(String message) {
-        
-        if(response.getWarningMessages() == null){
-            response.setWarningMessages(new ArrayList<>());
-        }
-        
-        response.getWarningMessages().add(message);
-    }
 }

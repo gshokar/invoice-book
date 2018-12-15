@@ -11,6 +11,7 @@
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
 import ca.aatl.app.invoicebook.data.jpa.entity.base.BusinessAddressEntity;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -34,7 +35,7 @@ public class ClientAddress extends BusinessAddressEntity{
     private AddressType addressType;
     
     @JoinColumn(name = "AddressId", referencedColumnName = "AddressId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade=CascadeType.PERSIST, optional = false)
     private Address address;
 
     public Client getClient() {

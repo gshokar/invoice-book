@@ -11,6 +11,7 @@
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
 import ca.aatl.app.invoicebook.data.jpa.entity.base.BusinessContactEntity;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
