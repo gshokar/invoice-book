@@ -5,13 +5,12 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Dec-13  GShokar         Created
+ * 2018-Dec-18  GShokar         Created
  * =============================================================================
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
-import ca.aatl.app.invoicebook.data.jpa.entity.base.BusinessEntity_;
-import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 /**
@@ -19,7 +18,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  * @author GShokar
  */
 
-@StaticMetamodel(Client.class)
-public class Client_ extends BusinessEntity_{
-    public static volatile ListAttribute<Client, ClientContact> contacts;
+@StaticMetamodel(ClientContact.class)
+public class ClientContact_ {
+    public static volatile SingularAttribute<ClientContact, Contact> contact;
 }

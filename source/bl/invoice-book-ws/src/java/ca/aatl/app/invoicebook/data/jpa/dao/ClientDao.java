@@ -11,6 +11,8 @@
 package ca.aatl.app.invoicebook.data.jpa.dao;
 
 import ca.aatl.app.invoicebook.data.jpa.entity.Client;
+import ca.aatl.app.invoicebook.data.jpa.entity.ClientContact;
+import ca.aatl.app.invoicebook.data.jpa.entity.ClientContact_;
 import ca.aatl.app.invoicebook.data.jpa.entity.Client_;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact_;
@@ -128,7 +130,8 @@ public class ClientDao extends AbstractDao<Client> {
 
             if (!AppUtils.isNullOrEmpty(phone)) {
 
-                Join<Client, Contact> contact = root.join(Client_.contacts);
+                Join<Client, ClientContact> cc = root.join(Client_.contacts);
+                Join<ClientContact, Contact> contact = cc.join(ClientContact_.contact);
 
                 Predicate p = cb.or(cb.equal(contact.get(Contact_.phone), phone), cb.equal(contact.get(Contact_.mobilePhone), phone));
 

@@ -71,7 +71,7 @@ public class ClientResponseService extends ResponseService {
     private void clientAction() throws Exception {
 
         if (getRequest().getRequestType() == ServiceRequestTypeEnum.Get) {
-
+            getClient();
         } else {
             update();
         }
@@ -85,7 +85,7 @@ public class ClientResponseService extends ResponseService {
             List<ClientDto> dtoClients = new ArrayList<>();
 
             if (searchDto.getNumber() != null && !searchDto.getNumber().trim().isEmpty()) {
-                
+
                 Client client = clientService.find(searchDto.getNumber());
 
                 if (client != null) {
@@ -108,13 +108,13 @@ public class ClientResponseService extends ResponseService {
                     addWarningMessage("No client record found");
                 } else {
                     clients.forEach(c -> {
-                        
+
                         ClientDto dto = newClientDto();
-                        
+
                         mappingService.updateClientDto(dto, c);
-                        
+
                         dtoClients.add(dto);
-                        
+
                     });
                 }
             }
@@ -136,7 +136,7 @@ public class ClientResponseService extends ResponseService {
             ClientDto clientDto = getDto(ClientDto.class);
 
             validate(clientDto);
-            
+
             Client client = null;
 
             if (clientDto.getNumber() != null && clientDto.getNumber().trim().length() == 0) {
@@ -146,16 +146,16 @@ public class ClientResponseService extends ResponseService {
             } else {
                 client = clientService.find(clientDto.getNumber());
             }
-            
+
             mappingService.updateClient(client, clientDto);
-            
+
             client.setLastUpdatedBy(getSession().getUser().getId());
             client.setLastUpdatedDate(Calendar.getInstance().getTime());
-            
+
             clientService.save(client);
-            
+
             mappingService.updateClientDto(clientDto, client);
-            
+
             setResponseSuccess(clientDto);
 
         } catch (JsonSyntaxException ex) {
@@ -169,7 +169,7 @@ public class ClientResponseService extends ResponseService {
             setResponseError(ex.getValidationMessage());
 
             Logger.getLogger(ClientResponseService.class.getName()).log(Level.INFO, "Invalid ClientDto data for update", ex);
-            
+
         }
 
     }
@@ -183,14 +183,45 @@ public class ClientResponseService extends ResponseService {
     }
 
     private void validate(ClientDto clientDto) throws Exception {
-        
+
         // This is workaround for now
         // There should be dto validations
         // There should be bean validations too
         Client client = clientService.newClient();
-        
+
         mappingService.updateClient(client, clientDto);
-        
+
         clientService.validate(client);
+    }
+
+    private void getClient() throws Exception {
+        try {
+            ClientSearchDto searchDto = getDto(ClientSearchDto.class);
+
+            ClientDto dto = newClientDto();
+
+            if (searchDto.getNumber() != null && !searchDto.getNumber().trim().isEmpty()) {
+
+                Client client = clientService.find(searchDto.getNumber());
+
+                if (client != null) {
+
+                    mappingService.updateClientDto(dto, client);
+
+                    setResponseSuccess(dto);
+
+                } else {
+                    addWarningMessage("Client number " + searchDto.getNumber() + " do not exists.");
+                }
+
+            } else {
+                setResponseError("Invalid client number");
+            }
+        } catch (JsonSyntaxException ex) {
+
+            setResponseError("Invalid client number - " + ex.getMessage());
+
+            Logger.getLogger(ClientResponseService.class.getName()).log(Level.INFO, "Invalid ClientSearchDto Json", ex);
+        }
     }
 }
