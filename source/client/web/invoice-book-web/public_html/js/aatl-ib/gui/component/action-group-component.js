@@ -103,6 +103,17 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
                 }
             }
         };
+        
+        this.updateActionItemText = function(actionItem){
+            
+            if (actionItem && actionItem.controlId) {
+                let control = getActionItemControl(actionItem.controlId);
+                
+                if(control){
+                    control.text(actionItem.text);
+                }
+            }
+        };
     }
 
     return ActionGroupComponent;

@@ -35,15 +35,15 @@ $aatl_ib.AuthService = {
                 {loginId: loginId, password: password},
                 function (res, err) {
                     if (err) {
-                        callback("Login request failed: " + err);
+                        callback({messages: ["Login request failed: " + err]});
 
                     } else if(res.status === "failure"){
-                        callback(res.message);
+                        callback({messages: [res.message]});
                     } else if(res.status === "success"){
                         $aatl_ib.AuthService.user = JSON.parse(res.data);
                         callback();
                         } else {
-                            callback("Invalid response from server")
+                            callback({messages: ["Invalid response from server"]});
                     }
                 });
 

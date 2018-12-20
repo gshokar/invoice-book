@@ -58,6 +58,10 @@ $aatl_ib.gui.MainComponent = (function () {
         this.selectActionItem = function(actionItem){
             sidebarComponent.getActionGroupComponent().selectActionItem(actionItem);
         };
+        
+        this.updateActionItemText = function(actionItem){
+            sidebarComponent.getActionGroupComponent().updateActionItemText(actionItem);
+        };
     }
 
     return MainComponent;

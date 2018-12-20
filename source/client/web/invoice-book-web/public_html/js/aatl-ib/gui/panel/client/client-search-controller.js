@@ -17,11 +17,11 @@ $aatl_ib.gui.ClientSearchController = (function () {
 
         var component = new $aatl_ib.gui.ClientSearchComponent(componentId, parentComponent);
 
-        function onToolbarItemClicked(toolbarItem){
-            
-            switch(toolbarItem.typeCode){
+        function onToolbarItemClicked(toolbarItem) {
+
+            switch (toolbarItem.typeCode) {
                 case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Find:
-                    alert("Find");
+                    find();
                     break;
                 case $aatl_ib.model.gui.PanelToolbarItemTypeCode.New:
                     createNewClient();
@@ -30,19 +30,47 @@ $aatl_ib.gui.ClientSearchController = (function () {
                     alert("Clear");
                     break;
             }
-        };
-        
-        function createNewClient(){
-          let actionItem = new $aatl_ib.model.gui.ActionItem("Client - New", $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail);
-          $aatl_ib.viewController.mainController.openPanel(actionItem);
-        };
-        
+        }
+        ;
+
+        function onTableRowDoubleClicked(client) {
+           
+            openClient(client);
+        }
+        ;
+
+        function afterFind(clients, err) {
+
+            component.setResults(clients);
+        }
+
+        function find() {
+
+            $aatl_ib.ClientService.find(component.getCriteria(), afterFind);
+        }
+
+        function createNewClient() {
+            let actionItem = new $aatl_ib.model.gui.ActionItem("Client - New", $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail);
+            $aatl_ib.viewController.mainController.openPanel(actionItem);
+        }
+        ;
+
+        function openClient(client) {
+
+            if (typeof client === 'object') {
+                let actionItem = new $aatl_ib.model.gui.ActionItem("Client - " + client.name, $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail);
+                actionItem.data = client.number;
+                $aatl_ib.viewController.mainController.openPanel(actionItem);
+            }
+        }
+
         this.init = function () {
             component.init();
             component.registerOnToolbarItemClicked(onToolbarItemClicked);
+            component.registerOnTableRowDoubleClicked(onTableRowDoubleClicked);
         };
-        
-        this.getComponent = function(){
+
+        this.getComponent = function () {
             return component;
         };
     }

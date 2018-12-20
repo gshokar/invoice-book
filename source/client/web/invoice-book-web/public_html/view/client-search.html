@@ -3,7 +3,42 @@
     <div class="card-header">
         <span id="panelTitle">Client Search</span>
     </div>
-    <div class="navbar text-dark navbar-expand-lg navbar-light bg-light" id="clientSearchPanelToolbar">
+    <div class="card-body">
+        <div class="navbar text-dark navbar-expand-lg navbar-light bg-light" id="clientSearchPanelToolbar" style="margin-top: -18px; margin-left: -10px; margin-right: -10px; margin-bottom: 10px;">
+        </div>
+        <div class="alert alert-danger" role="alert" hidden>
+            
+        </div>
+         <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="clientName">Name</label>
+                    <input type="text" class="form-control" id="clientName" placeholder="name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="clientPhone">Phone</label>
+                    <input type="text" class="form-control" id="clientPhone">
+                </div>
+            </div>
+         </form>
+        <h5>List of clients</h5>
+          <div class="table-responsive" id="clientSearchResultList">
+            <table class="table table-striped table-sm table-hover">
+              <thead>
+                  <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Number</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">City</th>
+                      <th scope="col">Province</th>
+                  </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
     </div>
+    
 </div>
 

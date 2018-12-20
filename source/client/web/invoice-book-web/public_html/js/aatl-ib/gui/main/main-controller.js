@@ -29,7 +29,7 @@ $aatl_ib.MainController = (function () {
                 openActionItemPanel(actionItem);
             }
         }
-        
+
         function openActionItemPanel(actionItem) {
 
             if (actionItem.id === undefined) {
@@ -64,27 +64,6 @@ $aatl_ib.MainController = (function () {
 
             component.addActionItem(actionItem);
         }
-        
-        this.init = function () {
-
-            component.init();
-            component.bindEvents(actionItemClicked);
-            component.setHomeView();
-        };
-
-        this.openPanel = function (actionItem) {
-            let existingPanel = findPanel(actionItem.text);
-
-            if (existingPanel) {
-
-                component.selectActionItem(existingPanel.linkedActionItem);
-
-            } else {
-
-                openActionItemPanel(actionItem);
-            }
-
-        };
 
         function findPanel(title) {
             return panels.find(function (panel) {
@@ -138,11 +117,42 @@ $aatl_ib.MainController = (function () {
             panel.controller = new $aatl_ib.gui.ClientDetailController(panel.controlId, component.getCenterView());
             panel.controller.setTitle(actionItem.text);
             panel.controller.setClientNumber(actionItem.data);
-            
+
             panel.controller.init();
 
             return panel.controlId;
         }
+
+        this.init = function () {
+
+            component.init();
+            component.bindEvents(actionItemClicked);
+            component.setHomeView();
+        };
+
+        this.openPanel = function (actionItem) {
+            let existingPanel = findPanel(actionItem.text);
+
+            if (existingPanel) {
+
+                component.selectActionItem(existingPanel.linkedActionItem);
+
+            } else {
+
+                openActionItemPanel(actionItem);
+            }
+
+        };
+        
+        this.updateActionItemText = function(currentTitle, newTitle){
+            let panel = findPanel(currentTitle);
+            
+            if (panel) {
+                panel.title = newTitle;
+                panel.linkedActionItem.text = newTitle;
+                component.updateActionItemText(panel.linkedActionItem);
+            }
+        };
     }
 
     return MainController;

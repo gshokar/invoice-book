@@ -69,6 +69,14 @@ $aatl_ib.gui.ClientDetailController = (function () {
                 component.showError(err);
             } else {
                 component.setClient(client);
+                
+                let currentTitle = title;
+                
+                title = 'Client - ' + client.name; 
+                
+                component.setTitle(title);
+                
+                $aatl_ib.viewController.mainController.updateActionItemText(currentTitle, title);
             }
 
         }
