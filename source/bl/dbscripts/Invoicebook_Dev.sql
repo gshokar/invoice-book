@@ -13,3 +13,8 @@ INSERT INTO `province` (`ProvinceId`,`ProvinceCode`,`GUID`,`Province`,`CountryId
 INSERT INTO `province` (`ProvinceId`,`ProvinceCode`,`GUID`,`Province`,`CountryId`) VALUES (11,'NT','D794D4D4-A4EF-11E1-A74D-0250F2000001','Northwest Territories',1);
 INSERT INTO `province` (`ProvinceId`,`ProvinceCode`,`GUID`,`Province`,`CountryId`) VALUES (12,'YT','D794D512-A4EF-11E1-A74D-0250F2000001','Yukon',1);
 INSERT INTO `province` (`ProvinceId`,`ProvinceCode`,`GUID`,`Province`,`CountryId`) VALUES (13,'NU','D794D550-A4EF-11E1-A74D-0250F2000001','Nunavut',1);
+
+INSERT INTO addresstype (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'Business', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO contacttype (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'Business', UPPER(UUID()), 0, Now(), 0, Now());
+
+INSERT INTO `tblsequence`(SequenceId, Filler, IdGenerator, LastNo, MaxLength, `Name`, PostFixString, PreFixString) VALUES (1,'0',NULL,100000,6,'ClientNumber',NULL,NULL);
