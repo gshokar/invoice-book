@@ -11,6 +11,10 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
@@ -19,23 +23,16 @@ import javax.ejb.Stateless;
 
 @Stateless
 @LocalBean
-public class LookupResponseService extends ResponseService{
+@Path("lookups")
+public class LookupResourceService extends ResponseService{
 
     @EJB
     LookupService lookupService;
     
-    @Override
-    public void processRequest() {
-        
-        switch(this.getRequest().getDataType()){
-            
-            case ProvinceList:
-                provinceList();
-                break;
-        }
-    }
-
-    private void provinceList() {
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/provinces")
+    public String provinces() {
         
         try {
             List<Province> provinces = lookupService.provinces();
@@ -53,8 +50,9 @@ public class LookupResponseService extends ResponseService{
             
             setResponseError("System error failed to get the province list - " + ex.getMessage());
             
-            Logger.getLogger(LookupResponseService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LookupResourceService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return this.getResponseJson();
     }
-    
 }

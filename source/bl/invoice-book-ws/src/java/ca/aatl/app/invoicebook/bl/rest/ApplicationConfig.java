@@ -17,7 +17,7 @@ import javax.ws.rs.core.Application;
  *
  * @author GShokar
  */
-@javax.ws.rs.ApplicationPath("/")
+@javax.ws.rs.ApplicationPath("/api")
 public class ApplicationConfig extends Application {
 
     @Override
@@ -35,7 +35,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(ca.aatl.app.invoicebook.bl.rest.CORSFilter.class);
-        resources.add(ca.aatl.app.invoicebook.bl.rest.service.RouteService.class);
+        resources.add(ca.aatl.app.invoicebook.bl.rest.service.AuthenticationResourceService.class);
+        resources.add(ca.aatl.app.invoicebook.bl.rest.service.ClientResourceService.class);
+        resources.add(ca.aatl.app.invoicebook.bl.rest.service.LookupResourceService.class);
     }
     
 }
