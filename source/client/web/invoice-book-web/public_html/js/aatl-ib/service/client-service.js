@@ -15,7 +15,7 @@ $aatl_ib.ClientService = {
 
     find: function (criteria, callback) {
 
-        $aatl_ib.ApiService.get("clientSearch",
+        $aatl_ib.ApiService.get("client/find",
                 criteria,
                 function (res, err) {
                     if (err) {
@@ -51,8 +51,8 @@ $aatl_ib.ClientService = {
                 }
             });
         } else {
-            $aatl_ib.ApiService.get("client",
-                    {number: number},
+            $aatl_ib.ApiService.get("client/" + number,
+                    {},
                     function (res, err) {
                         if (err) {
                             callback(null, {messages: ["Faild to get client detail: " + err]});
@@ -74,7 +74,7 @@ $aatl_ib.ClientService = {
         let err = $aatl_ib.ClientService.validate(client);
 
         if (err.messages.length === 0) {
-            $aatl_ib.ApiService.update("client",
+            $aatl_ib.ApiService.post("client",
                     client,
                     function (res, serverErr) {
                         if (serverErr) {

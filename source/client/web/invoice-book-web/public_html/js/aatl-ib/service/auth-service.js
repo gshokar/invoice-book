@@ -21,7 +21,12 @@ $aatl_ib.AuthService = {
     },
 
     getSessionId: function () {
-        return this.user.sessionId;
+
+        if (this.isLoggedIn()) {
+            return this.user.sessionId;
+        }
+        
+        return "";
     },
 
     login: function (loginId, password, callback) {
@@ -31,19 +36,19 @@ $aatl_ib.AuthService = {
             return;
         }
 
-        $aatl_ib.ApiService.post("authenticate", null,
+        $aatl_ib.ApiService.post("login",
                 {loginId: loginId, password: password},
                 function (res, err) {
                     if (err) {
                         callback({messages: ["Login request failed: " + err]});
 
-                    } else if(res.status === "failure"){
+                    } else if (res.status === "failure") {
                         callback({messages: [res.message]});
-                    } else if(res.status === "success"){
+                    } else if (res.status === "success") {
                         $aatl_ib.AuthService.user = JSON.parse(res.data);
                         callback();
-                        } else {
-                            callback({messages: ["Invalid response from server"]});
+                    } else {
+                        callback({messages: ["Invalid response from server"]});
                     }
                 });
 

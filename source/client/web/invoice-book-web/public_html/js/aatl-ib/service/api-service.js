@@ -13,37 +13,24 @@
 
 $aatl_ib.ApiService = {
 
-    createRequestData: function (type, dataType, data) {
-
-        let request = {
-            requestType: type,
-            dataType: dataType,
-            data: JSON.stringify(data)
-        };
-
-        if ($aatl_ib.AuthService.isLoggedIn()) {
-            request.sessionId = $aatl_ib.AuthService.getSessionId();
-        }
-
-        return request;
-    },
-
-    post: function (type, dataType, data, callback) {
-
+    baseUrl: "http://localhost:8080/invoicebookservice/api/",
+    
+    call: function(method, urlPath, data, callback){
+        
         let isCallback = $aatl_ib.utils.isFunction(callback);
+        let url = this.getUrl(urlPath);
 
-        let requestData = this.createRequestData(type, dataType, data);
-
-        let postCall = {
-            url: "http://localhost:8080/invoicebookservice/service",
-            method: "POST",
+        let call = {
+            url: url,
+            headers: {sessionId: $aatl_ib.AuthService.getSessionId()},
+            method: method,
             crossDomain: true,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            data: JSON.stringify(requestData)
+            data: data
         };
 
-        let request = $.ajax(postCall);
+        let request = $.ajax(call);
 
         request.done(function (res) {
             if (isCallback) {
@@ -57,14 +44,16 @@ $aatl_ib.ApiService = {
             }
         });
     },
-    
-    get: function(dataType, data, callback){
-        
-        $aatl_ib.ApiService.post('get', dataType, data, callback);
+   
+    post: function (urlPath, data, callback) {
+        this.call("POST", urlPath, JSON.stringify(data), callback);
     },
-    
-    update: function(dataType, data, callback){
-        
-        $aatl_ib.ApiService.post('update', dataType, data, callback);
+
+    get: function (urlPath, data, callback) {
+        this.call("GET", urlPath, data, callback);
+    },
+
+    getUrl: function (urlPath) {
+        return this.baseUrl + urlPath;
     }
 };
