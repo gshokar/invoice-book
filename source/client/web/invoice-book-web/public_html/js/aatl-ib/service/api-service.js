@@ -38,9 +38,9 @@ $aatl_ib.ApiService = {
             }
         });
 
-        request.fail(function (jqXHR, textStatus) {
+        request.fail(function (jqXHR, textStatus, errorThrown) {
             if (isCallback) {
-                callback(null, textStatus);
+                callback(null, textStatus );
             }
         });
     },
