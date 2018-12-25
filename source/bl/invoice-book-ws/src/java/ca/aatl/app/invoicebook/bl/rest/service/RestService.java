@@ -35,12 +35,12 @@ public class RestService {
         this.response = response;
     }
     
-    protected void setResponseError(String message) {
+    public void setResponseError(String message) {
         response.setStatus(ServiceResponseStatusEnum.Failure);
         response.setMessage(message);
     }
 
-    protected void setResponseSuccess(Object data) {
+    public void setResponseSuccess(Object data) {
         response.setStatus(ServiceResponseStatusEnum.Success);
         if (data != null) {
             response.setData(getGson().toJson(data));
@@ -78,5 +78,9 @@ public class RestService {
     protected <T extends Object> T getDto(Class<T> dtoClass, String json)throws JsonSyntaxException{
         
         return getGson().fromJson(json, dtoClass);
+    }
+    
+     public String getResponseJson(){
+        return getGson().toJson(getResponse());
     }
 }

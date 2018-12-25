@@ -14,7 +14,6 @@ import ca.aatl.app.invoicebook.bl.ejb.SessionService;
 import ca.aatl.app.invoicebook.bl.ejb.UserService;
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
-import ca.aatl.app.invoicebook.data.jpa.entity.AppSession;
 import ca.aatl.app.invoicebook.data.jpa.entity.AppUser;
 import ca.aatl.app.invoicebook.dto.AuthenticateDto;
 import ca.aatl.app.invoicebook.dto.SessionDto;
@@ -25,10 +24,12 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -46,6 +47,9 @@ public class AuthenticationResourceService extends ResponseService {
     @EJB
     private SessionService sessionService;
 
+    @Context
+    HttpServletRequest httpRequest;
+            
     public AuthenticationResourceService() {
     }
 

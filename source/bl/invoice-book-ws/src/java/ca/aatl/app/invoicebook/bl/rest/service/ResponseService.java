@@ -10,31 +10,20 @@
  */
 package ca.aatl.app.invoicebook.bl.rest.service;
 
-import ca.aatl.app.invoicebook.bl.ejb.SessionService;
+import ca.aatl.app.invoicebook.bl.rest.AppSecurity;
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.data.jpa.entity.AppSession;
 import java.util.ArrayList;
-import javax.ejb.EJB;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
  * @author gshokar
  */
 public class ResponseService extends RestService {
+        
 
-    @Context
-    protected HttpServletRequest httpRequest;
-    
-    @Context
-    protected HttpHeaders httpHeaders;
-    
-    @EJB
-    private SessionService sessionService;
-    
     public ResponseService() {
         this.response = new ServiceResponse();
     }
@@ -51,31 +40,17 @@ public class ResponseService extends RestService {
 
         getResponse().getWarningMessages().add(message);
     }
-    private AppSession session;
 
-    /**
-     * Get the value of session
-     *
-     * @return the value of session
-     */
-    public AppSession getSession() {
+    public AppSession getSession(SecurityContext securityContext) {
         
-        if(session == null){
-            session =  sessionService.find(httpHeaders.getHeaderString("sessionId"));
+        AppSession session = null;
+        
+        if(securityContext != null && securityContext instanceof AppSecurity){
+            
+            session = ((AppSecurity)securityContext).getUser().getSession();
         }
         return session;
     }
 
-    /**
-     * Set the value of session
-     *
-     * @param session new value of session
-     */
-    public void setSession(AppSession session) {
-        this.session = session;
-    }
-
-    public String getResponseJson(){
-        return getGson().toJson(getResponse());
-    }
+    
 }

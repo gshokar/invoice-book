@@ -34,7 +34,9 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(ca.aatl.app.invoicebook.bl.rest.AuthenticatingFilter.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.CORSFilter.class);
+        resources.add(ca.aatl.app.invoicebook.bl.rest.RequestAuthenticationFilter.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.AuthenticationResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.ClientResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.LookupResourceService.class);

@@ -34,6 +34,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import ca.aatl.app.invoicebook.bl.rest.Authenticated;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 
 /**
  *
@@ -42,6 +45,7 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 @LocalBean
 @Path("client")
+//@DeclareRoles(AppSecurity.ROLE_ADMIN)
 public class ClientResourceService extends ResponseService {
 
     @EJB
@@ -54,6 +58,8 @@ public class ClientResourceService extends ResponseService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/find")
+    @Authenticated
+    //@RolesAllowed(AppSecurity.ROLE_ADMIN)
     public String find(
             @QueryParam("name") String name,
             @QueryParam("phone") String phone) {
@@ -99,6 +105,7 @@ public class ClientResourceService extends ResponseService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{number}")
+    @Authenticated
     public String getClient(@PathParam("number") String number) {
         try {
 
@@ -139,7 +146,8 @@ public class ClientResourceService extends ResponseService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String update(String json) {
+    @Authenticated
+    public String update(@Context SecurityContext sc, String json) {
 
         try {
 
@@ -159,7 +167,7 @@ public class ClientResourceService extends ResponseService {
 
             mappingService.updateClient(client, clientDto);
 
-            client.setLastUpdatedBy(getSession().getUser().getId());
+            client.setLastUpdatedBy(getSession(sc).getUser().getId());
             client.setLastUpdatedDate(Calendar.getInstance().getTime());
 
             clientService.save(client);

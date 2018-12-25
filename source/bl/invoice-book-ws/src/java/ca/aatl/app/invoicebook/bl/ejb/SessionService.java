@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -76,5 +78,10 @@ public class SessionService {
     
     public AppSession find(String sessionId) {
         return sessionDao.find(sessionId);
+    }
+    
+    public static SessionService getIntsance() throws NamingException{
+        
+        return InitialContext.doLookup("java:module/SessionService");
     }
 }
