@@ -38,6 +38,8 @@ $aatl_ib.model.gui.ActionItemTypeCode = {
     Home: "home",
     ClientSearch: "clientSearch",
     ClientDetail: 'clientDetail',
+    EmployeeSearch: "employeeSearch",
+    EmployeeDetail: 'employeeDetail',
     Save: 'save',
     Open: 'open',
     Close: 'close',

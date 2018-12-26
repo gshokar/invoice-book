@@ -24,9 +24,11 @@ $aatl_ib.gui.MainComponent = (function () {
                         
             homeItem = new $aatl_ib.model.gui.ActionItem("Home", $aatl_ib.model.gui.ActionItemTypeCode.Home, $aatl_ib.utils.createUniqueId());
             let clientSearchItem = new $aatl_ib.model.gui.ActionItem("Client Search", $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch, $aatl_ib.utils.createUniqueId());
+            let employeeSearchItem = new $aatl_ib.model.gui.ActionItem("Employee Search", $aatl_ib.model.gui.ActionItemTypeCode.EmployeeSearch, $aatl_ib.utils.createUniqueId());
             
             sidebarComponent.getActionGroupComponent().addActionItem(homeItem);
             sidebarComponent.getActionGroupComponent().addActionItem(clientSearchItem);
+            sidebarComponent.getActionGroupComponent().addActionItem(employeeSearchItem);
             
         };
 

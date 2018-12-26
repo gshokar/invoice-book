@@ -1,0 +1,72 @@
+<div class="card text-white bg-secondary">
+    <div class="card-header">
+        <span id="panelTitle">Employee</span>
+        <button type="button" class="close float-right" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="navbar text-dark navbar-expand-lg navbar-light bg-light no-gutters" id="employeeDetailPanelToolbar" style="margin-top: -18px; margin-left: -10px; margin-right: -10px; margin-bottom: 10px;">
+        </div>
+        <div class="alert alert-danger" role="alert" hidden>
+            
+        </div>
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="employeeNumber">Number</label>
+                    <input type="text" class="form-control" id="employeeNumber" disabled>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="employeeBirthDate">Date of Birth</label>
+                    <input type="text" class="form-control" id="employeeBirthDate" placeholder="yyyy-mm-dd">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="employeeLastName">Last Name</label>
+                    <input type="text" class="form-control" id="employeeLastName" placeholder="last name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="employeeFirstName">First Name</label>
+                    <input type="text" class="form-control" id="employeeFirstName" placeholder="first name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="employeeAddress1">Address Line 1</label>
+                <input type="text" class="form-control" id="employeeAddress1" placeholder="1234 Main St">
+            </div>
+            <div class="form-group">
+                <label for="employeeAddress2">Address Line 2</label>
+                <input type="text" class="form-control" id="employeeAddress2" placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="employeeCity">City</label>
+                    <input type="text" class="form-control" id="employeeCity">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="employeeProvince">Province</label>
+                    <select id="employeeProvince" class="form-control">
+                        <option selected>Choose...</option>
+                        <option>...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="employeePostalCode">Postal Code</label>
+                    <input type="text" class="form-control" id="employeePostalCode">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="employeePhoneNumber">Phone #</label>
+                    <input type="text" class="form-control" id="employeePhoneNumber">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="employeeEmail">Email</label>
+                    <input type="email" class="form-control" id="employeeEmail" placeholder="Email">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

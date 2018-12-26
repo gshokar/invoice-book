@@ -37,5 +37,7 @@ $aatl_ib.model.gui.PanelTypeCode = {
   
     Home: "home",
     ClientSearch: "clientSearch",
-    Client: "client"
+    Client: "client",
+    EmployeeSearch: "employeeSearch",
+    Employee: "employee"
 };

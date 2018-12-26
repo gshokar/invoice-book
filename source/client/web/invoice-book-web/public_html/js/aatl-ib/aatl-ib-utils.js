@@ -72,5 +72,9 @@ $aatl_ib.utils = {
         $.each(options, function (index, option) {
             control.append($('<option></option>').val(option.code).text(option.name));
         });
+    },
+    
+    getEmployeeName: function(employee){
+        return employee.firstName + ' ' + employee.lastName;
     }
 };

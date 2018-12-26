@@ -50,6 +50,12 @@ $aatl_ib.MainController = (function () {
                     case $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail:
                         controlId = openClientDetail(actionItem);
                         break;
+                    case $aatl_ib.model.gui.ActionItemTypeCode.EmployeeSearch:
+                        controlId = openEmployeeSearch(actionItem);
+                        break;
+                    case $aatl_ib.model.gui.ActionItemTypeCode.EmployeeDetail:
+                        controlId = openEmployeeDetail(actionItem);
+                        break;
                 }
 
                 if (controlId) {
@@ -122,6 +128,30 @@ $aatl_ib.MainController = (function () {
 
             return panel.controlId;
         }
+        
+        function openEmployeeSearch(actionItem) {
+
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.EmployeeSearch, actionItem);
+
+            panel.controller = new $aatl_ib.gui.EmployeeSearchController(panel.controlId, component.getCenterView());
+
+            panel.controller.init();
+
+            return panel.controlId;
+        }
+
+        function openEmployeeDetail(actionItem) {
+
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.EmployeeDetail, actionItem);
+
+            panel.controller = new $aatl_ib.gui.EmployeeDetailController(panel.controlId, component.getCenterView());
+            panel.controller.setTitle(actionItem.text);
+            panel.controller.setEmployeeNumber(actionItem.data);
+
+            panel.controller.init();
+
+            return panel.controlId;
+        }
 
         this.init = function () {
 
@@ -143,10 +173,10 @@ $aatl_ib.MainController = (function () {
             }
 
         };
-        
-        this.updateActionItemText = function(currentTitle, newTitle){
+
+        this.updateActionItemText = function (currentTitle, newTitle) {
             let panel = findPanel(currentTitle);
-            
+
             if (panel) {
                 panel.title = newTitle;
                 panel.linkedActionItem.text = newTitle;
