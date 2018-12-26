@@ -10,6 +10,7 @@
  */
 package ca.aatl.app.invoicebook.bl.rest;
 
+import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.bl.rest.service.RestService;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -21,14 +22,14 @@ import javax.ws.rs.core.Response;
  */
 public abstract class AuthenticationFilter implements ContainerRequestFilter {
 
-    protected Response getResponse(String message) {
+    protected Response getResponse(int code, String message) {
 
         ServiceResponse sResponse = new ServiceResponse();
 
         RestService rService = new RestService();
 
         rService.setResponse(sResponse);
-        rService.setResponseError(message);
+        rService.setResponseError(code, message);
 
         Response.ResponseBuilder rb = Response.status(Response.Status.OK).entity(rService.getResponseJson());
 
@@ -37,4 +38,8 @@ public abstract class AuthenticationFilter implements ContainerRequestFilter {
         return response;
     }
        
+    protected Response getResponse(String message) {
+        
+        return this.getResponse(ErrorResponse.CODE_INTERNAL_SERVER_ERROR, message);
+    }
 }

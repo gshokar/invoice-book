@@ -11,6 +11,7 @@
 package ca.aatl.app.invoicebook.bl.rest.service;
 
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
+import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponseStatusEnum;
 import com.google.gson.Gson;
@@ -36,10 +37,16 @@ public class RestService {
     }
     
     public void setResponseError(String message) {
-        response.setStatus(ServiceResponseStatusEnum.Failure);
-        response.setMessage(message);
+        setResponseError(ErrorResponse.CODE_INTERNAL_SERVER_ERROR, message);
     }
 
+    public void setResponseError(int code, String message) {
+        response.setStatus(ServiceResponseStatusEnum.Failure);
+        response.setMessage(message);
+        response.setError(new ErrorResponse(code));
+        response.getError().getMessages().add(message);
+    }
+    
     public void setResponseSuccess(Object data) {
         response.setStatus(ServiceResponseStatusEnum.Success);
         if (data != null) {

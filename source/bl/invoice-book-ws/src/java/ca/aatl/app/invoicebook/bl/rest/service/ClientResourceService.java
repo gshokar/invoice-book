@@ -35,6 +35,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import ca.aatl.app.invoicebook.bl.rest.Authenticated;
+import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
@@ -88,7 +89,7 @@ public class ClientResourceService extends ResponseService {
 
         } catch (JsonSyntaxException ex) {
 
-            setResponseError("Invalid client search data - " + ex.getMessage());
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid client search data - " + ex.getMessage());
 
             Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid ClientSearchDto Json", ex);
         }catch (Exception ex) {
@@ -122,18 +123,13 @@ public class ClientResourceService extends ResponseService {
                     setResponseSuccess(dto);
 
                 } else {
-                    addWarningMessage("Client number " + number + " do not exists.");
+                    setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Client number " + number + " do not exists.");
                 }
 
             } else {
-                setResponseError("Invalid client number");
+                setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid client number");
             }
-        } catch (JsonSyntaxException ex) {
-
-            setResponseError("Invalid client number - " + ex.getMessage());
-
-            Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid ClientSearchDto Json", ex);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -167,7 +163,7 @@ public class ClientResourceService extends ResponseService {
 
             mappingService.updateClient(client, clientDto);
 
-            client.setLastUpdatedBy(getSession(sc).getUser().getId());
+            client.setLastUpdatedBy(getUserId(sc));
             client.setLastUpdatedDate(Calendar.getInstance().getTime());
 
             clientService.save(client);
@@ -178,13 +174,13 @@ public class ClientResourceService extends ResponseService {
 
         } catch (JsonSyntaxException ex) {
 
-            setResponseError("Invalid client data - " + ex.getMessage());
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid client data - " + ex.getMessage());
 
             Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto Json for update", ex);
 
         } catch (DataValidationException ex) {
 
-            setResponseError(ex.getValidationMessage());
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, ex.getValidationMessage());
 
             Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto data for update", ex);
 

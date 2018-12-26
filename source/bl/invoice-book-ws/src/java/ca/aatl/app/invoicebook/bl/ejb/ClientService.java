@@ -40,7 +40,7 @@ public class ClientService {
 
     @EJB
     SequenceService sequenceService;
-    
+
     public Client find(String number) throws Exception {
 
         return clientDao.find(number);
@@ -55,7 +55,7 @@ public class ClientService {
         Client client = new Client();
 
         client.setActive(true);
-        
+
         client.setAddresses(new ArrayList<>());
 
         ClientAddress ca = new ClientAddress();
@@ -99,8 +99,10 @@ public class ClientService {
             entity.setAddedBy(entity.getLastUpdatedBy());
             entity.setAddedDate(entity.getLastUpdatedDate());
             entity.getGuid();
-
-            entity.setNumber(sequenceService.next("ClientNumber"));
+            
+            synchronized (this) {
+                entity.setNumber(sequenceService.next("ClientNumber"));
+            }
         }
 
         if (entity.getAddresses() != null && !entity.getAddresses().isEmpty()) {
@@ -162,17 +164,16 @@ public class ClientService {
                 rtnValue = false;
                 sb.append(System.lineSeparator());
                 sb.append("Enter the client name.");
-            }else if(clientDao.isExists(entity.getId(), entity.getNumber(), entity.getName())){
+            } else if (clientDao.isExists(entity.getId(), entity.getNumber(), entity.getName())) {
                 rtnValue = false;
                 sb.append(System.lineSeparator());
                 sb.append("This client name already exists.");
             }
-            
-            
+
             if (entity.hasAddress()) {
-                
+
                 Address address = entity.primaryAddress().getAddress();
-                
+
                 if (AppUtils.isNullOrEmpty(address.getAddress1())) {
                     rtnValue = false;
                     sb.append(System.lineSeparator());
@@ -194,7 +195,7 @@ public class ClientService {
 
             if (entity.hasContact()) {
                 Contact contact = entity.primaryContact().getContact();
-                
+
                 if (AppUtils.isNullOrEmpty(contact.getPhone())) {
                     rtnValue = false;
                     sb.append(System.lineSeparator());

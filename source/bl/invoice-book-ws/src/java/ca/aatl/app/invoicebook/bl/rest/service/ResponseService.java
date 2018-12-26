@@ -52,5 +52,9 @@ public class ResponseService extends RestService {
         return session;
     }
 
+    public int getUserId(SecurityContext securityContext){
+        
+        return getSession(securityContext).getUser().getId();
+    }
     
 }

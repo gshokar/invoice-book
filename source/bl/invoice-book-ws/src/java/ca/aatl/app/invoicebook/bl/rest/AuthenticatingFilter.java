@@ -10,6 +10,7 @@
  */
 package ca.aatl.app.invoicebook.bl.rest;
 
+import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,7 @@ public class AuthenticatingFilter extends AuthenticationFilter {
 
         try {
             if (!isAuthenticated(crContext.getSecurityContext())) {
-                crContext.abortWith(getResponse("Request authentication failed"));
+                crContext.abortWith(getResponse(ErrorResponse.CODE_UNAUTHORIZED, "Request authentication failed"));
             }
         } catch (Exception ex) {
 

@@ -33,7 +33,7 @@ public class ClientContact extends BusinessContactEntity{
     @ManyToOne(optional = false)
     private ContactType contactType;
     @JoinColumn(name = "ContactId", referencedColumnName = "ContactId", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade=CascadeType.PERSIST, optional = false)
     private Contact contact;
 
     public Client getClient() {

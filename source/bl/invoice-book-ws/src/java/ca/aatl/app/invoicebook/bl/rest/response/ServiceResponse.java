@@ -119,4 +119,24 @@ public class ServiceResponse {
         this.warningMessages = warningMessages;
     }
 
+    private ErrorResponse error;
+
+    /**
+     * Get the value of error
+     *
+     * @return the value of error
+     */
+    public ErrorResponse getError() {
+        return error;
+    }
+
+    /**
+     * Set the value of error
+     *
+     * @param error new value of error
+     */
+    public void setError(ErrorResponse error) {
+        this.error = error;
+    }
+
 }

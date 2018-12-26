@@ -13,6 +13,7 @@ package ca.aatl.app.invoicebook.bl.rest.service;
 import ca.aatl.app.invoicebook.bl.ejb.SessionService;
 import ca.aatl.app.invoicebook.bl.ejb.UserService;
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
+import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.data.jpa.entity.AppUser;
 import ca.aatl.app.invoicebook.dto.AuthenticateDto;
@@ -70,7 +71,7 @@ public class AuthenticationResourceService extends ResponseService {
 
         } catch (JsonSyntaxException ex) {
 
-            setResponseError("Invalid login data - " + ex.getMessage());
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid login data - " + ex.getMessage());
 
             Logger.getLogger(AuthenticationResourceService.class.getName()).log(Level.INFO, "Invalid AuthenticationDto Json", ex);
         } catch (Exception ex) {

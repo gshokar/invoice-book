@@ -10,6 +10,7 @@
  */
 package ca.aatl.app.invoicebook.util;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
@@ -19,6 +20,8 @@ import java.util.UUID;
  * @author GShokar
  */
 public final class AppUtils {
+    
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     public static String getGUID(){
         return UUID.randomUUID().toString().toUpperCase();
@@ -31,5 +34,15 @@ public final class AppUtils {
     
     public static boolean isNullOrEmpty(String value){
         return value == null || value.trim().length() == 0;
+    }
+    
+    public static String dateToString(Date date){
+        String value = null;
+        
+        if(date != null){
+            value = dateFormat.format(date);
+        }
+        
+        return value;
     }
 }

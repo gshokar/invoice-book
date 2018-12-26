@@ -14,11 +14,15 @@ import ca.aatl.app.invoicebook.bl.ejb.LookupService;
 import ca.aatl.app.invoicebook.data.jpa.entity.Address;
 import ca.aatl.app.invoicebook.data.jpa.entity.Client;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
+import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
 import ca.aatl.app.invoicebook.dto.AddressDto;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
+import ca.aatl.app.invoicebook.dto.EmployeeDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
+import ca.aatl.app.invoicebook.util.AppUtils;
+import java.text.ParseException;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -125,7 +129,59 @@ public class MappingService {
             }
 
             client.setName(dto.getName());
-            client.setNumber(dto.getNumber());
+            //client.setNumber(dto.getNumber());
+        }
+    }
+
+    public void updateEmployeeDto(EmployeeDto dto, Employee employee) {
+
+        if (employee != null && dto != null) {
+
+            dto.setFirstName(employee.getFirstName());
+            dto.setLastName(employee.getLastName());
+            dto.setNumber(employee.getNumber());
+
+            if (employee.getBirthDate() != null) {
+                dto.setBirthDate(AppUtils.dateToString(employee.getBirthDate()));
+            }
+
+            if (employee.getAddress() != null) {
+
+                updateAddressDto(dto.getAddress(), employee.getAddress());
+
+            }
+
+            if (employee.getContact() != null) {
+
+                updateContactDto(dto.getContact(), employee.getContact());
+            }
+        }
+    }
+
+    public void updateEmployee(Employee employee, EmployeeDto dto) throws Exception {
+
+        if (dto != null && employee != null) {
+
+            if (employee.getAddress() != null) {
+
+                updateAddress(employee.getAddress(), dto.getAddress());
+            }
+
+            if (employee.getContact() != null) {
+                updateContact(employee.getContact(), dto.getContact());
+            }
+
+            employee.setFirstName(dto.getFirstName());
+            employee.setLastName(dto.getLastName());
+
+            if (!AppUtils.isNullOrEmpty(dto.getBirthDate())) {
+                try {
+                    employee.setBirthDate(AppUtils.dateFormat.parse(dto.getBirthDate()));
+                } catch (ParseException ex) {
+
+                }
+            }
+            //employee.setNumber(dto.getNumber());
         }
     }
 }

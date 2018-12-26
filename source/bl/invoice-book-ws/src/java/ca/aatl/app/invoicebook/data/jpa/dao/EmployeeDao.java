@@ -5,18 +5,17 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Nov-08  GShokar         Created
+ * 2018-Dec-25  GShokar         Created
  * =============================================================================
  */
 package ca.aatl.app.invoicebook.data.jpa.dao;
 
-import ca.aatl.app.invoicebook.data.jpa.entity.Client;
-import ca.aatl.app.invoicebook.data.jpa.entity.ClientContact;
-import ca.aatl.app.invoicebook.data.jpa.entity.ClientContact_;
-import ca.aatl.app.invoicebook.data.jpa.entity.Client_;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact_;
+import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
+import ca.aatl.app.invoicebook.data.jpa.entity.Employee_;
 import ca.aatl.app.invoicebook.util.AppUtils;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -32,12 +31,13 @@ import javax.persistence.criteria.Root;
  *
  * @author GShokar
  */
+
 @Stateless
 @LocalBean
-public class ClientDao extends AbstractDao<Client> {
+public class EmployeeDao extends AbstractDao<Employee>{
 
     @Override
-    public void save(Client entity) throws Exception {
+    public void save(Employee entity) throws Exception {
         if (entity != null) {
 
             if (entity.getId() == null) {
@@ -50,65 +50,62 @@ public class ClientDao extends AbstractDao<Client> {
     }
 
     @Override
-    public void beforeCreate(Client entity) throws Exception {
+    public void beforeCreate(Employee entity) throws Exception {
         
     }
 
     @Override
-    public void beforeUpdate(Client entity) throws Exception {
-
+    public void beforeUpdate(Employee entity) throws Exception {
+        
     }
 
-    public Client find(String number) {
-        Client client = null;
+    public Employee find(String number) {
+        
+        Employee entity = null;
 
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
-            CriteriaQuery<Client> cq = cb.createQuery(Client.class);
+            CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
 
-            Root<Client> root = cq.from(Client.class);
+            Root<Employee> root = cq.from(Employee.class);
 
             cq.select(root);
-            cq.where(cb.equal(root.get(Client_.number), number));
+            cq.where(cb.equal(root.get(Employee_.number), number));
 
-            TypedQuery<Client> q = em.createQuery(cq);
+            TypedQuery<Employee> q = em.createQuery(cq);
 
-            client = q.getSingleResult();
-
-            if (client != null) {
-                client.getAddresses().size();
-                client.getContacts().size();
-            }
+            entity = q.getSingleResult();
+            
 
         } catch (NoResultException ex) {
 
         }
-        return client;
+        return entity;
     }
-
-    public List<Client> find(String name, String phone) {
-        List<Client> list = null;
+    
+    public List<Employee> find(String name, String phone) {
+        List<Employee> list = null;
 
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
-            CriteriaQuery<Client> cq = cb.createQuery(Client.class);
+            CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
 
-            Root<Client> root = cq.from(Client.class);
+            Root<Employee> root = cq.from(Employee.class);
 
             cq.select(root);
 
             Predicate predicate = null;
 
             if (!AppUtils.isNullOrEmpty(name)) {
-                predicate = cb.like(root.get(Client_.name), '%' + name + '%');
+                predicate = cb.or(cb.like(root.get(Employee_.firstName), '%' + name + '%')
+                        ,cb.like(root.get(Employee_.lastName), '%' + name + '%'));
             }
 
             if (!AppUtils.isNullOrEmpty(phone)) {
 
-                Join<Client, ClientContact> cc = root.join(Client_.contacts);
-                Join<ClientContact, Contact> contact = cc.join(ClientContact_.contact);
+                Join<Employee, Contact> contact = root.join(Employee_.contact);
 
                 Predicate p = cb.or(cb.equal(contact.get(Contact_.phone), phone), cb.equal(contact.get(Contact_.mobilePhone), phone));
 
@@ -123,44 +120,34 @@ public class ClientDao extends AbstractDao<Client> {
                 cq.where(predicate);
             }
 
-            TypedQuery<Client> q = em.createQuery(cq);
+            TypedQuery<Employee> q = em.createQuery(cq);
 
             list = q.getResultList();
-
-            if (list != null && !list.isEmpty()) {
-                list.forEach(c -> {
-                    c.getAddresses().size();
-                    c.getContacts().size();
-                });
-            }
+            
         } catch (NoResultException ex) {
 
         }
         return list;
     }
-
-    public boolean isExists(Integer id, String number, String name) {
+    
+    public boolean isExists(Integer id, String name, Date birthDate) {
         boolean value = false;
         
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
             CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-            Root<Client> root = cq.from(Client.class);
+            Root<Employee> root = cq.from(Employee.class);
 
             cq.select(cb.count(root));
 
-            Predicate predicate = cb.equal(root.get(Client_.name),
-                    name);
+            Predicate predicate = cb.and(cb.equal(root.get(Employee_.name),name)
+                    , cb.equal(root.get(Employee_.birthDate),
+                    birthDate));
 
             if (id != null) {
                 predicate = cb.and(predicate,
-                        cb.notEqual(root.get(Client_.id), id));
-            }
-
-            if (number != null) {
-                predicate = cb.and(predicate,
-                        cb.notEqual(root.get(Client_.number), number));
+                        cb.notEqual(root.get(Employee_.id), id));
             }
             
             cq.where(predicate);
@@ -174,5 +161,4 @@ public class ClientDao extends AbstractDao<Client> {
         
         return value;
     }
-
 }
