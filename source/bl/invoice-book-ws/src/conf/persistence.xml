@@ -16,6 +16,7 @@
     <class>ca.aatl.app.invoicebook.data.jpa.entity.Province</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.base.Sequence</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.Employee</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>

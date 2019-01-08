@@ -205,6 +205,7 @@ public class EmployeeResourceService extends ResponseService{
 
         mappingService.updateEmployee(employee, dto);
 
+        //employee.setNumber(dto.getNumber());
         employeeService.validate(employee);
     }
 }

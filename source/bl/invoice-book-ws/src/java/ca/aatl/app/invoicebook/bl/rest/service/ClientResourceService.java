@@ -210,7 +210,8 @@ public class ClientResourceService extends ResponseService {
         Client client = clientService.newClient();
 
         mappingService.updateClient(client, clientDto);
-
+        
+        client.setNumber(clientDto.getNumber());
         clientService.validate(client);
     }
 }

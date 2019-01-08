@@ -5,7 +5,7 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2018-Nov-04  GShokar         Created
+ * 2018-Dec-26  GShokar         Created
  * =============================================================================
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
@@ -23,48 +23,36 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name="client")
-public class Client extends BusinessEntity{
+@Table(name="company")
+public class Company extends BusinessEntity{
     
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "client")
-    private List<ClientAddress> addresses;
-    
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "client")
-    private List<ClientContact> contacts;
-    
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "client")
-    private List<ClientLocation> locations;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "company")
+    private List<CompanyAddress> addresses;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "company")
+    private List<CompanyContact> contacts;
 
-    public List<ClientAddress> getAddresses() {
+    public List<CompanyAddress> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<ClientAddress> addresses) {
+    public void setAddresses(List<CompanyAddress> addresses) {
         this.addresses = addresses;
     }
 
-    public List<ClientContact> getContacts() {
+    public List<CompanyContact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<ClientContact> contacts) {
+    public void setContacts(List<CompanyContact> contacts) {
         this.contacts = contacts;
     }
-
-    public List<ClientLocation> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<ClientLocation> locations) {
-        this.locations = locations;
-    }
     
-    public ClientContact primaryContact() {
-        ClientContact cc = null;
+    public CompanyContact primaryContact() {
+        CompanyContact cc = null;
         
         if (contacts != null) {
             
-            for(ClientContact c : contacts){
+            for(CompanyContact c : contacts){
                 if(c.getPrimary()){
                     cc = c;
                     break;
@@ -75,10 +63,10 @@ public class Client extends BusinessEntity{
         return cc;
     }
 
-    public ClientAddress primaryAddress() {
-        ClientAddress ca = null;
+    public CompanyAddress primaryAddress() {
+        CompanyAddress ca = null;
         if (addresses != null) {
-            for(ClientAddress c : addresses){
+            for(CompanyAddress c : addresses){
                 if(c.getPrimary()){
                     ca = c;
                     break;
@@ -89,12 +77,13 @@ public class Client extends BusinessEntity{
     }
     
     public boolean hasAddress(){
-        ClientAddress ca = primaryAddress();
+        CompanyAddress ca = primaryAddress();
         return ca != null && ca.getAddress() != null;
     }
     
     public boolean hasContact(){
-        ClientContact cc = primaryContact();
+        CompanyContact cc = primaryContact();
         return cc != null && cc.getContact() != null;
     }
+    
 }
