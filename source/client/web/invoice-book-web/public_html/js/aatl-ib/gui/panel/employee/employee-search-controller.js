@@ -15,7 +15,7 @@
 $aatl_ib.gui.EmployeeSearchController = (function () {
     function EmployeeSearchController(componentId, parentComponent) {
 
-        var component = new $aatl_ib.gui.EmployeeSearchComponent(componentId, parentComponent);
+        var component = new $aatl_ib.gui.EmployeeSearchComponent({componentId: componentId, parentComponent: parentComponent});
 
         function onToolbarItemClicked(toolbarItem) {
 
@@ -50,15 +50,14 @@ $aatl_ib.gui.EmployeeSearchController = (function () {
         }
 
         function createNewEmployee() {
-            let actionItem = new $aatl_ib.model.gui.ActionItem("Employee - New", $aatl_ib.model.gui.ActionItemTypeCode.EmployeeDetail);
+            let actionItem = new $aatl_ib.gui.ActionItem({text: "Employee - New", typeCode: $aatl_ib.gui.ActionItemTypeCode.EmployeeDetail});
             $aatl_ib.viewController.mainController.openPanel(actionItem);
         }
-        ;
 
         function openEmployee(employee) {
 
             if (typeof employee === 'object') {
-                let actionItem = new $aatl_ib.model.gui.ActionItem("Employee - " + $aatl_ib.utils.getEmployeeName(employee), $aatl_ib.model.gui.ActionItemTypeCode.EmployeeDetail);
+                let actionItem = new $aatl_ib.gui.ActionItem({text: "Employee - " + $aatl_ib.utils.getEmployeeName(employee), typeCode: $aatl_ib.gui.ActionItemTypeCode.EmployeeDetail});
                 actionItem.data = employee.number;
                 $aatl_ib.viewController.mainController.openPanel(actionItem);
             }

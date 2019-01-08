@@ -12,48 +12,41 @@
 "use strict";
 
 $aatl_ib.gui.ClientDetailComponent = (function () {
-    function ClientDetailComponent(componentId, parentComponent) {
+    function ClientDetailComponent(props) {
 
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent);
+        let component = new $aatl_ib.gui.Component(props);
         let client = null;
-        let onToolbarItemClicked = null;
+        let onActionButtonClicked = null;
         let afterInit = null;
         let isFormLoading = false;
 
-        let toolbar = new $aatl_ib.gui.PanelToolbarComponent("clientDetailPanelToolbar", component.getControl, "clientDetailPanelToolbar");
-        let numberField = new $aatl_ib.gui.Component("clientNumber", component.getControl, "clientNumber");
-        let nameField = new $aatl_ib.gui.Component("clientName", component.getControl, "clientName");
-        let address1Field = new $aatl_ib.gui.Component("clientAddress1", component.getControl, "clientAddress1");
-        let address2Field = new $aatl_ib.gui.Component("clientAddress2", component.getControl, "clientAddress2");
-        let cityField = new $aatl_ib.gui.Component("clientCity", component.getControl, "clientCity");
-        let provinceField = new $aatl_ib.gui.Component("clientProvince", component.getControl, "clientProvince");
-        let postalCodeField = new $aatl_ib.gui.Component("clientPostalCode", component.getControl, "clientPostalCode");
-        let emailField = new $aatl_ib.gui.Component("clientEmail", component.getControl, "clientEmail");
-        let phoneField = new $aatl_ib.gui.Component("clientPhoneNumber", component.getControl, "clientPhoneNumber");
+        let numberField = new $aatl_ib.gui.Component({componentId: "clientNumber", parentComponent: component.getControl, componentName: "clientNumber"});
+        let nameField = new $aatl_ib.gui.Component({componentId: "clientName", parentComponent: component.getControl, componentName: "clientName"});
 
+        let addressComponent = new $aatl_ib.gui.AddressComponent({componentId: "address", parentComponent: component.getControl, componentName: "address", replaceComponent: true});
+        let contactComponent = new $aatl_ib.gui.ContactComponent({componentId: "contact", parentComponent: component.getControl, componentName: "contact", replaceComponent: true});
+        let locationsComponent = new $aatl_ib.gui.ClientLocationsComponent({componentId: "clientLocations", parentComponent: component.getControl, componentName: "clientLocations"});
+        let errorComponent = new $aatl_ib.ErrorComponent({componentId: "clientErrors", parentComponent: component.getControl});
+        
         function afterLoad() {
-            toolbar.init();
-            toolbar.registerOnClickActionItem(onToolbarItemClicked);
-            addToolbarItems();
+
             bindEvents();
-            
+
+            addressComponent.init();
+            contactComponent.init();
+            locationsComponent.init();
+
             if (afterInit !== null && typeof afterInit === "function") {
                 afterInit();
             }
-            
+
             setModified(false);
         }
 
         function getControl() {
             return component.getControl();
         }
-
-        function addToolbarItems() {
-
-            toolbar.addNewActionItem("Save", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Save);
-            toolbar.addNewActionItem("Close", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Close);
-        }
-
+   
         function getNumberField() {
             return numberField.getControl();
         }
@@ -62,79 +55,41 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             return nameField.getControl();
         }
 
-        function getAddress1Field() {
-            return address1Field.getControl();
-        }
-
-        function getAddress2Field() {
-            return address2Field.getControl();
-        }
-
-        function getCityField() {
-            return cityField.getControl();
-        }
-
-        function getProvinceField() {
-            return provinceField.getControl();
-        }
-
-        function getPostalCodeField() {
-            return postalCodeField.getControl();
-        }
-
-        function getEmailField() {
-            return emailField.getControl();
-        }
-
-        function getPhoneField() {
-            return phoneField.getControl();
-        }
-
         function getTitleControl() {
             return getControl().find("#panelTitle");
         }
-
-        function getErrorControl() {
-            return getControl().find(".alert-danger");
+        
+        function setButtonActionEnabled(name, value) {
+            getControl().find(".client-action-btn-group button[data-action='" + name + "']").prop("disabled", !value);
         }
-
+        
         function setModified(value) {
 
             if (typeof value === "boolean") {
-                
-                toolbar.getActionItemControl($aatl_ib.model.gui.PanelToolbarItemTypeCode.Save).prop('disabled', !value);
+
+                setButtonActionEnabled("save", value);
                 component.setModified(value);
             }
         }
-        
-        function bindEvents(){
-          
+
+        function bindEvents() {
+
             getNameField().change(() => {
                 onFieldValueChanged();
             });
-            getAddress1Field().change(() => {
-                onFieldValueChanged();
+
+            getControl().find(".client-action-btn-group button").click(function (evt) {
+
+                let $element = $(evt.target);
+                let action = $element.data("action");
+
+                onActionButtonClicked(action);
             });
-            getAddress2Field().change(() => {
-                onFieldValueChanged();
-            });
-            getCityField().change(() => {
-                onFieldValueChanged();
-            });
-            getProvinceField().change(() => {
-                onFieldValueChanged();
-            });
-            getPostalCodeField().change(() => {
-                onFieldValueChanged();
-            });
-            getPhoneField().change(() => {
-                onFieldValueChanged();
-            });
-            getEmailField().change(() => {
-                onFieldValueChanged();
-            });
+
+            addressComponent.registerOnFieldValueChanged(onFieldValueChanged);
+            contactComponent.registerOnFieldValueChanged(onFieldValueChanged);
         }
-        
+
         function onFieldValueChanged() {
 
             if (isFormLoading === false) {
@@ -145,48 +100,38 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         function onClientChanged() {
 
             setModified(false);
-            
+
             isFormLoading = true;
-            
+
             if (client === null || client === undefined) {
                 getNumberField().val("");
                 getNameField().val("");
-                getAddress1Field().val("");
-                getAddress2Field().val("");
-                getCityField().val("");
-                //getProvinceField().val("");
-                getPostalCodeField().val("");
-                getPhoneField().val("");
-                getEmailField().val("");
+
+                addressComponent.setAddress(null);
+                contactComponent.setContact(null);
+
             } else {
                 getNumberField().val(client.number);
                 getNameField().val(client.name);
-                getAddress1Field().val(client.address.address1);
-                getAddress2Field().val(client.address.address2);
-                getCityField().val(client.address.city);
-                getProvinceField().val(client.address.province);
-                getPostalCodeField().val(client.address.postalCode);
-                getPhoneField().val(client.contact.phone);
-                getEmailField().val(client.contact.email);
+
+                addressComponent.setAddress(client.address);
+                contactComponent.setContact(client.contact);
             }
-            
+
             isFormLoading = false;
         }
 
         function updateElementIds(html) {
-            let updatedHtml = toolbar.updateElementId(html, $aatl_ib.utils.createUniqueId());
+            let updatedHtml = errorComponent.updateElementId(html);
+            
+            updatedHtml = locationsComponent.updateElementIds(updatedHtml);
 
-            updatedHtml = numberField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = nameField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = address1Field.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = address2Field.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = cityField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = provinceField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = postalCodeField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = emailField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = phoneField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
+            let element = {html: updatedHtml, createNewId: true, attributes: ['for']};
 
-            return updatedHtml;
+            element.html = numberField.updateElementId(element);
+            element.html = nameField.updateElementId(element);
+
+            return element.html;
         }
 
         function loadView(html) {
@@ -195,12 +140,12 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         }
 
         this.init = function () {
-            $.get($aatl_ib.viewController.getViewUrl("client-detail"), loadView);
+            $aatl_ib.ViewService.getViewContent("client-detail", loadView);
 
         };
 
-        this.registerOnToolbarItemClicked = function (actionItemClicked) {
-            onToolbarItemClicked = actionItemClicked;
+        this.registerOnActionButtonClicked = function (actionClicked) {
+            onActionButtonClicked = actionClicked;
         };
 
         this.getComponent = function () {
@@ -212,17 +157,8 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             let client = {
                 number: getNumberField().val(),
                 name: getNameField().val(),
-                address: {
-                    address1: getAddress1Field().val(),
-                    address2: getAddress2Field().val(),
-                    city: getCityField().val(),
-                    province: getProvinceField().val(),
-                    postalCode: getPostalCodeField().val()
-                },
-                contact: {
-                    phone: getPhoneField().val(),
-                    email: getEmailField().val()
-                }
+                address: addressComponent.getAddress(),
+                contact: contactComponent.getContact()
             };
 
             return client;
@@ -243,34 +179,22 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         };
 
         this.showError = function (err) {
-            let control = getErrorControl();
-
-            control.empty();
-
-            $.each(err.messages, function (index, message) {
-                control.append(message);
-
-                if (index < (err.messages.length - 1)) {
-                    control.append("</br>");
-                }
-            });
-
-            control.prop("hidden", false);
+            errorComponent.show(err.messages);
         };
 
         this.hideError = function () {
-            getErrorControl().prop("hidden", true);
+            errorComponent.hide();
         };
 
         this.getProvinceControl = function () {
 
-            return getProvinceField();
+            return addressComponent.getProvinceControl();
         };
 
         this.selectProvince = function () {
 
             if (client !== undefined && client !== null && client.address !== undefined && client.address !== null) {
-                getProvinceField().val(client.address.province);
+                addressComponent.selectProvince(client.address.province);
             }
         };
     }

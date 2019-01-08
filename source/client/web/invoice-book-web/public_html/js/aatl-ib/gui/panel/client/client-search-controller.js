@@ -15,7 +15,7 @@
 $aatl_ib.gui.ClientSearchController = (function () {
     function ClientSearchController(componentId, parentComponent) {
 
-        var component = new $aatl_ib.gui.ClientSearchComponent(componentId, parentComponent);
+        var component = new $aatl_ib.gui.ClientSearchComponent({componentId: componentId, parentComponent: parentComponent});
 
         function onToolbarItemClicked(toolbarItem) {
 
@@ -50,7 +50,7 @@ $aatl_ib.gui.ClientSearchController = (function () {
         }
 
         function createNewClient() {
-            let actionItem = new $aatl_ib.model.gui.ActionItem("Client - New", $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail);
+            let actionItem = new $aatl_ib.gui.ActionItem({text: "Client - New", typeCode: $aatl_ib.gui.ActionItemTypeCode.ClientDetail});
             $aatl_ib.viewController.mainController.openPanel(actionItem);
         }
         ;
@@ -58,7 +58,7 @@ $aatl_ib.gui.ClientSearchController = (function () {
         function openClient(client) {
 
             if (typeof client === 'object') {
-                let actionItem = new $aatl_ib.model.gui.ActionItem("Client - " + client.name, $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail);
+                let actionItem = new $aatl_ib.gui.ActionItem({text: "Client - " + client.name, typeCode: $aatl_ib.gui.ActionItemTypeCode.ClientDetail});
                 actionItem.data = client.number;
                 $aatl_ib.viewController.mainController.openPanel(actionItem);
             }

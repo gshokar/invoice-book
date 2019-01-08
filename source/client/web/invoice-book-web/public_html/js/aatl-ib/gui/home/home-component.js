@@ -13,11 +13,11 @@
 
 $aatl_ib.gui.HomeComponent = (function () {
 
-    function HomeComponent(componentId, parentComponent) {
+    function HomeComponent(props) {
 
-        let id = componentId;
+        let id = props.componentId;
         let controlId = "#" + id;
-        let parent = parentComponent;
+        let parent = props.parentComponent;
         
         this.getComponent = function() {
 

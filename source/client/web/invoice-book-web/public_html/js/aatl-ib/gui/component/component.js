@@ -13,11 +13,11 @@
 
 $aatl_ib.gui.Component = (function () {
 
-    function Component(componentId, parentComponent, componentName) {
+    function Component(props) {
 
-        let id = componentId;
-        let parent = parentComponent;
-        let name = componentName;
+        let id = props.componentId;
+        let parent = props.parentComponent;
+        let name = props.componentName;
         let valueChanged = false;
 
         function controlId() {
@@ -57,20 +57,32 @@ $aatl_ib.gui.Component = (function () {
             name = value;
         };
 
-        this.updateElementId = function (html, newId, updateForAttributes) {
+        this.updateElementId = function (element) {
 
-            if (newId !== undefined && newId !== null) {
-                let updatedHtml = $aatl_ib.utils.replaceElementId(html, id, newId);
+            let elementId = undefined;
+            
+            if (element.newId !== undefined && element.newId !== null) {
+                elementId = element.newId;
+            }else if(element.createNewId === true){
+                elementId = $aatl_ib.utils.createUniqueId();
+            }
 
-                if (updateForAttributes === true) {
-                    updatedHtml = $aatl_ib.utils.replaceElementAttributeFor(updatedHtml, id, newId);
+            if (elementId !== undefined) {
+                let updatedHtml = $aatl_ib.utils.replaceElementId(element.html, id, elementId);
+
+                if (Array.isArray(element.attributes)) {
+
+                    $.each(element.attributes, function (index, attribute) {
+                        updatedHtml = $aatl_ib.utils.replaceElementAttribute(updatedHtml, attribute, id, elementId);
+                    });
                 }
 
-                id = newId;
+                id = elementId;
 
                 return updatedHtml;
             }
-            return html;
+            
+            return element.html;
         };
 
         this.isModified = function () {

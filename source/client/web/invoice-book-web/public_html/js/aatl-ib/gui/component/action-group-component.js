@@ -13,24 +13,20 @@
 
 $aatl_ib.gui.ActionGroupComponent = (function () {
 
-    function ActionGroupComponent(componentId, parentComponent) {
+    function ActionGroupComponent(props) {
 
-        let id = componentId;
-        let controlId = "#" + id;
-
-        let parent = parentComponent;
-
+        let component = new $aatl_ib.gui.Component(props);
+        
         let actionItems = [];
         let onClickActions = [];
         let activeItem = undefined;
+        let actionItemView = function (actionItem) {
+            return '<a class="list-group-item list-group-item-action" id="' + actionItem.id + '" data-toggle="list" href="#" role="tab">';
+        };
 
         function getComponent() {
-
-            if (parent && typeof parent === 'function') {
-                return parent().find(controlId);
-            }
-
-            return $(controlId);
+            
+            return component.getControl();
         }
 
         function getActionItemControl(id) {
@@ -38,8 +34,14 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
         }
 
         function addActionItemControl(actionItem) {
+            let actionElement = actionItemView(actionItem);
 
-            getComponent().append('<a class="list-group-item list-group-item-action" id="' + actionItem.id + '" data-toggle="list" href="#list-clientSearch" role="tab">' + actionItem.text + '</a>');
+            if (actionItem.icon !== undefined && actionItem.icon !== null) {
+                actionElement = actionElement + '<span data-feather="' + actionItem.icon + '"></span>';
+            }
+            actionElement = actionElement + actionItem.text + '</a>';
+
+            getComponent().append(actionElement);
         }
 
         this.registerOnClickActionItem = function (action) {
@@ -97,22 +99,37 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
 
             if (actionItem && actionItem.controlId) {
                 let control = getActionItemControl(actionItem.controlId);
-                
-                if(control){
+
+                if (control) {
                     control.trigger('click');
                 }
             }
         };
-        
-        this.updateActionItemText = function(actionItem){
-            
+
+        this.updateActionItemText = function (actionItem) {
+
             if (actionItem && actionItem.controlId) {
                 let control = getActionItemControl(actionItem.controlId);
-                
-                if(control){
+
+                if (control) {
                     control.text(actionItem.text);
                 }
             }
+        };
+
+        this.setActionItemViewTemplate = function (view) {
+
+            if (typeof view === 'function') {
+                actionItemView = view;
+            }
+        };
+        
+        this.updateElementId = function (element) {
+            return component.updateElementId(element);
+        };
+        
+        this.getSelectedActionItem = function(){
+            return activeItem;
         };
     }
 

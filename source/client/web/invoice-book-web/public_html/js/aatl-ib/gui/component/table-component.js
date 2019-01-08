@@ -12,9 +12,9 @@
 "use strict";
 
 $aatl_ib.gui.TableComponent = (function () {
-    function TableComponent(componentId, parentComponent, componentName) {
+    function TableComponent(props) {
      
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent, componentName);     
+        let component = new $aatl_ib.gui.Component(props);     
         let onRowDoubleClicked = null;
         
         function getTableControl(){

@@ -13,9 +13,9 @@
 "use strict";
 
 $aatl_ib.gui.EmployeeSearchComponent = (function () {
-    function EmployeeSearchComponent(componentId, parentComponent) {
+    function EmployeeSearchComponent(props) {
 
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent);
+        let component = new $aatl_ib.gui.Component(props);
 
         let toolbar = null;
         let onToolbarItemClicked = null;
@@ -24,12 +24,12 @@ $aatl_ib.gui.EmployeeSearchComponent = (function () {
         let onTableRowDoubleClicked = null;
 
         function afterLoad() {
-            toolbar = new $aatl_ib.gui.PanelToolbarComponent("employeeSearchPanelToolbar", component.getControl);
+            toolbar = new $aatl_ib.gui.PanelToolbarComponent({componentId: "employeeSearchPanelToolbar", parentComponent: component.getControl});
             toolbar.init();
             toolbar.registerOnClickActionItem(onToolbarItemClicked);
             addToolbarItems();
 
-            resultListTable = new $aatl_ib.gui.TableComponent("employeeSearchResultList", component.getControl);
+            resultListTable = new $aatl_ib.gui.TableComponent({componentId: "employeeSearchResultList", parentComponent: component.getControl});
 
             resultListTable.setOnRowDoubleClicked(onResultListTableRowDoubleClicked);
         }

@@ -41,19 +41,19 @@ $aatl_ib.MainController = (function () {
                 let controlId = undefined;
 
                 switch (actionItem.typeCode) {
-                    case $aatl_ib.model.gui.ActionItemTypeCode.Home:
+                    case $aatl_ib.gui.ActionItemTypeCode.Home:
                         controlId = openHome(actionItem);
                         break;
-                    case $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch:
+                    case $aatl_ib.gui.ActionItemTypeCode.ClientSearch:
                         controlId = openClientSearch(actionItem);
                         break;
-                    case $aatl_ib.model.gui.ActionItemTypeCode.ClientDetail:
+                    case $aatl_ib.gui.ActionItemTypeCode.ClientDetail:
                         controlId = openClientDetail(actionItem);
                         break;
-                    case $aatl_ib.model.gui.ActionItemTypeCode.EmployeeSearch:
+                    case $aatl_ib.gui.ActionItemTypeCode.EmployeeSearch:
                         controlId = openEmployeeSearch(actionItem);
                         break;
-                    case $aatl_ib.model.gui.ActionItemTypeCode.EmployeeDetail:
+                    case $aatl_ib.gui.ActionItemTypeCode.EmployeeDetail:
                         controlId = openEmployeeDetail(actionItem);
                         break;
                 }
@@ -158,6 +158,7 @@ $aatl_ib.MainController = (function () {
             component.init();
             component.bindEvents(actionItemClicked);
             component.setHomeView();
+            $aatl_ib.gui.replaceIcons();
         };
 
         this.openPanel = function (actionItem) {

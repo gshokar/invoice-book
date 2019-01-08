@@ -12,9 +12,9 @@
 "use strict";
 
 $aatl_ib.gui.ClientSearchComponent = (function () {
-    function ClientSearchComponent(componentId, parentComponent) {
+    function ClientSearchComponent(props) {
 
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent);
+        let component = new $aatl_ib.gui.Component(props);
 
         let toolbar = null;
         let onToolbarItemClicked = null;
@@ -23,12 +23,12 @@ $aatl_ib.gui.ClientSearchComponent = (function () {
         let onTableRowDoubleClicked = null;
 
         function afterLoad() {
-            toolbar = new $aatl_ib.gui.PanelToolbarComponent("clientSearchPanelToolbar", component.getControl);
+            toolbar = new $aatl_ib.gui.PanelToolbarComponent({componentId: "clientSearchPanelToolbar", parentComponent: component.getControl});
             toolbar.init();
             toolbar.registerOnClickActionItem(onToolbarItemClicked);
             addToolbarItems();
 
-            resultListTable = new $aatl_ib.gui.TableComponent("clientSearchResultList", component.getControl);
+            resultListTable = new $aatl_ib.gui.TableComponent({componentId: "clientSearchResultList", parentComponent: component.getControl});
 
             resultListTable.setOnRowDoubleClicked( onResultListTableRowDoubleClicked );
         }

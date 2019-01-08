@@ -22,9 +22,9 @@ $aatl_ib.gui.MainComponent = (function () {
 
             sidebarComponent.bindEvents();
                         
-            homeItem = new $aatl_ib.model.gui.ActionItem("Home", $aatl_ib.model.gui.ActionItemTypeCode.Home, $aatl_ib.utils.createUniqueId());
-            let clientSearchItem = new $aatl_ib.model.gui.ActionItem("Client Search", $aatl_ib.model.gui.ActionItemTypeCode.ClientSearch, $aatl_ib.utils.createUniqueId());
-            let employeeSearchItem = new $aatl_ib.model.gui.ActionItem("Employee Search", $aatl_ib.model.gui.ActionItemTypeCode.EmployeeSearch, $aatl_ib.utils.createUniqueId());
+            homeItem = new $aatl_ib.gui.ActionItem({text: "Home", typeCode: $aatl_ib.gui.ActionItemTypeCode.Home, icon: "home", createId: true});
+            let clientSearchItem = new $aatl_ib.gui.ActionItem({text: "Client Search", typeCode: $aatl_ib.gui.ActionItemTypeCode.ClientSearch, icon: "users", createId: true});
+            let employeeSearchItem = new $aatl_ib.gui.ActionItem({text: "Employee Search", typeCode: $aatl_ib.gui.ActionItemTypeCode.EmployeeSearch, icon: "users", createId: true});
             
             sidebarComponent.getActionGroupComponent().addActionItem(homeItem);
             sidebarComponent.getActionGroupComponent().addActionItem(clientSearchItem);

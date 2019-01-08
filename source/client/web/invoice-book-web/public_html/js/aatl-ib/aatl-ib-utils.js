@@ -49,7 +49,12 @@ $aatl_ib.utils = {
     },
 
     replaceElementAttribute: function (html, attribute, value, newValue) {
-
+        
+        if(attribute === 'data-target'){
+            value = '#' + value;
+            newValue = '#' + newValue;
+        }
+        
         let currentAttribute = attribute + '="' + value + '" ';
         let newAttribute = attribute + '="' + newValue + '" ';
 

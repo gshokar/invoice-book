@@ -14,7 +14,7 @@
 $aatl_ib.gui.HomeController = (function () {
     function HomeController(componentId, parentComponent) {
 
-        var component = new $aatl_ib.gui.HomeComponent(componentId, parentComponent);
+        var component = new $aatl_ib.gui.HomeComponent({componentId: componentId, parentComponent: parentComponent});
 
         this.init = function () {
             component.init();

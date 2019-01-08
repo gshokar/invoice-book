@@ -56,7 +56,7 @@ $aatl_ib.LoginComponent = (function () {
             return loginId && loginId.length > 0 && password && password.length > 0;
         };
 
-        var errorComponent = new $aatl_ib.ErrorComponent();
+        var errorComponent = new $aatl_ib.ErrorComponent({componentId: "errorMessages"});
 
         formControlValueChanged = function () {
             buttonLoginSubmit().prop('disabled', !isFormValid());
@@ -107,7 +107,7 @@ $aatl_ib.LoginComponent = (function () {
         };
 
         this.updateComponentIds = function (html) {
-            return errorComponent.updateComponentIds(html);
+            return errorComponent.updateElementId(html);
         };
     }
 

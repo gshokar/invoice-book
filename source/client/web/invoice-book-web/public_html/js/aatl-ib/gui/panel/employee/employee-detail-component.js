@@ -11,26 +11,22 @@
 "use strict";
 
 $aatl_ib.gui.EmployeeDetailComponent = (function () {
-    function EmployeeDetailComponent(componentId, parentComponent) {
+    function EmployeeDetailComponent(props) {
 
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent);
+        let component = new $aatl_ib.gui.Component(props);
         let employee = null;
         let onToolbarItemClicked = null;
         let afterInit = null;
         let isFormLoading = false;
 
-        let toolbar = new $aatl_ib.gui.PanelToolbarComponent("employeeDetailPanelToolbar", component.getControl, "employeeDetailPanelToolbar");
-        let numberField = new $aatl_ib.gui.Component("employeeNumber", component.getControl, "employeeNumber");
-        let lastNameField = new $aatl_ib.gui.Component("employeeLastName", component.getControl, "employeeLastName");
-        let firstNameField = new $aatl_ib.gui.Component("employeeFirstName", component.getControl, "employeeFirstName");
-        let address1Field = new $aatl_ib.gui.Component("employeeAddress1", component.getControl, "employeeAddress1");
-        let address2Field = new $aatl_ib.gui.Component("employeeAddress2", component.getControl, "employeeAddress2");
-        let cityField = new $aatl_ib.gui.Component("employeeCity", component.getControl, "employeeCity");
-        let provinceField = new $aatl_ib.gui.Component("employeeProvince", component.getControl, "employeeProvince");
-        let postalCodeField = new $aatl_ib.gui.Component("employeePostalCode", component.getControl, "employeePostalCode");
-        let emailField = new $aatl_ib.gui.Component("employeeEmail", component.getControl, "employeeEmail");
-        let phoneField = new $aatl_ib.gui.Component("employeePhoneNumber", component.getControl, "employeePhoneNumber");
-        let birthDateField = new $aatl_ib.gui.Component("employeeBirthDate", component.getControl, "employeeBirthDate");
+        let toolbar = new $aatl_ib.gui.PanelToolbarComponent({componentId: "employeeDetailPanelToolbar", parentComponent: component.getControl, componentName: "employeeDetailPanelToolbar"});
+        let numberField = new $aatl_ib.gui.Component({componentId: "employeeNumber", parentComponent: component.getControl, componentName: "employeeNumber"});
+        let lastNameField = new $aatl_ib.gui.Component({componentId: "employeeLastName", parentComponent: component.getControl, componentName: "employeeLastName"});
+        let firstNameField = new $aatl_ib.gui.Component({componentId: "employeeFirstName", parentComponent: component.getControl, componentName: "employeeFirstName"});
+        let birthDateField = new $aatl_ib.gui.Component({componentId: "employeeBirthDate", parentComponent: component.getControl, componentName: "employeeBirthDate"});
+        
+        let addressComponent = new $aatl_ib.gui.AddressComponent({componentId: "address", parentComponent: component.getControl, componentName: "address", replaceComponent: true});
+        let contactComponent = new $aatl_ib.gui.ContactComponent({componentId: "contact", parentComponent: component.getControl, componentName: "contact", replaceComponent: true});
 
         function afterLoad() {
             toolbar.init();
@@ -38,6 +34,9 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
             addToolbarItems();
             bindEvents();
 
+            addressComponent.init();
+            contactComponent.init();
+            
             if (afterInit !== null && typeof afterInit === "function") {
                 afterInit();
             }
@@ -65,34 +64,6 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
 
         function getFirstNameField() {
             return firstNameField.getControl();
-        }
-
-        function getAddress1Field() {
-            return address1Field.getControl();
-        }
-
-        function getAddress2Field() {
-            return address2Field.getControl();
-        }
-
-        function getCityField() {
-            return cityField.getControl();
-        }
-
-        function getProvinceField() {
-            return provinceField.getControl();
-        }
-
-        function getPostalCodeField() {
-            return postalCodeField.getControl();
-        }
-
-        function getEmailField() {
-            return emailField.getControl();
-        }
-
-        function getPhoneField() {
-            return phoneField.getControl();
         }
         
         function getBirthDateField(){
@@ -127,27 +98,8 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
                 onFieldValueChanged();
             });
             
-            getAddress1Field().change(() => {
-                onFieldValueChanged();
-            });
-            getAddress2Field().change(() => {
-                onFieldValueChanged();
-            });
-            getCityField().change(() => {
-                onFieldValueChanged();
-            });
-            getProvinceField().change(() => {
-                onFieldValueChanged();
-            });
-            getPostalCodeField().change(() => {
-                onFieldValueChanged();
-            });
-            getPhoneField().change(() => {
-                onFieldValueChanged();
-            });
-            getEmailField().change(() => {
-                onFieldValueChanged();
-            });
+            addressComponent.registerOnFieldValueChanged(onFieldValueChanged);
+            contactComponent.registerOnFieldValueChanged(onFieldValueChanged);
             
             getBirthDateField().change(() => {
                 onFieldValueChanged();
@@ -171,47 +123,36 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
                 getNumberField().val("");
                 getLastNameField().val("");
                 getFirstNameField().val("");
-                getAddress1Field().val("");
-                getAddress2Field().val("");
-                getCityField().val("");
-                //getProvinceField().val("");
-                getPostalCodeField().val("");
-                getPhoneField().val("");
-                getEmailField().val("");
                 getBirthDateField().val("");
+                
+                addressComponent.setAddress(null);
+                contactComponent.setContact(null);
+                
             } else {
                 getNumberField().val(employee.number);
                 getLastNameField().val(employee.lastName);
                 getFirstNameField().val(employee.firstName);
                 getBirthDateField().val(employee.birthDate);
-                getAddress1Field().val(employee.address.address1);
-                getAddress2Field().val(employee.address.address2);
-                getCityField().val(employee.address.city);
-                getProvinceField().val(employee.address.province);
-                getPostalCodeField().val(employee.address.postalCode);
-                getPhoneField().val(employee.contact.phone);
-                getEmailField().val(employee.contact.email);
+                
+                addressComponent.setAddress(employee.address);
+                contactComponent.setContact(employee.contact);
             }
 
             isFormLoading = false;
         }
 
         function updateElementIds(html) {
-            let updatedHtml = toolbar.updateElementId(html, $aatl_ib.utils.createUniqueId());
 
-            updatedHtml = numberField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = lastNameField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = firstNameField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = address1Field.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = address2Field.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = cityField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = provinceField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = postalCodeField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = emailField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = phoneField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
-            updatedHtml = birthDateField.updateElementId(updatedHtml, $aatl_ib.utils.createUniqueId(), true);
+            let updatedHtml = toolbar.updateElementId(html, $aatl_ib.utils.createUniqueId());
             
-            return updatedHtml;
+            let element = {html: updatedHtml, createNewId: true, attributes: ['for']};
+            
+            element.html = numberField.updateElementId(element);
+            element.html = lastNameField.updateElementId(element);
+            element.html = firstNameField.updateElementId(element);
+            element.html = birthDateField.updateElementId(element);
+
+            return element.html;
         }
 
         function loadView(html) {
@@ -220,7 +161,7 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
         }
 
         this.init = function () {
-            $.get($aatl_ib.viewController.getViewUrl("employee-detail"), loadView);
+            $aatl_ib.ViewService.getViewContent("employee-detail", loadView);
 
         };
 
@@ -239,17 +180,8 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
                 lastName: getLastNameField().val(),
                 firstName: getFirstNameField().val(),
                 birthDate: getBirthDateField().val(),
-                address: {
-                    address1: getAddress1Field().val(),
-                    address2: getAddress2Field().val(),
-                    city: getCityField().val(),
-                    province: getProvinceField().val(),
-                    postalCode: getPostalCodeField().val()
-                },
-                contact: {
-                    phone: getPhoneField().val(),
-                    email: getEmailField().val()
-                }
+                address: addressComponent.getAddress(),
+                contact: contactComponent.getContact()
             };
 
             return employee;
@@ -291,13 +223,13 @@ $aatl_ib.gui.EmployeeDetailComponent = (function () {
 
         this.getProvinceControl = function () {
 
-            return getProvinceField();
+            return addressComponent.getProvinceControl();
         };
 
         this.selectProvince = function () {
 
             if (employee !== undefined && employee !== null && employee.address !== undefined && employee.address !== null) {
-                getProvinceField().val(employee.address.province);
+                addressComponent.selectProvince(employee.address.province);
             }
         };
     }

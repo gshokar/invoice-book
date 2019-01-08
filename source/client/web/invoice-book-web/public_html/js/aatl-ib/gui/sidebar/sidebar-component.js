@@ -17,7 +17,7 @@ $aatl_ib.SidebarComponent = (function () {
         let id = componentId;
         let controlId = "#" + id;
         
-        let actionGroupComponent = new $aatl_ib.gui.ActionGroupComponent("list-documents", getComponent);
+        let actionGroupComponent = new $aatl_ib.gui.ActionGroupComponent({componentId: "list-documents", parentComponent: getComponent});
         
         function getComponent() {
             return $(controlId);

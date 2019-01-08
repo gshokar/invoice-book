@@ -48,7 +48,11 @@ const $aatl_ib = {
     model: {
         gui: {}
     },
-    gui: {}
+    gui: {
+        replaceIcons: function(){
+            feather.replace();
+        }
+    }
 };
 
 

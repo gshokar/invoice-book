@@ -12,9 +12,9 @@
 
 $aatl_ib.gui.PanelToolbarComponent = (function () {
 
-    function PanelToolbarComponent(componentId, parentComponent, componentName) {
+    function PanelToolbarComponent(props) {
 
-        let component = new $aatl_ib.gui.Component(componentId, parentComponent, componentName);
+        let component = new $aatl_ib.gui.Component(props);
 
         let toolbarComponentId = component.getId() + "-toolbar";
         let toolbarControlId = "#" + toolbarComponentId;
@@ -110,7 +110,7 @@ $aatl_ib.gui.PanelToolbarComponent = (function () {
 
             if (newId !== undefined && newId !== null) {
 
-                let updatedHtml = component.updateElementId(html, newId);
+                let updatedHtml = component.updateElementId({html: html, newId: newId});
 
                 let currentToolbarComponentId = toolbarComponentId;
 

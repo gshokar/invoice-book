@@ -2,48 +2,49 @@
 <div class="row-offcanvas row-offcanvas-left">
 
     <div id="sidebar" class="sidebar-offcanvas">
-        <div class="col-md-12">
-            <div class="pull-right" style="padding-top: 5px">
-                <button id="sidebarButtonCollapse" type="button" class="btn btn-primary btn-xs" data-toggle="sidebarleft">
-                    <i class="glyphicon glyphicon-chevron-left"></i>
-                </button>
+        <div class="row" style="padding-top: 5px; padding-left: 5px">
+            <div class="col-md-12 align-middle">
+                    <button id="sidebarButtonCollapse" type="button" class="btn btn-xs btn-link float-right" data-toggle="sidebarleft">
+                        <span data-feather="arrow-left-circle"></span>
+                    </button>
+
+                <h5 style="margin-bottom: 0; margin-top: .4em;">Documents</h5>
             </div>
-            <h4>Documents</h4>
-
-            <div id="list-documents" class="list-group">
-                <!--
-                <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
-                <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-clientSearch" role="tab" aria-controls="clientSearch">Client Search</a>
-                <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
-                <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
-            -->
-                </div>
-
         </div>
+        <div id="list-documents" class="list-group">
+            <!--
+            <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
+            <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-clientSearch" role="tab" aria-controls="clientSearch">Client Search</a>
+            <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
+            <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
+            -->
+        </div>
+
+
     </div>  
     <div id="sidebar-collapsed" hidden>
         <div class="col-md-12" style="padding-top: 5px">
-            <button id="sidebarButtonOpen" type="button" class="btn btn-primary btn-xs" data-toggle="sidebarleft">
-                <i class="icon icon-chevron-right"></i>
+            <button id="sidebarButtonOpen" type="button" class="btn btn-xs btn-link" data-toggle="sidebarleft">
+                <span data-feather="arrow-right-circle"></span>
             </button>
         </div>
         <div class="col-md-12 vertical-center">
             <div>
-                <h4>D</h4>
-                <h4>O</h4>
-                <h4>C</h4>
-                <h4>U</h4>
-                <h4>M</h4>
-                <h4>E</h4>
-                <h4>N</h4>
-                <h4>T</h4>
-                <h4>S</h4>
+                <h5>D</h5>
+                <h5>O</h5>
+                <h5>C</h5>
+                <h5>U</h5>
+                <h5>M</h5>
+                <h5>E</h5>
+                <h5>N</h5>
+                <h5>T</h5>
+                <h5>S</h5>
             </div>
         </div>
     </div>
 
     <!-- Center Content -->
     <div id="centerView">
-        
+
     </div>
 </div>

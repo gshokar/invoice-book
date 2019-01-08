@@ -13,7 +13,7 @@
 $aatl_ib.gui.EmployeeDetailController = (function () {
     function EmployeeDetailController(componentId, parentComponent) {
 
-        var component = new $aatl_ib.gui.EmployeeDetailComponent(componentId, parentComponent);
+        var component = new $aatl_ib.gui.EmployeeDetailComponent({componentId: componentId, parentComponent: parentComponent});
         let title = "";
         let employeeNumber = null;
 

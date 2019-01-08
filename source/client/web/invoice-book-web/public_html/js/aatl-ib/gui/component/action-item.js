@@ -12,28 +12,33 @@
 
 "use strict";
 
-$aatl_ib.model.gui.ActionItem = (function () {
+$aatl_ib.gui.ActionItem = (function () {
 
-    function ActionItem(text, typeCode, id, data) {
-        this.text = text;
-        this.id = id;
-        this.typeCode = typeCode;
-        this.controlId = "#" + id;
+    function ActionItem(props) {
+
+        this.text = props.text;
+        this.id = props.id !== undefined && props.id !== null ? props.id : props.createId === true ? $aatl_ib.utils.createUniqueId() : undefined;
+        this.controlId = "#" + this.id;
+        this.typeCode = props.typeCode;
         this.viewComponent = undefined;
-        this.data = data;
+        this.data = props.data;
         this.linkedPanel = undefined;
-
+        this.icon = props.icon;
+                
         this.setId = function (id) {
+            
             this.id = id;
             this.controlId = "#" + id;
+            
         };
+
     }
 
     return ActionItem;
 
 }());
 
-$aatl_ib.model.gui.ActionItemTypeCode = {
+$aatl_ib.gui.ActionItemTypeCode = {
 
     Home: "home",
     ClientSearch: "clientSearch",

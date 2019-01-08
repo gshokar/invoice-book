@@ -14,17 +14,17 @@
 $aatl_ib.gui.ClientDetailController = (function () {
     function ClientDetailController(componentId, parentComponent) {
 
-        var component = new $aatl_ib.gui.ClientDetailComponent(componentId, parentComponent);
+        var component = new $aatl_ib.gui.ClientDetailComponent({componentId: componentId, parentComponent: parentComponent});
         let title = "";
         let clientNumber = null;
 
-        function onToolbarItemClicked(toolbarItem) {
+        function onActionButtonClicked(action) {
 
-            switch (toolbarItem.typeCode) {
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Save:
+            switch (action) {
+                case "save":
                     saveData();
                     break;
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Close:
+                case "close":
                     alert("Close");
                     break;
             }
@@ -94,7 +94,7 @@ $aatl_ib.gui.ClientDetailController = (function () {
         this.init = function () {
             component.setAfterInit(afterInit);
             component.init();
-            component.registerOnToolbarItemClicked(onToolbarItemClicked);
+            component.registerOnActionButtonClicked(onActionButtonClicked);
         };
 
         this.getComponent = function () {

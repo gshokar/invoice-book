@@ -13,12 +13,9 @@
 
 $aatl_ib.ErrorComponent = (function(){
     
-    function ErrorComponent(parent){
-        
-        let id = $aatl_ib.utils.createUniqueId();
-        let viewId = 'errorMessages';
-        
-        let component = new $aatl_ib.gui.Component(viewId, parent,viewId);
+    function ErrorComponent(props){
+                
+        let component = new $aatl_ib.gui.Component(props);
         
         function getControl(){
           
@@ -48,8 +45,8 @@ $aatl_ib.ErrorComponent = (function(){
             getControl().prop('hidden', true);
         };
         
-        this.updateComponentIds = function(html){
-          return component.updateElementId(html, id);
+        this.updateElementId = function(html){
+          return component.updateElementId({html: html, createNewId: true});
         };
     };
     
