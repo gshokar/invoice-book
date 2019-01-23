@@ -39,7 +39,7 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
             if (actionItem.icon !== undefined && actionItem.icon !== null) {
                 actionElement = actionElement + '<span data-feather="' + actionItem.icon + '"></span>';
             }
-            actionElement = actionElement + actionItem.text + '</a>';
+            actionElement = actionElement + '<span>' + actionItem.text + '</span></a>';
 
             getComponent().append(actionElement);
         }
@@ -112,7 +112,7 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
                 let control = getActionItemControl(actionItem.controlId);
 
                 if (control) {
-                    control.text(actionItem.text);
+                    control.find("span").text(actionItem.text);
                 }
             }
         };
@@ -130,6 +130,11 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
         
         this.getSelectedActionItem = function(){
             return activeItem;
+        };
+        
+        this.clearActionItems = function(){
+            getComponent().empty();
+            actionItems.splice(0, actionItems.length);
         };
     }
 

@@ -76,7 +76,7 @@ $aatl_ib.EmployeeService = {
         let err = $aatl_ib.EmployeeService.validate(employee);
 
         if (err.messages.length === 0) {
-            $aatl_ib.ApiService.post("employee",
+            $aatl_ib.ApiService.put("employee",
                     employee,
                     function (res, serverErr) {
                         if (serverErr) {
@@ -113,31 +113,31 @@ $aatl_ib.EmployeeService = {
 
         if (employee) {
 
-            if (typeof employee.lastName !== 'string' || employee.lastName.trim().length === 0) {
+            if ($aatl_ib.utils.isStringEmpty(employee.lastName)) {
                 err.messages.push("Please enter employee last name.");
             }
 
-            if (typeof employee.firstName !== 'string' || employee.firstName.trim().length === 0) {
+            if ($aatl_ib.utils.isStringEmpty(employee.firstName)) {
                 err.messages.push("Please enter employee first name.");
             }
 
-            if (typeof employee.birthDate !== 'string' || employee.birthDate.trim().length === 0) {
+            if ($aatl_ib.utils.isStringEmpty(employee.birthDate)) {
                 err.messages.push("Please enter employee date of birth.");
             }
 
-            if (employee.address && typeof employee.address.address1 !== 'string' || employee.address.address1.trim().length === 0) {
+            if (employee.address && $aatl_ib.utils.isStringEmpty(employee.address.address1)) {
                 err.messages.push("Please enter address line 1.");
             }
 
-            if (employee.address && typeof employee.address.city !== 'string' || employee.address.city.trim().length === 0) {
+            if (employee.address && $aatl_ib.utils.isStringEmpty(employee.address.city)) {
                 err.messages.push("Please enter city.");
             }
 
-            if (employee.address && typeof employee.address.province !== 'string' || employee.address.province.trim().length === 0) {
+            if (employee.address && $aatl_ib.utils.isStringEmpty(employee.address.province)) {
                 err.messages.push("Please enter province.");
             }
 
-            if (employee.address && typeof employee.address.postalCode !== 'string' || employee.address.postalCode.trim().length === 0) {
+            if (employee.address && $aatl_ib.utils.isStringEmpty(employee.address.postalCode)) {
                 err.messages.push("Please enter postal code.");
             }
         }

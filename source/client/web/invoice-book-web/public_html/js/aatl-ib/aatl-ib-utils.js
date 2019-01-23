@@ -43,6 +43,11 @@ $aatl_ib.utils = {
         return obj !== undefined && obj !== null && typeof obj === "function";
     },
 
+    isStringEmpty: function(value){
+        // undefinded or null
+        return typeof value !== 'string' || value.trim().length === 0;
+    },
+            
     replaceElementId: function (html, oldId, newId) {
 
         return $aatl_ib.utils.replaceElementAttribute(html, 'id', oldId, newId);

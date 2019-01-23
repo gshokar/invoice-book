@@ -16,7 +16,8 @@ $aatl_ib.gui.ClientLocationsComponent = (function () {
 
         let component = new $aatl_ib.gui.Component(props);
         let list = [];
-        
+        let clientNumber = "";
+
         let actionGroupComponent = new $aatl_ib.gui.ActionGroupComponent({componentId: "clientLocationList", parentComponent: getControl});
         let locationComponent = new $aatl_ib.gui.ClientLocationComponent({componentId: "clientLocation", parentComponent: getControl, componentName: "clientLocation"});
 
@@ -37,6 +38,7 @@ $aatl_ib.gui.ClientLocationsComponent = (function () {
 
         function addNewLocation() {
             let location = {
+                clientNumber: clientNumber,
                 name: "",
                 number: "",
                 address: {
@@ -95,33 +97,37 @@ $aatl_ib.gui.ClientLocationsComponent = (function () {
             }
         }
 
-        function afterSave(location, err){
+        function afterSave(location, err) {
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 locationComponent.showError(err);
             } else {
-                
+
                 let selectedActionItem = actionGroupComponent.getSelectedActionItem();
-                
+
                 locationComponent.setLocation(location);
-                
-                let locationIndex = list.findIndex(function(obj){ return obj.number === selectedActionItem.data; });
-                
+
+                let locationIndex = list.findIndex(function (obj) {
+                    return obj.number === selectedActionItem.data;
+                });
+
                 list[locationIndex] = location;
-                
+
                 selectedActionItem.data = location.number;
                 selectedActionItem.text = location.name;
-                
+
                 actionGroupComponent.updateActionItemText(selectedActionItem);
+
+                setButtonActionEnabled(buttonActions.add, true);
             }
         }
-        
+
         function saveData() {
             let location = locationComponent.getLocation();
 
             locationComponent.hideError();
-            
+
             $aatl_ib.ClientLocationService.save(location, afterSave);
-            
+
         }
         function bindEvents() {
             getControl().find(".btn-group button").click(function (evt) {
@@ -138,6 +144,36 @@ $aatl_ib.gui.ClientLocationsComponent = (function () {
 
         function afterLocationModified(value) {
             setButtonActionEnabled(buttonActions.save, value);
+        }
+
+        function loadLocations(locations, err) {
+
+            if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
+                locationComponent.showError(err);
+            } else {
+                setButtonActionEnabled(buttonActions.add, true);
+                list = locations;
+
+                if (list !== undefined && Array.isArray(list) && list.length > 0) {
+                    list.forEach(function (location) {
+                        addLocationActionItem(location);
+                    });
+                }
+            }
+        }
+
+        function onClientNumberChanged() {
+
+            actionGroupComponent.clearActionItems();
+            locationComponent.hideError();
+            locationComponent.show(false);
+            setButtonActionEnabled(buttonActions.add, false);
+
+            if ($aatl_ib.utils.isStringEmpty(clientNumber)) {
+                list = [];
+            } else {
+                $aatl_ib.ClientLocationService.list(clientNumber, loadLocations);
+            }
         }
 
         this.init = function () {
@@ -161,15 +197,23 @@ $aatl_ib.gui.ClientLocationsComponent = (function () {
             element.newId = $aatl_ib.utils.createUniqueId();
             element.attributes = ['id', 'data-target', 'aria-controls'];
 
-            $.each(element.attributes, function (index, attr) {
-                element.html = $aatl_ib.utils.replaceElementAttribute(element.html, attr, 'clientLocationsBody', element.newId);
-            });
+            element.attributes.forEach(
+                    function (attr) {
+                        element.html = $aatl_ib.utils.replaceElementAttribute(element.html, attr, 'clientLocationsBody', element.newId);
+                    });
 
             element.html = locationComponent.updateElementIds(element.html);
 
             return element.html;
         };
 
+        this.setClientNumber = function (number) {
+
+            if (clientNumber !== number) {
+                clientNumber = number;
+                onClientNumberChanged();
+            }
+        };
     }
 
     return ClientLocationsComponent;

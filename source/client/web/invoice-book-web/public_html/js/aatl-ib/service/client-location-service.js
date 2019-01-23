@@ -75,7 +75,7 @@ $aatl_ib.ClientLocationService = {
 
         if (err.messages.length === 0) {
 
-            $aatl_ib.ApiService.post("client/location",
+            $aatl_ib.ApiService.put("client/location",
                     location,
                     function (res, serverErr) {
                         if (serverErr) {
@@ -105,6 +105,25 @@ $aatl_ib.ClientLocationService = {
 
         callback(location, err);
     },
+    list: function (number, callback) {
+
+        $aatl_ib.ApiService.get("client/location/list/" + number,
+                {},
+                function (res, err) {
+                    if (err) {
+                        callback(null, {messages: ["Faild to get client locations: " + err]});
+
+                    } else if (res.status === "failure") {
+                        callback(null, {messages: [res.message]});
+                    } else if (res.status === "success") {
+                        let client = JSON.parse(res.data);
+                        callback(client);
+                    } else {
+                        callback(null, {messages: ["Invalid response from server"]});
+                    }
+                });
+
+    },
 
     validate: function (location) {
 
@@ -112,23 +131,23 @@ $aatl_ib.ClientLocationService = {
 
         if (location) {
 
-            if (typeof location.name !== 'string' || location.name.trim().length === 0) {
+            if ($aatl_ib.utils.isStringEmpty(location.name)) {
                 err.messages.push("Please enter location name.");
             }
 
-            if (location.address && typeof location.address.address1 !== 'string' || location.address.address1.trim().length === 0) {
+            if (location.address && $aatl_ib.utils.isStringEmpty(location.address.address1)) {
                 err.messages.push("Please enter address line 1.");
             }
 
-            if (location.address && typeof location.address.city !== 'string' || location.address.city.trim().length === 0) {
+            if (location.address && $aatl_ib.utils.isStringEmpty(location.address.city)) {
                 err.messages.push("Please enter city.");
             }
 
-            if (location.address && typeof location.address.province !== 'string' || location.address.province.trim().length === 0) {
+            if (location.address && $aatl_ib.utils.isStringEmpty(location.address.province)) {
                 err.messages.push("Please enter province.");
             }
 
-            if (location.address && typeof location.address.postalCode !== 'string' || location.address.postalCode.trim().length === 0) {
+            if (location.address && $aatl_ib.utils.isStringEmpty(location.address.postalCode)) {
                 err.messages.push("Please enter postal code.");
             }
         }

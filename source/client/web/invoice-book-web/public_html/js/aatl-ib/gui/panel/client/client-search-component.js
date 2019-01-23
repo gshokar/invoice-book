@@ -16,32 +16,23 @@ $aatl_ib.gui.ClientSearchComponent = (function () {
 
         let component = new $aatl_ib.gui.Component(props);
 
-        let toolbar = null;
-        let onToolbarItemClicked = null;
-        let resultListTable = null;
+        let onActionButtonClicked = null;
+        let resultListTable = new $aatl_ib.gui.TableComponent({componentId: "clientSearchResultList", parentComponent: component.getControl});
         let resultList = [];
         let onTableRowDoubleClicked = null;
-
+        
         function afterLoad() {
-            toolbar = new $aatl_ib.gui.PanelToolbarComponent({componentId: "clientSearchPanelToolbar", parentComponent: component.getControl});
-            toolbar.init();
-            toolbar.registerOnClickActionItem(onToolbarItemClicked);
-            addToolbarItems();
+            component.getControl().find(".client-search-action-btn-group button").click(function (evt) {
 
-            resultListTable = new $aatl_ib.gui.TableComponent({componentId: "clientSearchResultList", parentComponent: component.getControl});
+                let $element = $(evt.target);
+                let action = $element.data("action");
+
+                onActionButtonClicked(action);
+            });
 
             resultListTable.setOnRowDoubleClicked( onResultListTableRowDoubleClicked );
         }
-
-        function addToolbarItems() {
-
-            toolbar.addNewActionItem("Find", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Find);
-            toolbar.addNewActionItem("Open", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Open);
-            toolbar.addNewActionItem("New", $aatl_ib.model.gui.PanelToolbarItemTypeCode.New);
-            toolbar.addNewActionItem("Clear", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Clear);
-        }
-        ;
-
+       
         function getClientName() {
             return component.getControl().find("#clientName").val().trim();
         }
@@ -91,8 +82,8 @@ $aatl_ib.gui.ClientSearchComponent = (function () {
 
         };
 
-        this.registerOnToolbarItemClicked = function (actionItemClicked) {
-            onToolbarItemClicked = actionItemClicked;
+        this.registerOnActionButtonClicked = function (onClicked) {
+            onActionButtonClicked = onClicked;
         };
 
         this.getComponent = function () {

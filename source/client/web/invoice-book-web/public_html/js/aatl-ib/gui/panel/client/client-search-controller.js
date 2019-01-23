@@ -17,24 +17,26 @@ $aatl_ib.gui.ClientSearchController = (function () {
 
         var component = new $aatl_ib.gui.ClientSearchComponent({componentId: componentId, parentComponent: parentComponent});
 
-        function onToolbarItemClicked(toolbarItem) {
+        function onActionButtonClicked(action) {
 
-            switch (toolbarItem.typeCode) {
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Find:
+            switch (action) {
+                case "find":
                     find();
                     break;
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.New:
+                case "open":
+                    alert("Open not implemented yet");
+                    break;
+                case "new":
                     createNewClient();
                     break;
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Clear:
-                    alert("Clear");
+                case "clear":
+                    alert("Clear not implemented yet");
                     break;
             }
         }
-        ;
-
+    
         function onTableRowDoubleClicked(client) {
-           
+
             openClient(client);
         }
         ;
@@ -66,7 +68,7 @@ $aatl_ib.gui.ClientSearchController = (function () {
 
         this.init = function () {
             component.init();
-            component.registerOnToolbarItemClicked(onToolbarItemClicked);
+            component.registerOnActionButtonClicked(onActionButtonClicked);
             component.registerOnTableRowDoubleClicked(onTableRowDoubleClicked);
         };
 

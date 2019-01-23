@@ -56,6 +56,9 @@ $aatl_ib.MainController = (function () {
                     case $aatl_ib.gui.ActionItemTypeCode.EmployeeDetail:
                         controlId = openEmployeeDetail(actionItem);
                         break;
+                    case $aatl_ib.gui.ActionItemTypeCode.TimeCodes:
+                        controlId = openTimeCodes(actionItem);
+                        break;
                 }
 
                 if (controlId) {
@@ -68,7 +71,12 @@ $aatl_ib.MainController = (function () {
         function addActionItem(actionItem) {
             actionItem.setId($aatl_ib.utils.createUniqueId());
 
+            if (actionItem.icon === undefined) {
+                actionItem.icon = $aatl_ib.gui.ActionItemIcon.getIcon(actionItem.typeCode);
+            }
             component.addActionItem(actionItem);
+
+            $aatl_ib.gui.replaceIcons();
         }
 
         function findPanel(title) {
@@ -118,6 +126,8 @@ $aatl_ib.MainController = (function () {
 
         function openClientDetail(actionItem) {
 
+            actionItem.icon = "user";
+
             let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.ClientDetail, actionItem);
 
             panel.controller = new $aatl_ib.gui.ClientDetailController(panel.controlId, component.getCenterView());
@@ -128,7 +138,7 @@ $aatl_ib.MainController = (function () {
 
             return panel.controlId;
         }
-        
+
         function openEmployeeSearch(actionItem) {
 
             let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.EmployeeSearch, actionItem);
@@ -142,6 +152,8 @@ $aatl_ib.MainController = (function () {
 
         function openEmployeeDetail(actionItem) {
 
+            actionItem.icon = "user";
+
             let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.EmployeeDetail, actionItem);
 
             panel.controller = new $aatl_ib.gui.EmployeeDetailController(panel.controlId, component.getCenterView());
@@ -152,7 +164,18 @@ $aatl_ib.MainController = (function () {
 
             return panel.controlId;
         }
+        
+        function openTimeCodes(actionItem){
+            
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.TimeCodes, actionItem);
 
+            panel.controller = new $aatl_ib.gui.TimeCodesController(panel.controlId, component.getCenterView());
+
+            panel.controller.init();
+
+            return panel.controlId;
+        }
+        
         this.init = function () {
 
             component.init();

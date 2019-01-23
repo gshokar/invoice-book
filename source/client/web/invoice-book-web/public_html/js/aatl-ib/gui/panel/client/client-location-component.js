@@ -23,11 +23,11 @@ $aatl_ib.gui.ClientLocationComponent = (function () {
 
         let numberField = new $aatl_ib.gui.Component({componentId: "clientLocationNumber", parentComponent: component.getControl, componentName: "clientLocationNumber"});
         let nameField = new $aatl_ib.gui.Component({componentId: "clientLocationName", parentComponent: component.getControl, componentName: "clientLocationName"});
-        
+
         let addressComponent = new $aatl_ib.gui.AddressComponent({componentId: "locationAddress", parentComponent: component.getControl, componentName: "locationAddress", replaceComponent: true});
         let contactComponent = new $aatl_ib.gui.ContactComponent({componentId: "locationContact", parentComponent: component.getControl, componentName: "locationContact", replaceComponent: true});
         let errorComponent = new $aatl_ib.ErrorComponent({componentId: "clientLocationErrors", parentComponent: component.getControl});
-        
+
         function afterLoad() {
             bindEvents();
             addressComponent.init();
@@ -110,7 +110,7 @@ $aatl_ib.gui.ClientLocationComponent = (function () {
 
             isFormLoading = false;
         }
-     
+
         function loadView(html) {
             getControl().html(updateElementIds(html));
             afterLoad();
@@ -146,13 +146,14 @@ $aatl_ib.gui.ClientLocationComponent = (function () {
             return getControl();
         };
         this.getLocation = function () {
-            return {
-                number: getNumberField().val(),
-                name: getNameField().val(),
-                address: addressComponent.getAddress(),
-                contact: contactComponent.getContact()
-            };
+
+            location.name = getNameField().val();
+            location.address = addressComponent.getAddress();
+            location.contact = contactComponent.getContact();
+
+            return location;
         };
+
         this.setLocation = function (value) {
             location = value;
             onLocationChanged();
@@ -182,16 +183,21 @@ $aatl_ib.gui.ClientLocationComponent = (function () {
             let updatedHtml = errorComponent.updateElementId(html);
 
             let element = {html: updatedHtml, createNewId: true, attributes: ['for']};
-            
+
             element.html = component.updateElementId(element);
             element.html = nameField.updateElementId(element);
             element.html = numberField.updateElementId(element);
-            
+
             return element.html;
         };
 
         this.getNumber = function () {
-            return getNumberField().val();
+            let number = undefined;
+            
+            if(location !== undefined && location !== null){
+                number = location.number;
+            }
+            return number;
         };
 
         this.show = function (value) {

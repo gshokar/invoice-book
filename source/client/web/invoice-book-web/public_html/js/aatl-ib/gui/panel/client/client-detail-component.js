@@ -27,6 +27,7 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         let contactComponent = new $aatl_ib.gui.ContactComponent({componentId: "contact", parentComponent: component.getControl, componentName: "contact", replaceComponent: true});
         let locationsComponent = new $aatl_ib.gui.ClientLocationsComponent({componentId: "clientLocations", parentComponent: component.getControl, componentName: "clientLocations"});
         let errorComponent = new $aatl_ib.ErrorComponent({componentId: "clientErrors", parentComponent: component.getControl});
+        let titleComponent = new $aatl_ib.gui.Component({componentId: "panelTitle", parentComponent: component.getControl});
         
         function afterLoad() {
 
@@ -56,7 +57,7 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
         }
 
         function getTitleControl() {
-            return getControl().find("#panelTitle");
+            return titleComponent.getControl();
         }
         
         function setButtonActionEnabled(name, value) {
@@ -109,13 +110,15 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
 
                 addressComponent.setAddress(null);
                 contactComponent.setContact(null);
-
+                
+                locationsComponent.setClientNumber("");
             } else {
                 getNumberField().val(client.number);
                 getNameField().val(client.name);
 
                 addressComponent.setAddress(client.address);
                 contactComponent.setContact(client.contact);
+                locationsComponent.setClientNumber(client.number);
             }
 
             isFormLoading = false;
@@ -126,8 +129,12 @@ $aatl_ib.gui.ClientDetailComponent = (function () {
             
             updatedHtml = locationsComponent.updateElementIds(updatedHtml);
 
-            let element = {html: updatedHtml, createNewId: true, attributes: ['for']};
-
+            let element = {html: updatedHtml, createNewId: true};
+            
+            element.html = titleComponent.updateElementId(element);
+            
+            element.attributes = ['for'];
+            
             element.html = numberField.updateElementId(element);
             element.html = nameField.updateElementId(element);
 

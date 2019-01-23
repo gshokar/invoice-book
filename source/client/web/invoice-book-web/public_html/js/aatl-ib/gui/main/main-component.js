@@ -25,10 +25,12 @@ $aatl_ib.gui.MainComponent = (function () {
             homeItem = new $aatl_ib.gui.ActionItem({text: "Home", typeCode: $aatl_ib.gui.ActionItemTypeCode.Home, icon: "home", createId: true});
             let clientSearchItem = new $aatl_ib.gui.ActionItem({text: "Client Search", typeCode: $aatl_ib.gui.ActionItemTypeCode.ClientSearch, icon: "users", createId: true});
             let employeeSearchItem = new $aatl_ib.gui.ActionItem({text: "Employee Search", typeCode: $aatl_ib.gui.ActionItemTypeCode.EmployeeSearch, icon: "users", createId: true});
+            let timecodesItem = new $aatl_ib.gui.ActionItem({text: "Time Codes", typeCode: $aatl_ib.gui.ActionItemTypeCode.TimeCodes, icon: "code", createId: true});
             
             sidebarComponent.getActionGroupComponent().addActionItem(homeItem);
             sidebarComponent.getActionGroupComponent().addActionItem(clientSearchItem);
             sidebarComponent.getActionGroupComponent().addActionItem(employeeSearchItem);
+            sidebarComponent.getActionGroupComponent().addActionItem(timecodesItem);
             
         };
 

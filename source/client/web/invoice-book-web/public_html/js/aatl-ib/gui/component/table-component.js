@@ -30,12 +30,23 @@ $aatl_ib.gui.TableComponent = (function () {
             return getTableControl().find("tbody");
         }
         
+        function getColumnElement(value){
+            
+            if(typeof value === 'boolean'){
+                
+                let icon = value === true ? "check-square" : "x-square";
+                
+                return '<td><span data-feather="' + icon +'"></span></td>';
+            }
+            
+            return "<td>" + value + "</td>";
+        }
         function getRow(rowData){
             
             let row = '<tr data-key-value="' + rowData.keyValue + '">';
             
             $.each(rowData.columnValues, function(index, value){
-               row = row + "<td>" + value + "</td>";
+               row = row + getColumnElement(value);
             });
             
             row = row + "</tr>";
@@ -43,8 +54,26 @@ $aatl_ib.gui.TableComponent = (function () {
             return row;
         }
         
-        this.addRow = function(values){
-            getTableBody().append(getRow(values));
+        function findRowControl(keyValue){
+            return getTableBody().find("tr[data-key-value='" + keyValue + "']");
+        }
+        
+        function tableRowDoubleClicked(evt){
+            
+            let element = $(evt.currentTarget);
+                
+               if( typeof onRowDoubleClicked === 'function'){
+                   let value = '' + element.data("keyValue");
+                    onRowDoubleClicked(value);
+               }
+        }
+        
+        this.addRow = function(value){
+            getTableBody().append(getRow(value));
+            
+            findRowControl(value.keyValue).dblclick(tableRowDoubleClicked);
+            
+            $aatl_ib.gui.replaceIcons();
         };
         
         this.addRows = function(data){
@@ -59,15 +88,9 @@ $aatl_ib.gui.TableComponent = (function () {
             
             tableBody.append(rows);
             
-           tableBody.find('tr').dblclick(function(event){
-            
-                let element = $(event.currentTarget);
-                
-               if( typeof onRowDoubleClicked === 'function'){
-                   let value = '' + element.data("keyValue");
-                    onRowDoubleClicked(value);
-               }
-           });
+           tableBody.find('tr').dblclick(tableRowDoubleClicked);
+           
+           $aatl_ib.gui.replaceIcons();
         };
         
         this.clearRows = function(){
@@ -78,6 +101,10 @@ $aatl_ib.gui.TableComponent = (function () {
         this.setOnRowDoubleClicked = function(action){
           
             onRowDoubleClicked = action;
+        };
+        
+        this.getRowControl = function(keyValue){
+          return findRowControl(keyValue);
         };
     }
     

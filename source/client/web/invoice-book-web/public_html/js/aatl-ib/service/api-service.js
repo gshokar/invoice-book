@@ -14,9 +14,9 @@
 $aatl_ib.ApiService = {
 
     baseUrl: "http://localhost:8080/invoicebookservice/api/",
-    
-    call: function(method, urlPath, data, callback){
-        
+
+    call: function (method, urlPath, data, callback) {
+
         let isCallback = $aatl_ib.utils.isFunction(callback);
         let url = this.getUrl(urlPath);
 
@@ -40,15 +40,19 @@ $aatl_ib.ApiService = {
 
         request.fail(function (jqXHR, textStatus, errorThrown) {
             if (isCallback) {
-                callback(null, textStatus );
+                callback(null, textStatus);
             }
         });
     },
-   
+
     post: function (urlPath, data, callback) {
         this.call("POST", urlPath, JSON.stringify(data), callback);
     },
 
+    put: function (urlPath, data, callback) {
+        this.call("PUT", urlPath, JSON.stringify(data), callback);
+    },
+    
     get: function (urlPath, data, callback) {
         this.call("GET", urlPath, data, callback);
     },

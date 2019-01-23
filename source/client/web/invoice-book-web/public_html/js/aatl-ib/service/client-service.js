@@ -15,7 +15,7 @@ $aatl_ib.ClientService = {
 
     find: function (criteria, callback) {
 
-        $aatl_ib.ApiService.get("client/find",
+        $aatl_ib.ApiService.get("clients/find",
                 criteria,
                 function (res, err) {
                     if (err) {
@@ -31,7 +31,24 @@ $aatl_ib.ClientService = {
                     }
                 });
     },
+    list: function (callback) {
 
+        $aatl_ib.ApiService.get("clients",
+        {},
+                function (res, err) {
+                    if (err) {
+                        callback(null, {messages: ["Faild to get client list: " + err]});
+
+                    } else if (res.status === "failure") {
+                        callback(null, {messages: [res.message]});
+                    } else if (res.status === "success") {
+                        let clients = JSON.parse(res.data);
+                        callback(clients);
+                    } else {
+                        callback(null, {messages: ["Invalid response from server"]});
+                    }
+                });
+    },
     get: function (number, callback) {
 
         if (number === undefined || number === null) {
@@ -51,7 +68,7 @@ $aatl_ib.ClientService = {
                 }
             });
         } else {
-            $aatl_ib.ApiService.get("client/" + number,
+            $aatl_ib.ApiService.get("clients/" + number,
                     {},
                     function (res, err) {
                         if (err) {
@@ -74,7 +91,7 @@ $aatl_ib.ClientService = {
         let err = $aatl_ib.ClientService.validate(client);
 
         if (err.messages.length === 0) {
-            $aatl_ib.ApiService.post("client",
+            $aatl_ib.ApiService.put("clients",
                     client,
                     function (res, serverErr) {
                         if (serverErr) {
@@ -111,23 +128,23 @@ $aatl_ib.ClientService = {
 
         if (client) {
 
-            if (typeof client.name !== 'string' || client.name.trim().length === 0) {
+            if ($aatl_ib.utils.isStringEmpty(client.name)) {
                 err.messages.push("Please enter client name.");
             }
 
-            if (client.address && typeof client.address.address1 !== 'string' || client.address.address1.trim().length === 0) {
+            if (client.address && $aatl_ib.utils.isStringEmpty(client.address.address1)) {
                 err.messages.push("Please enter address line 1.");
             }
 
-            if (client.address && typeof client.address.city !== 'string' || client.address.city.trim().length === 0) {
+            if (client.address && $aatl_ib.utils.isStringEmpty(client.address.city)) {
                 err.messages.push("Please enter city.");
             }
 
-            if (client.address && typeof client.address.province !== 'string' || client.address.province.trim().length === 0) {
+            if (client.address && $aatl_ib.utils.isStringEmpty(client.address.province)) {
                 err.messages.push("Please enter province.");
             }
 
-            if (client.address && typeof client.address.postalCode !== 'string' || client.address.postalCode.trim().length === 0) {
+            if (client.address && $aatl_ib.utils.isStringEmpty(client.address.postalCode)) {
                 err.messages.push("Please enter postal code.");
             }
         }
