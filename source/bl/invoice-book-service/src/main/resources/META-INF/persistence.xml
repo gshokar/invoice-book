@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="invoicebook-pu" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:jboss/datasources/invoicebook-ds</jta-data-source>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.AppSession</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.AppUser</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.Address</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.AddressType</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.Client</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.ClientAddress</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.ClientContact</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.Contact</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.ContactType</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.Country</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.Province</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.base.Sequence</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.Employee</class>
+        <class>ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <validation-mode>NONE</validation-mode>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>
