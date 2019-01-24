@@ -17,11 +17,13 @@ import ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
+import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
 import ca.aatl.app.invoicebook.dto.AddressDto;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.ClientLocationDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
+import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import java.text.ParseException;
@@ -222,6 +224,46 @@ public class MappingService {
 
             clientLocation.setName(dto.getName());
 
+        }
+    }
+
+    public void updateTimeCode(TimeCode timeCode, TimeCodeDto dto) throws Exception {
+        if (dto != null && timeCode != null) {
+
+            timeCode.setName(dto.getName());
+            timeCode.setActive(dto.isActive());
+            timeCode.setChargeable(dto.isChargeable());
+
+        }
+    }
+
+    public void updateTimeCodeDto(TimeCodeDto dto, TimeCode timeCode) {
+        if (dto != null && timeCode != null) {
+            
+            dto.setActive(timeCode.isActive());
+            dto.setChargeable(timeCode.isChargeable());
+            dto.setName(timeCode.getName());
+            dto.setUid(timeCode.getGuid());
+            dto.setClient(new ClientDto());
+            dto.setClientLocation(new ClientLocationDto());
+            
+            if(timeCode.getClient() != null){
+                
+                dto.getClient().setName(timeCode.getClient().getName());
+                dto.getClient().setNumber(timeCode.getClient().getNumber());
+            }else{
+                dto.getClient().setNumber("");
+                dto.getClient().setName("");
+            }
+            
+            if(timeCode.getClientLocation() != null){
+                
+                dto.getClientLocation().setName(timeCode.getClientLocation().getName());
+                dto.getClientLocation().setNumber(timeCode.getClientLocation().getNumber());
+            }else{
+                dto.getClientLocation().setNumber("");
+                dto.getClientLocation().setName("");
+            }
         }
     }
 }

@@ -25,6 +25,9 @@ $aatl_ib.gui.TimeCodesController = (function () {
                 case "add":
                     component.addTimeCode();
                     break;
+                case "cancel":
+                    component.cancelTimeCodeEdit();
+                    break;
             }
         }
         ;
@@ -39,7 +42,7 @@ $aatl_ib.gui.TimeCodesController = (function () {
                     let options = [{code: "", name: ""}];
 
                     clients.forEach((client) => {
-                        options.push({code: client.number, name: client.name})
+                        options.push({code: client.number, name: client.name});
                     });
 
                     $aatl_ib.utils.addDropdownOptions(clientControl, options);
@@ -69,13 +72,20 @@ $aatl_ib.gui.TimeCodesController = (function () {
                         });
 
                         $aatl_ib.utils.addDropdownOptions(control, options);
-                        control.val("");
+                        
+                        component.selectClientLocation();
                     }
                 });
             }
         }
         function afterInit() {
-  
+            $aatl_ib.TimeCodeService.list(function (list, err) {
+                if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
+                    component.showError(err);
+                } else {
+                    component.setTimeCodes(list);
+                }
+            });
         }
 
         function beforeSave(data) {
@@ -86,30 +96,23 @@ $aatl_ib.gui.TimeCodesController = (function () {
 
             return value;
         }
-        function afterSave(client, err) {
+        function afterSave(timeCode, err) {
 
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
             } else {
-                //component.setClient(client);
+                component.afterSaved(timeCode);
 
-//                let currentTitle = title;
-//                
-//                title = 'Client - ' + client.name; 
-//                
-//                component.setTitle(title);
-//                
-//                $aatl_ib.viewController.mainController.updateActionItemText(currentTitle, title);
             }
 
         }
 
         function saveData() {
 
-            let client = component.getClient();
+            let timeCode = component.getEditTimeCode();
 
-            if (beforeSave(client)) {
-                $aatl_ib.ClientService.save(client, afterSave);
+            if (beforeSave(timeCode)) {
+                $aatl_ib.TimeCodeService.save(timeCode, afterSave);
             }
 
         }
@@ -126,7 +129,7 @@ $aatl_ib.gui.TimeCodesController = (function () {
             }
 
             // set save enabled
-            // set add disabled
+            component.setSaveEnabled(true);
         }
 
         this.init = function () {

@@ -22,7 +22,9 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
         let activeFieldId = "";
         let chargeableFieldId = "";
         let rowElement = undefined;
-
+        let editMode = false;
+        let locationNumber = "";
+        
         let onFieldValueChanged = undefined;
         let loadClientOptions = undefined;
 
@@ -104,11 +106,11 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
         function getClientControl(rowControl) {
             return rowControl.find('#' + clientFieldId);
         }
-        
+
         function getLocationControl(rowControl) {
             return rowControl.find('#' + locationFieldId);
         }
-        
+
         function setClientDropdown(rowControl) {
 
             if (typeof loadClientOptions === 'function') {
@@ -116,7 +118,58 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             }
         }
 
+        function getNameField() {
+            return rowElement.find('#' + nameFieldId);
+        }
+
+        function getClientField() {
+            return rowElement.find('#' + clientFieldId);
+        }
+
+        function getClientLocationField() {
+            return rowElement.find('#' + locationFieldId);
+        }
+
+        function getActiveField() {
+            return rowElement.find('#' + activeFieldId);
+        }
+
+        function getChargeableField() {
+            return rowElement.find('#' + chargeableFieldId);
+        }
+
+        function setValues() {
+
+            getNameField().val(timeCode.name);
+            getActiveField().prop("checked", timeCode.active === true);
+            getChargeableField().prop("checked", timeCode.chargeable === true);
+            //getClientLocationField().data('value', );
+            locationNumber = timeCode.clientLocation.number;
+            
+            let $clientField = getClientField();
+
+            $clientField.val(timeCode.client.number);
+            $clientField.change();
+
+            
+        }
+
         this.getTimeCode = function () {
+                        
+            if (editMode === true) {
+                
+                let editTimeCode = {client: {}, clientLocation: {}};
+                
+                editTimeCode.uid = timeCode.uid;
+                editTimeCode.name = getNameField().val().trim();
+                editTimeCode.client.number = getClientField().val();
+                editTimeCode.clientLocation.number = getClientLocationField().val();
+                editTimeCode.active = getActiveField().prop("checked");
+                editTimeCode.chargeable = getChargeableField().prop("checked");
+                
+                return editTimeCode;
+            }
+            
             return timeCode;
         };
 
@@ -135,7 +188,9 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
 
             setClientDropdown(rowControl);
 
-            //setValues();
+            editMode = true;
+
+            setValues();
         };
 
         this.registerOnFieldValueChanged = function (valueChanged) {
@@ -147,7 +202,10 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
         };
 
         this.selectClient = function () {
-            getClientControl(rowElement).val(timeCode.client.number);
+            let $clientField = getClientControl(rowElement);
+            
+            $clientField.val(timeCode.client.number);
+            $clientField.change();
         };
 
         this.registerLoadClientOptions = function (loadOptions) {
@@ -157,6 +215,27 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
 
         this.getLocationControl = function () {
             return getLocationControl(rowElement);
+        };
+
+        this.setEditMode = function (value) {
+            editMode = value;
+        };
+
+        this.getEditMode = function () {
+            return editMode;
+        };
+        
+        this.reset = function(){
+            timeCode = {};
+            editMode = false;
+        }
+        
+        this.selectClientLocation = function () {
+            
+            getClientLocationField().val(locationNumber);
+            
+            //Reset the number when client changed but to set first time
+            locationNumber = "";
         };
     }
 

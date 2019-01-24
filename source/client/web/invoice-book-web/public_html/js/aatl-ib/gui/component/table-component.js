@@ -106,6 +106,19 @@ $aatl_ib.gui.TableComponent = (function () {
         this.getRowControl = function(keyValue){
           return findRowControl(keyValue);
         };
+        
+        this.replaceRow = function(keyValue, rowData){
+           
+           let rowControl = findRowControl(keyValue);
+           
+           rowControl.replaceWith(getRow(rowData));
+           
+           rowControl = findRowControl(rowData.keyValue);
+           
+           rowControl.dblclick(tableRowDoubleClicked);
+            
+            $aatl_ib.gui.replaceIcons();
+        };
     }
     
     return TableComponent;

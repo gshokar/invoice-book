@@ -11,9 +11,11 @@
 package ca.aatl.app.invoicebook.bl.rest.service;
 
 import ca.aatl.app.invoicebook.bl.rest.AppSecurity;
+import ca.aatl.app.invoicebook.bl.rest.AppUserPrincipal;
 import ca.aatl.app.invoicebook.bl.rest.request.ServiceRequest;
 import ca.aatl.app.invoicebook.bl.rest.response.ServiceResponse;
 import ca.aatl.app.invoicebook.data.jpa.entity.AppSession;
+import java.security.Principal;
 import java.util.ArrayList;
 import javax.ws.rs.core.SecurityContext;
 
@@ -45,9 +47,13 @@ public class ResponseService extends RestService {
         
         AppSession session = null;
         
-        if(securityContext != null && securityContext instanceof AppSecurity){
+        if(securityContext != null ){
             
-            session = ((AppSecurity)securityContext).getUser().getSession();
+            Principal principal = securityContext.getUserPrincipal();
+            
+            if(principal instanceof AppUserPrincipal){
+                session = ((AppUserPrincipal)principal).getSession();
+            }
         }
         return session;
     }

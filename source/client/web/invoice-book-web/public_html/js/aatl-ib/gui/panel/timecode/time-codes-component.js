@@ -20,7 +20,7 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
         let onActionButtonClicked = null;
         let afterInit = null;
 
-        let errorComponent = new $aatl_ib.ErrorComponent({componentId: "clientErrors", parentComponent: component.getControl});
+        let errorComponent = new $aatl_ib.ErrorComponent({componentId: "timeCodesErrors", parentComponent: component.getControl});
         let titleComponent = new $aatl_ib.gui.Component({componentId: "panelTitle", parentComponent: component.getControl});
         let timeCodeTable = new $aatl_ib.gui.TableComponent({componentId: "timeCodeList", parentComponent: component.getControl});
         let timeCodeRowEdit = new $aatl_ib.gui.TimeCodeRowEdit();
@@ -58,13 +58,20 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
 
         function onTimeCodeRowDoubleClicked(keyValue) {
 
-            let timeCode = timeCodes.find(function (tc) {
-                return tc.uid == keyValue;
-            });
+            if (timeCodeRowEdit.getEditMode() === false) {
 
-            if (timeCode !== undefined) {
-                if (keyValue !== timeCodeRowEdit.getTimeCode().uid) {
-                    timeCodeRowEdit.setRow(timeCodeTable.getRowControl(keyValue), timeCode);
+                let timeCode = timeCodes.find(function (tc) {
+                    return tc.uid == keyValue;
+                });
+
+                if (timeCode !== undefined) {
+                    if (keyValue !== timeCodeRowEdit.getTimeCode().uid) {
+                        timeCodeRowEdit.setRow(timeCodeTable.getRowControl(keyValue), timeCode);
+
+                        setButtonActionEnabled("add", false);
+                        setButtonActionEnabled("cancel", true);
+                        setButtonActionEnabled("save", false);
+                    }
                 }
             }
         }
@@ -84,9 +91,8 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
             afterLoad();
         }
 
-        function getTableRowData(timeCode) {
+        function getTableRowData(timeCode, index = 0) {
 
-            let index = 0;
             let rowData = {keyValue: timeCode.uid,
                 columnValues: []};
 
@@ -98,6 +104,53 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
             rowData.columnValues.push(timeCode.chargeable);
 
             return rowData;
+        }
+
+        function removeEditRow(keyValue) {
+
+            let index = timeCodes.findIndex(function (tc) {
+                return tc.uid === keyValue;
+            });
+
+            if (index >= 0) {
+                timeCodes.splice(index, 1);
+                timeCodeTable.getRowControl(keyValue).remove();
+            }
+        }
+
+        function resetTableRow(keyValue) {
+
+            let index = timeCodes.findIndex(function (tc) {
+                return tc.uid === keyValue;
+            });
+
+            let timeCode = timeCodes[index];
+
+            let rowData = getTableRowData(timeCode, index);
+
+            timeCodeTable.replaceRow(keyValue, rowData);
+
+        }
+
+        function resetActionButtons() {
+
+            setButtonActionEnabled("add", true);
+            setButtonActionEnabled("cancel", false);
+            setButtonActionEnabled("save", false);
+        }
+
+        function setTableRows() {
+
+            let rows = [];
+
+            for (var i = 0; i < timeCodes.length; i++) {
+
+                rows.push(getTableRowData(timeCodes[i], i));
+
+            }
+
+            timeCodeTable.addRows(rows);
+
         }
 
         this.init = function () {
@@ -144,33 +197,87 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
             };
 
             timeCodes.push(timeCode);
-
-            let rowData = getTableRowData(timeCode);
+           
+            let rowData = getTableRowData(timeCode, timeCodes.length - 1);
 
             timeCodeTable.addRow(rowData);
 
+            onTimeCodeRowDoubleClicked(timeCode.uid);
 
         };
-        
+
         this.registerOnFieldValueChanged = function (valueChanged) {
             timeCodeRowEdit.registerOnFieldValueChanged(valueChanged);
         };
-        
-        this.isClientControl = function(control){
-          return timeCodeRowEdit.isClientControl(control);
+
+        this.isClientControl = function (control) {
+            return timeCodeRowEdit.isClientControl(control);
         };
-        
-        this.selectClient = function(){
+
+        this.selectClient = function () {
             timeCodeRowEdit.selectClient();
         };
-        
-        this.registerLoadClientOptions = function(loadOptions){
-          
+
+        this.registerLoadClientOptions = function (loadOptions) {
+
             timeCodeRowEdit.registerLoadClientOptions(loadOptions);
         };
-        
-        this.getLocationControl = function(){
-          return timeCodeRowEdit.getLocationControl();
+
+        this.getLocationControl = function () {
+            return timeCodeRowEdit.getLocationControl();
+        };
+
+        this.cancelTimeCodeEdit = function () {
+            let editTimeCode = timeCodeRowEdit.getTimeCode();
+
+            if ($aatl_ib.utils.isStringEmpty(editTimeCode.uid)) {
+
+                removeEditRow(editTimeCode.uid);
+            } else {
+                resetTableRow(editTimeCode.uid);
+            }
+
+            timeCodeRowEdit.reset();
+
+            resetActionButtons();
+        };
+
+        this.getEditTimeCode = function () {
+            return timeCodeRowEdit.getTimeCode();
+        };
+
+        this.setSaveEnabled = function (value) {
+            setButtonActionEnabled("save", value);
+        };
+
+        this.afterSaved = function (timeCode) {
+            let editTimeCode = timeCodeRowEdit.getTimeCode();
+
+            let index = timeCodes.findIndex(function (tc) {
+                return tc.uid === editTimeCode.uid;
+            });
+
+            timeCodes[index] = timeCode;
+
+            let rowData = getTableRowData(timeCode, index);
+
+            timeCodeTable.replaceRow(editTimeCode.uid, rowData);
+
+            timeCodeRowEdit.reset();
+
+            resetActionButtons();
+        };
+
+        this.setTimeCodes = function (list) {
+            timeCodes = list;
+
+            timeCodeTable.clearRows();
+
+            setTableRows();
+        };
+
+        this.selectClientLocation = function () {
+            timeCodeRowEdit.selectClientLocation();
         };
     }
 
