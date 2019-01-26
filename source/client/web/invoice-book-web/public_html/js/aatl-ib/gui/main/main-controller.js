@@ -59,6 +59,9 @@ $aatl_ib.MainController = (function () {
                     case $aatl_ib.gui.ActionItemTypeCode.TimeCodes:
                         controlId = openTimeCodes(actionItem);
                         break;
+                    case $aatl_ib.gui.ActionItemTypeCode.TimeSheet:
+                        controlId = openTimeSheet(actionItem);
+                        break;
                 }
 
                 if (controlId) {
@@ -164,9 +167,9 @@ $aatl_ib.MainController = (function () {
 
             return panel.controlId;
         }
-        
-        function openTimeCodes(actionItem){
-            
+
+        function openTimeCodes(actionItem) {
+
             let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.TimeCodes, actionItem);
 
             panel.controller = new $aatl_ib.gui.TimeCodesController(panel.controlId, component.getCenterView());
@@ -176,6 +179,17 @@ $aatl_ib.MainController = (function () {
             return panel.controlId;
         }
         
+        function openTimeSheet(actionItem) {
+
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.TimeSheet, actionItem);
+
+            panel.controller = new $aatl_ib.gui.TimeSheetController(panel.controlId, component.getCenterView());
+
+            panel.controller.init();
+
+            return panel.controlId;
+        }
+
         this.init = function () {
 
             component.init();

@@ -46,6 +46,7 @@ $aatl_ib.gui.ActionItemTypeCode = {
     EmployeeSearch: "employeeSearch",
     EmployeeDetail: 'employeeDetail',
     TimeCodes: "timeCodes",
+    TimeSheet: "timeSheet",
     Save: 'save',
     Open: 'open',
     Close: 'close',

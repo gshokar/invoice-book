@@ -40,5 +40,6 @@ $aatl_ib.model.gui.PanelTypeCode = {
     Client: "client",
     EmployeeSearch: "employeeSearch",
     Employee: "employee",
-    TimeCodes: "timeCodes"
+    TimeCodes: "timeCodes",
+    TimeSheet: "timeSheet"
 };
