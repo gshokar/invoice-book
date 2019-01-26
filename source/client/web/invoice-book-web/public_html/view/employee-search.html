@@ -1,9 +1,15 @@
 <div class="card text-white bg-secondary mb-3">
-    <div class="card-header">
-        <span id="panelTitle">Employee Search</span>
-    </div>
     <div class="card-body">
-        <div class="navbar text-dark navbar-expand-lg navbar-light bg-light" id="employeeSearchPanelToolbar" style="margin-top: -18px; margin-left: -10px; margin-right: -10px; margin-bottom: 10px;">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 id="panelTitleEmployeeSearch" class="h5">Employee Search</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group mr-2 employee-search-action-btn-group">
+                    <button class="btn btn-sm btn-outline-light" data-action="find">Find</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="open">Open</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="new">New</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="clear">Clear</button>
+                </div>
+            </div>
         </div>
         <div class="alert alert-danger" role="alert" hidden>
             

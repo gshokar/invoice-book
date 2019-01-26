@@ -21,13 +21,14 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
         let errorComponent = new $aatl_ib.ErrorComponent({componentId: "timeSheetErrors", parentComponent: component.getControl});
         let titleComponent = new $aatl_ib.gui.Component({componentId: "panelTitle", parentComponent: component.getControl});
+        let employeeField = new $aatl_ib.gui.Component({componentId: "employee", parentComponent: component.getControl, componentName: "employee"});
         let timeRecordTable = new $aatl_ib.gui.TableComponent({componentId: "timeSheeTimeRecords", parentComponent: component.getControl});
         let timeRecordRowEdit = new $aatl_ib.gui.TimeCodeRowEdit();
-        
+
         function getControl() {
             return component.getControl();
         }
-        
+
         function afterLoad() {
 
             bindEvents();
@@ -36,7 +37,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 afterInit();
             }
         }
-        
+
         function bindEvents() {
 
             getControl().find(".time-sheet-action-btn-group button").click(function (evt) {
@@ -49,7 +50,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             timeRecordTable.setOnRowDoubleClicked(onTimeRecordRowDoubleClicked)
         }
-        
+
         function onTimeRecordRowDoubleClicked(keyValue) {
 
             if (timeRecordRowEdit.getEditMode() === false) {
@@ -69,12 +70,24 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 }
             }
         }
-        
+        function updateElementIds(html) {
+            let updatedHtml = errorComponent.updateElementId(html);
+
+            let element = {html: updatedHtml, createNewId: true};
+
+            element.html = titleComponent.updateElementId(element);
+
+            element.attributes = ['for'];
+
+            element.html = employeeField.updateElementId(element);
+            
+            return element.html;
+        }
         function loadView(html) {
             getControl().html(updateElementIds(html));
             afterLoad();
         }
-        
+
         this.init = function () {
             $aatl_ib.ViewService.getViewContent("time-sheet", loadView);
 
@@ -82,6 +95,10 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
         this.registerOnActionButtonClicked = function (actionClicked) {
             onActionButtonClicked = actionClicked;
+        };
+
+        this.setAfterInit = function (callback) {
+            afterInit = callback;
         };
     }
     return TimeSheetComponent;

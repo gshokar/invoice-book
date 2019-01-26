@@ -17,27 +17,28 @@ $aatl_ib.gui.EmployeeSearchController = (function () {
 
         var component = new $aatl_ib.gui.EmployeeSearchComponent({componentId: componentId, parentComponent: parentComponent});
 
-        function onToolbarItemClicked(toolbarItem) {
+function onActionButtonClicked(action) {
 
-            switch (toolbarItem.typeCode) {
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Find:
+            switch (action) {
+                case "find":
                     find();
                     break;
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.New:
+                case "open":
+                    alert("Open not implemented yet");
+                    break;
+                case "new":
                     createNewEmployee();
                     break;
-                case $aatl_ib.model.gui.PanelToolbarItemTypeCode.Clear:
-                    alert("Clear");
+                case "clear":
+                    alert("Clear not implemented yet");
                     break;
             }
         }
-        ;
 
         function onTableRowDoubleClicked(employee) {
            
             openEmployee(employee);
         }
-        ;
 
         function afterFind(employees, err) {
 
@@ -65,7 +66,7 @@ $aatl_ib.gui.EmployeeSearchController = (function () {
 
         this.init = function () {
             component.init();
-            component.registerOnToolbarItemClicked(onToolbarItemClicked);
+            component.registerOnActionButtonClicked(onActionButtonClicked);
             component.registerOnTableRowDoubleClicked(onTableRowDoubleClicked);
         };
 

@@ -16,32 +16,25 @@ $aatl_ib.gui.EmployeeSearchComponent = (function () {
     function EmployeeSearchComponent(props) {
 
         let component = new $aatl_ib.gui.Component(props);
-
-        let toolbar = null;
-        let onToolbarItemClicked = null;
+        
+        let onActionButtonClicked = null;
         let resultListTable = null;
         let resultList = [];
         let onTableRowDoubleClicked = null;
 
         function afterLoad() {
-            toolbar = new $aatl_ib.gui.PanelToolbarComponent({componentId: "employeeSearchPanelToolbar", parentComponent: component.getControl});
-            toolbar.init();
-            toolbar.registerOnClickActionItem(onToolbarItemClicked);
-            addToolbarItems();
+            component.getControl().find(".employee-search-action-btn-group button").click(function (evt) {
+
+                let $element = $(evt.target);
+                let action = $element.data("action");
+
+                onActionButtonClicked(action);
+            });
 
             resultListTable = new $aatl_ib.gui.TableComponent({componentId: "employeeSearchResultList", parentComponent: component.getControl});
 
             resultListTable.setOnRowDoubleClicked(onResultListTableRowDoubleClicked);
         }
-
-        function addToolbarItems() {
-
-            toolbar.addNewActionItem("Find", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Find);
-            toolbar.addNewActionItem("Open", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Open);
-            toolbar.addNewActionItem("New", $aatl_ib.model.gui.PanelToolbarItemTypeCode.New);
-            toolbar.addNewActionItem("Clear", $aatl_ib.model.gui.PanelToolbarItemTypeCode.Clear);
-        }
-        ;
 
         function getEmployeeName() {
             return component.getControl().find("#employeeName").val().trim();
@@ -93,8 +86,8 @@ $aatl_ib.gui.EmployeeSearchComponent = (function () {
 
         };
 
-        this.registerOnToolbarItemClicked = function (actionItemClicked) {
-            onToolbarItemClicked = actionItemClicked;
+        this.registerOnActionButtonClicked = function (actionItemClicked) {
+            onActionButtonClicked = actionItemClicked;
         };
 
         this.getComponent = function () {

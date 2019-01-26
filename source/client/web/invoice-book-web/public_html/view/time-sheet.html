@@ -13,6 +13,21 @@
         <div id="timeSheetErrors" class="alert alert-danger" role="alert" hidden>
 
         </div>
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="employee">Employee</label>
+                    <select id="employee" class="form-control">
+                        <option selected>Choose...</option>
+                        <option>...</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="timesheetYearMonth">Month</label>
+                    <input type="text" class="form-control" id="timesheetYearMonth">
+                </div>
+            </div>
+        </form>
         <div class="table-responsive" id="timeSheeTimeRecords">
             <table class="table table-striped table-sm table-hover">
                 <thead>
