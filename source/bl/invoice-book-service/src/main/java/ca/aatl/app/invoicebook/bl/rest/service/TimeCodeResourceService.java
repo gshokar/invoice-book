@@ -155,7 +155,7 @@ public class TimeCodeResourceService extends ResponseService {
 
             setResponseError("System error - " + ex.getMessage());
 
-            Logger.getLogger(ClientResourceService.class.getName()).log(Level.SEVERE, "System error ClientResponseService list", ex);
+            Logger.getLogger(TimeCodeResourceService.class.getName()).log(Level.SEVERE, "System error TimeCodeResourceService list", ex);
         }
 
         return getResponseJson();

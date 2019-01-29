@@ -18,6 +18,7 @@
     <class>ca.aatl.app.invoicebook.data.jpa.entity.Employee</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.TimeCode</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <validation-mode>NONE</validation-mode>

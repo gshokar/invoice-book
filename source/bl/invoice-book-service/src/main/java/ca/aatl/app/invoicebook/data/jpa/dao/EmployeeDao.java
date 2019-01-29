@@ -31,10 +31,9 @@ import javax.persistence.criteria.Root;
  *
  * @author GShokar
  */
-
 @Stateless
 @LocalBean
-public class EmployeeDao extends AbstractDao<Employee>{
+public class EmployeeDao extends AbstractDao<Employee> {
 
     @Override
     public void save(Employee entity) throws Exception {
@@ -51,16 +50,16 @@ public class EmployeeDao extends AbstractDao<Employee>{
 
     @Override
     public void beforeCreate(Employee entity) throws Exception {
-        
+
     }
 
     @Override
     public void beforeUpdate(Employee entity) throws Exception {
-        
+
     }
 
     public Employee find(String number) {
-        
+
         Employee entity = null;
 
         try {
@@ -76,14 +75,13 @@ public class EmployeeDao extends AbstractDao<Employee>{
             TypedQuery<Employee> q = em.createQuery(cq);
 
             entity = q.getSingleResult();
-            
 
         } catch (NoResultException ex) {
 
         }
         return entity;
     }
-    
+
     public List<Employee> find(String name, String phone) {
         List<Employee> list = null;
 
@@ -99,8 +97,8 @@ public class EmployeeDao extends AbstractDao<Employee>{
             Predicate predicate = null;
 
             if (!AppUtils.isNullOrEmpty(name)) {
-                predicate = cb.or(cb.like(root.get(Employee_.firstName), '%' + name + '%')
-                        ,cb.like(root.get(Employee_.lastName), '%' + name + '%'));
+                predicate = cb.or(cb.like(root.get(Employee_.firstName), '%' + name + '%'),
+                         cb.like(root.get(Employee_.lastName), '%' + name + '%'));
             }
 
             if (!AppUtils.isNullOrEmpty(phone)) {
@@ -123,16 +121,16 @@ public class EmployeeDao extends AbstractDao<Employee>{
             TypedQuery<Employee> q = em.createQuery(cq);
 
             list = q.getResultList();
-            
+
         } catch (NoResultException ex) {
 
         }
         return list;
     }
-    
+
     public boolean isExists(Integer id, String name, Date birthDate) {
         boolean value = false;
-        
+
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -141,15 +139,15 @@ public class EmployeeDao extends AbstractDao<Employee>{
 
             cq.select(cb.count(root));
 
-            Predicate predicate = cb.and(cb.equal(root.get(Employee_.name),name)
-                    , cb.equal(root.get(Employee_.birthDate),
-                    birthDate));
+            Predicate predicate = cb.and(cb.equal(root.get(Employee_.name), name),
+                     cb.equal(root.get(Employee_.birthDate),
+                            birthDate));
 
             if (id != null) {
                 predicate = cb.and(predicate,
                         cb.notEqual(root.get(Employee_.id), id));
             }
-            
+
             cq.where(predicate);
 
             TypedQuery<Long> q = em.createQuery(cq);
@@ -158,7 +156,30 @@ public class EmployeeDao extends AbstractDao<Employee>{
 
         } catch (NoResultException ex) {
         }
-        
+
         return value;
+    }
+
+    public List<Employee> list() {
+        List<Employee> list = null;
+
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+
+            CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
+
+            Root<Employee> root = cq.from(Employee.class);
+
+            cq.select(root);
+            cq.orderBy(cb.asc(root.get(Employee_.name)));
+
+            TypedQuery<Employee> q = em.createQuery(cq);
+
+            list = q.getResultList();
+
+        } catch (NoResultException ex) {
+
+        }
+        return list;
     }
 }

@@ -10,6 +10,9 @@
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
+import ca.aatl.app.invoicebook.data.jpa.entity.Address;
+import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
+import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.PersonEntity_;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;

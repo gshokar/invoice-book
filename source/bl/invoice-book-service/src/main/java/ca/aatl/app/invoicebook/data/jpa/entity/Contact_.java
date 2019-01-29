@@ -10,6 +10,7 @@
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
+import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.ContactEntity_;
 import javax.persistence.metamodel.StaticMetamodel;
 

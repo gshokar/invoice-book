@@ -11,6 +11,7 @@
 
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
+import ca.aatl.app.invoicebook.data.jpa.entity.AddressType;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.TypeEntity_;
 import javax.persistence.metamodel.StaticMetamodel;
 

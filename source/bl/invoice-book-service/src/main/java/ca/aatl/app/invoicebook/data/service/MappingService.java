@@ -18,14 +18,17 @@ import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
+import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry;
 import ca.aatl.app.invoicebook.dto.AddressDto;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.ClientLocationDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
+import ca.aatl.app.invoicebook.dto.TimeEntryDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
+import java.text.DateFormat;
 import java.text.ParseException;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -143,6 +146,7 @@ public class MappingService {
             dto.setFirstName(employee.getFirstName());
             dto.setLastName(employee.getLastName());
             dto.setNumber(employee.getNumber());
+            dto.setName(employee.getName());
 
             if (employee.getBirthDate() != null) {
                 dto.setBirthDate(AppUtils.dateToString(employee.getBirthDate()));
@@ -196,7 +200,7 @@ public class MappingService {
             if (location.getClient() != null) {
                 dto.setClientNumber(location.getClient().getNumber());
             }
-            
+
             if (location.getAddress() != null) {
 
                 updateAddressDto(dto.getAddress(), location.getAddress());
@@ -239,30 +243,82 @@ public class MappingService {
 
     public void updateTimeCodeDto(TimeCodeDto dto, TimeCode timeCode) {
         if (dto != null && timeCode != null) {
-            
+
             dto.setActive(timeCode.isActive());
             dto.setChargeable(timeCode.isChargeable());
             dto.setName(timeCode.getName());
             dto.setUid(timeCode.getGuid());
             dto.setClient(new ClientDto());
             dto.setClientLocation(new ClientLocationDto());
-            
-            if(timeCode.getClient() != null){
-                
+
+            if (timeCode.getClient() != null) {
+
                 dto.getClient().setName(timeCode.getClient().getName());
                 dto.getClient().setNumber(timeCode.getClient().getNumber());
-            }else{
+            } else {
                 dto.getClient().setNumber("");
                 dto.getClient().setName("");
             }
-            
-            if(timeCode.getClientLocation() != null){
-                
+
+            if (timeCode.getClientLocation() != null) {
+
                 dto.getClientLocation().setName(timeCode.getClientLocation().getName());
                 dto.getClientLocation().setNumber(timeCode.getClientLocation().getNumber());
-            }else{
+            } else {
                 dto.getClientLocation().setNumber("");
                 dto.getClientLocation().setName("");
+            }
+        }
+    }
+
+    public void updateTimeEntry(TimeEntry entity, TimeEntryDto dto) {
+        if (dto != null && entity != null) {
+
+            if (!AppUtils.isNullOrEmpty(dto.getDate())) {
+                try {
+                    entity.setDate(AppUtils.dateFormat.parse(dto.getDate()));
+                } catch (ParseException ex) {
+
+                }
+            }
+
+            if (!AppUtils.isNullOrEmpty(dto.getEndTime())) {
+                try {
+                    entity.setEndTime(AppUtils.timeFormat.parse(dto.getEndTime()));
+                } catch (ParseException ex) {
+
+                }
+            }
+
+            if (!AppUtils.isNullOrEmpty(dto.getStartTime())) {
+                try {
+                    entity.setStartTime(AppUtils.timeFormat.parse(dto.getStartTime()));
+                } catch (ParseException ex) {
+
+                }
+            }
+        }
+    }
+
+    public void updateTimeEntryDto(TimeEntryDto dto, TimeEntry entity) {
+        if (dto != null && entity != null) {
+
+            dto.setDate(AppUtils.dateToString(entity.getDate()));
+            dto.setEmployee(new EmployeeDto());
+            dto.setEndTime(AppUtils.timeToString(entity.getEndTime()));
+            dto.setStartTime(AppUtils.timeToString(entity.getStartTime()));
+            dto.setHours(entity.getHours() == null ? 0 : entity.getHours().doubleValue());
+            dto.setTimeCode(new TimeCodeDto());
+            dto.setUid(entity.getGuid());
+
+            if (entity.getEmployee() != null) {
+                dto.getEmployee().setNumber(entity.getEmployee().getNumber());
+                dto.getEmployee().setName(entity.getEmployee().getName());
+            }
+            
+            if (entity.getTimeCode() != null) {
+                dto.getTimeCode().setUid(entity.getTimeCode().getGuid());
+                dto.getTimeCode().setName(entity.getEmployee().getName());
             }
         }
     }

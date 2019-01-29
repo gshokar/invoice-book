@@ -22,6 +22,7 @@ import java.util.UUID;
 public final class AppUtils {
     
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
     
     public static String getGUID(){
         return UUID.randomUUID().toString().toUpperCase();
@@ -41,6 +42,16 @@ public final class AppUtils {
         
         if(date != null){
             value = dateFormat.format(date);
+        }
+        
+        return value;
+    }
+    
+    public static String timeToString(Date date){
+        String value = null;
+        
+        if(date != null){
+            value = timeFormat.format(date);
         }
         
         return value;

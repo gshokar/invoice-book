@@ -30,7 +30,7 @@ import javax.ejb.Stateless;
 public class EmployeeService {
 
     @EJB
-    EmployeeDao employeeDao;
+    EmployeeDao dao;
 
     @EJB
     LookupService lookupService;
@@ -39,12 +39,12 @@ public class EmployeeService {
     SequenceService sequenceService;
 
     public List<Employee> find(String name, String phone) throws Exception {
-        return employeeDao.find(name, phone);
+        return dao.find(name, phone);
     }
 
     public Employee find(String number) throws Exception {
 
-        return employeeDao.find(number);
+        return dao.find(number);
     }
 
     public Employee newEntity() throws Exception {
@@ -67,7 +67,7 @@ public class EmployeeService {
 
         beforeSave(entity);
 
-        employeeDao.save(entity);
+        dao.save(entity);
     }
 
     private void beforeSave(Employee entity) throws DataValidationException {
@@ -137,7 +137,7 @@ public class EmployeeService {
                 sb.append("Employee's date of birth can't be in future.");
             }
 
-            if (checkDuplicate && employeeDao.isExists(entity.getId(), entity.getName(), entity.getBirthDate())) {
+            if (checkDuplicate && dao.isExists(entity.getId(), entity.getName(), entity.getBirthDate())) {
                 rtnValue = false;
                 sb.append(System.lineSeparator());
                 sb.append("This employee already exists.");
@@ -182,5 +182,9 @@ public class EmployeeService {
             throw new DataValidationException(sb.toString());
         }
 
+    }
+
+    public List<Employee> list() throws Exception{
+        return dao.list();
     }
 }

@@ -46,7 +46,7 @@ import javax.ws.rs.core.SecurityContext;
 
 @Stateless
 @LocalBean
-@Path("employee")
+@Path("employees")
 public class EmployeeResourceService extends ResponseService{
     
     @EJB
@@ -129,6 +129,41 @@ public class EmployeeResourceService extends ResponseService{
             setResponseError("System error - " + ex.getMessage());
 
             Logger.getLogger(EmployeeResourceService.class.getName()).log(Level.SEVERE, "System error EmployeeResponseService getEmployee", ex);
+        }
+
+        return getResponseJson();
+    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Authenticated
+    //@RolesAllowed(AppSecurity.ROLE_ADMIN)
+    public String list() {
+        try {
+            List<EmployeeDto> dtoList = new ArrayList<>();
+
+            List<Employee> employees = employeeService.list();
+
+            if (employees.isEmpty()) {
+                addWarningMessage("No employee record found");
+            } else {
+                employees.forEach(c -> {
+
+                    EmployeeDto dto = newEmployeeDto();
+
+                    mappingService.updateEmployeeDto(dto, c);
+
+                    dtoList.add(dto);
+
+                });
+            }
+
+            setResponseSuccess(dtoList);
+
+        }catch (Exception ex) {
+
+            setResponseError("System error - " + ex.getMessage());
+
+            Logger.getLogger(EmployeeResourceService.class.getName()).log(Level.SEVERE, "System error EmployeeResourceService list", ex);
         }
 
         return getResponseJson();
