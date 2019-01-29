@@ -43,23 +43,23 @@ $aatl_ib.utils = {
         return obj !== undefined && obj !== null && typeof obj === "function";
     },
 
-    isStringEmpty: function(value){
+    isStringEmpty: function (value) {
         // undefinded or null
         return typeof value !== 'string' || value.trim().length === 0;
     },
-            
+
     replaceElementId: function (html, oldId, newId) {
 
         return $aatl_ib.utils.replaceElementAttribute(html, 'id', oldId, newId);
     },
 
     replaceElementAttribute: function (html, attribute, value, newValue) {
-        
-        if(attribute === 'data-target'){
+
+        if (attribute === 'data-target') {
             value = '#' + value;
             newValue = '#' + newValue;
         }
-        
+
         let currentAttribute = attribute + '="' + value + '" ';
         let newAttribute = attribute + '="' + newValue + '" ';
 
@@ -79,12 +79,35 @@ $aatl_ib.utils = {
     addDropdownOptions: function (control, options) {
         control.empty();
 
-        $.each(options, function (index, option) {
+        options.forEach(function (option) {
             control.append($('<option></option>').val(option.code).text(option.name));
         });
     },
-    
-    getEmployeeName: function(employee){
+
+    getEmployeeName: function (employee) {
         return employee.firstName + ' ' + employee.lastName;
-    }
+    },
+
+    calcHours: function (time1, time2) {
+        var hours = 0;
+        var start = time1.split(":");
+        var end = time2.split(":");
+
+        if (start.length === 2 && end.length === 2) {
+            try {
+                var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+                var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+                var diff = endDate.getTime() - startDate.getTime();
+                var hours = diff / 1000 / 60 / 60;
+
+                // Round to 2 decimals
+                hours = Math.round(hours * 100) / 100;
+            } catch (ex) {
+                console.log("time1 or time2 is invalid");
+            }
+        }
+
+        return hours;
+    },
+    
 };

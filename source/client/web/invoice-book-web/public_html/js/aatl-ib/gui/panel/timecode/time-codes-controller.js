@@ -72,7 +72,7 @@ $aatl_ib.gui.TimeCodesController = (function () {
                         });
 
                         $aatl_ib.utils.addDropdownOptions(control, options);
-                        
+
                         component.selectClientLocation();
                     }
                 });

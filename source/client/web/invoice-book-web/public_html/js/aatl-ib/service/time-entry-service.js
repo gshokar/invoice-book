@@ -5,27 +5,27 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2019-Jan-23  GShokar         Created
+ * 2019-Jan-28  GShokar         Created
  * =============================================================================
  */
 
 "use strict";
 
-$aatl_ib.TimeCodeService = {
+$aatl_ib.TimeEntryService = {
 
     find: function (criteria, callback) {
 
-        $aatl_ib.ApiService.get("time-codes/find",
+        $aatl_ib.ApiService.get("time-entries/find",
                 criteria,
                 function (res, err) {
                     if (err) {
-                        callback(null, {messages: ["Faild to get employee search results: " + err]});
+                        callback(null, {messages: ["Faild to get time entries: " + err]});
 
                     } else if (res.status === "failure") {
                         callback(null, {messages: [res.message]});
                     } else if (res.status === "success") {
-                        let employees = JSON.parse(res.data);
-                        callback(employees);
+                        let list = JSON.parse(res.data);
+                        callback(list);
                     } else {
                         callback(null, {messages: ["Invalid response from server"]});
                     }
@@ -71,23 +71,23 @@ $aatl_ib.TimeCodeService = {
         }
     },
 
-    save: function (timeCode, callback) {
+    save: function (timeEntry, callback) {
 
-        let err = $aatl_ib.TimeCodeService.validate(timeCode);
+        let err = $aatl_ib.TimeEntryService.validate(timeEntry);
 
         if (err.messages.length === 0) {
-            $aatl_ib.ApiService.put("time-codes",
-                    timeCode,
+            $aatl_ib.ApiService.put("time-entries",
+                    timeEntry,
                     function (res, serverErr) {
                         if (serverErr) {
 
-                            err.messages.push("Failed to save the time code: " + serverErr);
-                            callback(timeCode, err);
+                            err.messages.push("Failed to save the time entry: " + serverErr);
+                            callback(timeEntry, err);
 
                         } else if (res.status === "failure") {
 
                             err.messages.push(res.message);
-                            callback(timeCode, err);
+                            callback(timeEntry, err);
 
                         } else if (res.status === "success") {
 
@@ -97,22 +97,22 @@ $aatl_ib.TimeCodeService = {
 
                             callback(JSON.parse(res.data), err);
                         } else {
-                            callback(timeCode, "Invalid response from server");
+                            callback(timeEntry, "Invalid response from server");
                         }
                     });
 
             return;
         }
 
-        callback(timeCode, err);
+        callback(timeEntry, err);
     },
     list: function (callback) {
 
-        $aatl_ib.ApiService.get("time-codes",
+        $aatl_ib.ApiService.get("time-entries",
                 {},
                 function (res, err) {
                     if (err) {
-                        callback(null, {messages: ["Faild to get time code list: " + err]});
+                        callback(null, {messages: ["Faild to get time entry list: " + err]});
 
                     } else if (res.status === "failure") {
                         callback(null, {messages: [res.message]});
@@ -124,14 +124,23 @@ $aatl_ib.TimeCodeService = {
                     }
                 });
     },
-    validate: function (timeCode) {
+    validate: function (timeEntry) {
 
         let err = {messages: []};
 
-        if (timeCode) {
+        if (timeEntry) {
 
-            if ($aatl_ib.utils.isStringEmpty(timeCode.name)) {
-                err.messages.push("Please enter time code name.");
+            if ($aatl_ib.utils.isStringEmpty(timeEntry.date)) {
+                err.messages.push("Please select enter date.");
+            }
+            if ($aatl_ib.utils.isStringEmpty(timeEntry.timeCode.uid)) {
+                err.messages.push("Please select time code.");
+            }
+            if ($aatl_ib.utils.isStringEmpty(timeEntry.startTime)) {
+                err.messages.push("Please enter start time.");
+            }
+            if ($aatl_ib.utils.isStringEmpty(timeEntry.endTime)) {
+                err.messages.push("Please enter end time.");
             }
 
         }
@@ -139,4 +148,5 @@ $aatl_ib.TimeCodeService = {
         return err;
     }
 };
+
 

@@ -9,7 +9,6 @@
  * =============================================================================
  */
 
-
 "use strict";
 
 $aatl_ib.gui.TimeCodeRowEdit = (function () {
@@ -228,7 +227,7 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
         this.reset = function(){
             timeCode = {};
             editMode = false;
-        }
+        };
         
         this.selectClientLocation = function () {
             

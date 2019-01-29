@@ -15,7 +15,7 @@ $aatl_ib.EmployeeService = {
 
     find: function (criteria, callback) {
 
-        $aatl_ib.ApiService.get("employee/find",
+        $aatl_ib.ApiService.get("employees/find",
                 criteria,
                 function (res, err) {
                     if (err) {
@@ -26,6 +26,24 @@ $aatl_ib.EmployeeService = {
                     } else if (res.status === "success") {
                         let employees = JSON.parse(res.data);
                         callback(employees);
+                    } else {
+                        callback(null, {messages: ["Invalid response from server"]});
+                    }
+                });
+    },
+    list: function (callback) {
+
+        $aatl_ib.ApiService.get("employees",
+        {},
+                function (res, err) {
+                    if (err) {
+                        callback(null, {messages: ["Faild to get employee list: " + err]});
+
+                    } else if (res.status === "failure") {
+                        callback(null, {messages: [res.message]});
+                    } else if (res.status === "success") {
+                        let clients = JSON.parse(res.data);
+                        callback(clients);
                     } else {
                         callback(null, {messages: ["Invalid response from server"]});
                     }
@@ -53,7 +71,7 @@ $aatl_ib.EmployeeService = {
                 }
             });
         } else {
-            $aatl_ib.ApiService.get("employee/" + number,
+            $aatl_ib.ApiService.get("employees/" + number,
                     {},
                     function (res, err) {
                         if (err) {
@@ -76,7 +94,7 @@ $aatl_ib.EmployeeService = {
         let err = $aatl_ib.EmployeeService.validate(employee);
 
         if (err.messages.length === 0) {
-            $aatl_ib.ApiService.put("employee",
+            $aatl_ib.ApiService.put("employees",
                     employee,
                     function (res, serverErr) {
                         if (serverErr) {

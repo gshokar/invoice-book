@@ -22,69 +22,32 @@ $aatl_ib.gui.TimeSheetController = (function () {
                     saveData();
                     break;
                 case "add":
-                    component.addTimeCode();
+                    component.addTimeEntry();
                     break;
                 case "cancel":
-                    component.cancelTimeCodeEdit();
+                    component.cancelTimeEntryEdit();
                     break;
             }
         }
-        ;
 
-        function loadClientDropdownOptions(clientControl) {
-
-            $aatl_ib.ClientService.list(function (clients, err) {
-
-                if (err !== undefined && err !== null) {
-                    component.showError();
-                } else {
-                    let options = [{code: "", name: ""}];
-
-                    clients.forEach((client) => {
-                        options.push({code: client.number, name: client.name});
-                    });
-
-                    $aatl_ib.utils.addDropdownOptions(clientControl, options);
-
-                    component.selectClient();
-                }
-            });
-        }
-        function loadLocationDropdownOptions(control, clientNumber) {
-
-            let options = [{code: "", name: ""}];
-
-            control.empty();
-
-            if ($aatl_ib.utils.isStringEmpty(clientNumber)) {
-                $aatl_ib.utils.addDropdownOptions(control, options);
-                control.val("");
-            } else {
-                $aatl_ib.ClientLocationService.list(clientNumber, function (locations, err) {
-
-                    if (err !== undefined && err !== null) {
-                        component.showError();
-                    } else {
-
-                        locations.forEach((location) => {
-                            options.push({code: location.number, name: location.name})
-                        });
-
-                        $aatl_ib.utils.addDropdownOptions(control, options);
-                        
-                        component.selectClientLocation();
-                    }
-                });
-            }
-        }
         function afterInit() {
-//            $aatl_ib.TimeCodeService.list(function (list, err) {
+//            $aatl_ib.TimeEntryService.list(function (list, err) {
 //                if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
 //                    component.showError(err);
 //                } else {
-//                    component.setTimeCodes(list);
+//                    component.setTimeEntries(list);
 //                }
 //            });
+        }
+
+        function crteriaChanged(employeeNumber, yearMonthDate) {
+            $aatl_ib.TimeEntryService.find({employeeNumber: employeeNumber, yearMonthDate: yearMonthDate}, function (list, err) {
+                if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
+                    component.showError(err);
+                } else {
+                    component.setTimeEntries(list);
+                }
+            });
         }
 
         function beforeSave(data) {
@@ -95,12 +58,12 @@ $aatl_ib.gui.TimeSheetController = (function () {
 
             return value;
         }
-        function afterSave(timeCode, err) {
+        function afterSave(timeEntry, err) {
 
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
             } else {
-                component.afterSaved(timeCode);
+                component.afterSaved(timeEntry);
 
             }
 
@@ -108,35 +71,60 @@ $aatl_ib.gui.TimeSheetController = (function () {
 
         function saveData() {
 
-            let timeCode = component.getEditTimeCode();
+            let timeEntry = component.getEditTimeEntry();
 
-            if (beforeSave(timeCode)) {
-                $aatl_ib.TimeCodeService.save(timeCode, afterSave);
+            if (beforeSave(timeEntry)) {
+                $aatl_ib.TimeEntryService.save(timeEntry, afterSave);
             }
 
         }
 
-        function onValueChanged(evt) {
 
-            let $element = $(evt.target);
+        function loadEmployeeDropdownOptions(dropdownControl) {
 
-            if (component.isClientControl($element)) {
+            $aatl_ib.EmployeeService.list(function (employees, err) {
 
-                let locationControl = component.getLocationControl();
+                if (err !== undefined && err !== null) {
+                    component.showError();
+                } else {
+                    let options = [{code: "", name: ""}];
 
-                loadLocationDropdownOptions(locationControl, $element.val());
-            }
+                    employees.forEach((employee) => {
+                        options.push({code: employee.number, name: employee.name});
+                    });
 
-            // set save enabled
-            component.setSaveEnabled(true);
+                    $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
+
+                }
+            });
+        }
+
+        function loadTimeCodeDropdownOptions(dropdownControl) {
+
+            $aatl_ib.TimeCodeService.list(function (timeCodes, err) {
+
+                if (err !== undefined && err !== null) {
+                    component.showError();
+                } else {
+                    let options = [{code: "", name: ""}];
+
+                    timeCodes.forEach((timeCode) => {
+                        options.push({code: timeCode.uid, name: timeCode.name});
+                    });
+
+                    $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
+
+                }
+            });
         }
 
         this.init = function () {
             component.setAfterInit(afterInit);
+            component.registerLoadEmployeeOptions(loadEmployeeDropdownOptions);
             component.init();
-            //component.registerOnActionButtonClicked(onActionButtonClicked);
-            //component.registerOnFieldValueChanged(onValueChanged);
-            //component.registerLoadClientOptions(loadClientDropdownOptions);
+            component.registerOnActionButtonClicked(onActionButtonClicked);
+            component.registerLoadTimeCodeOptions(loadTimeCodeDropdownOptions);
+            component.registerOnCriteriaChanged(crteriaChanged);
         };
 
         this.getComponent = function () {

@@ -24,9 +24,8 @@ $aatl_ib.ErrorComponent = (function(){
                 
         function setMessage(control, messages){
             
-            $.each(messages, function(index, message){ 
-                control.append($('<label></label>').text(message));
-               
+            messages.forEach(function(message){ 
+                control.append($('<li></li>').text(message));
             });
             
         };
@@ -35,8 +34,9 @@ $aatl_ib.ErrorComponent = (function(){
             let control = getControl();
             
             control.empty();
+            control.append('<ul></ul>');
             
-            setMessage(control, messages);
+            setMessage(control.find('ul'), messages);
             
             control.prop('hidden', false);
         };
