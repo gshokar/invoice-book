@@ -19,13 +19,13 @@ $aatl_ib.TimeCodeService = {
                 criteria,
                 function (res, err) {
                     if (err) {
-                        callback(null, {messages: ["Faild to get employee search results: " + err]});
+                        callback(null, {messages: ["Faild to get time code results: " + err]});
 
                     } else if (res.status === "failure") {
                         callback(null, {messages: [res.message]});
                     } else if (res.status === "success") {
-                        let employees = JSON.parse(res.data);
-                        callback(employees);
+                        let list = JSON.parse(res.data);
+                        callback(list);
                     } else {
                         callback(null, {messages: ["Invalid response from server"]});
                     }

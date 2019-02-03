@@ -109,5 +109,111 @@ $aatl_ib.utils = {
 
         return hours;
     },
-    
+
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+
+    displayDateFomat: function (date) {
+
+        let displayVal = "";
+        let displayDate = undefined;
+
+        if (typeof date === "string") {
+            try {
+                displayDate = $aatl_ib.utils.parseDate(date);
+            } catch (ex) {
+
+            }
+
+        } else if (date instanceof Date) {
+            displayDate = date;
+        }
+
+        if (displayDate instanceof Date) {
+            displayVal = ("0" + displayDate.getDate()).slice(-2) + "-"
+                    + $aatl_ib.utils.months[displayDate.getMonth()] + "-"
+                    + displayDate.getFullYear();
+        }
+        return displayVal;
+    },
+
+    parseDate: function (date) {
+        let dateVal = undefined;
+
+        if (typeof date === "string" && date.length === 10) {
+
+            let year = date.slice(0, 4);
+            let month = date.slice(5, 7);
+            let day = date.slice(8, 10);
+
+            if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+                dateVal = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            }
+        }
+        return dateVal;
+    },
+
+    parseTime: function (time) {
+        //Assumtions time value hh:mm or hh:mm:ss
+        let timeVal = undefined;
+
+        if (typeof time === "string"
+                && (time.length === 5 || time.length === 8)) {
+
+            let hours = time.slice(0, 2);
+            let mintues = time.slice(3, 5);
+
+            if (!isNaN(hours) && !isNaN(mintues)) {
+                timeVal = new Date();
+                
+                timeVal.setHours(parseInt(hours));
+                timeVal.setMinutes(parseInt(mintues));
+                timeVal.setSeconds(0);
+                
+                if (time.length === 8) {
+                    let seconds = time.slice(6, 8);
+                    
+                    if (!isNaN(seconds)){
+                        timeVal.setSeconds(parseInt(seconds));
+                    }else{
+                        timeVal = undefined;
+                    }
+                }
+            }
+        }
+        return timeVal;
+    },
+
+    displayTimeFomat: function (time) {
+
+        let displayVal = "";
+        let displayTime = undefined;
+
+        if (typeof time === "string") {
+            try {
+                displayTime = $aatl_ib.utils.parseTime(time);
+            } catch (ex) {
+
+            }
+
+        } else if (time instanceof Date) {
+            displayTime = time;
+        }
+
+        if (displayTime instanceof Date) {
+            let marker = "AM";
+            let hours = displayTime.getHours();
+            
+            if(hours > 11){
+                marker = 'PM';
+                
+                if(hours > 12){
+                    hours = hours - 12;
+                }
+            }
+            displayVal = ("0" + hours).slice(-2) + ":"
+                    + ("0" + displayTime.getMinutes()).slice(-2) + " "
+                    + marker;
+        }
+        return displayVal;
+    }
 };

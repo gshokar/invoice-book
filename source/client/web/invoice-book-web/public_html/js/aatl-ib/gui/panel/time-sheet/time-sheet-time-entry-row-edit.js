@@ -21,7 +21,8 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
         let hoursFieldId = "";
         let rowElement = undefined;
         let editMode = false;
-
+        let timeCodeClientNumber = "";
+        
         let onFieldValueChanged = undefined;
         let loadTimeCodeOptions = undefined;
 
@@ -107,7 +108,7 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
         function setTimeCodeDropdown(rowControl) {
 
             if (typeof loadTimeCodeOptions === 'function') {
-                loadTimeCodeOptions(getTimeCodeControl(rowControl));
+                loadTimeCodeOptions(getTimeCodeControl(rowControl), timeCodeClientNumber);
             }
         }
 
@@ -133,15 +134,15 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
 
         function setValues() {
 
-            let date = new Date(timeEntry.date);
+            let date = $aatl_ib.utils.parseDate(timeEntry.date);
 
             if (date instanceof Date) {
                 getDateField().datepicker('setDate', date);
             }
-            getTimeCodeField().val(timeEntry.timeCode.uid);
+            //getTimeCodeField().val(timeEntry.timeCode.uid);
             getStartTimeField().val(timeEntry.startTime);
             getEndTimeField().val(timeEntry.endTime);
-            getHoursField().val(timeEntry.hours);
+            getHoursField().val(timeEntry.hours.toFixed(2));
         }
 
         function setDatePickerControls(startDate) {
@@ -185,10 +186,11 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
             return timeEntry;
         };
 
-        this.setRow = function (rowControl, row, startDate) {
+        this.setRow = function (rowControl, row, startDate, clientNumber) {
             rowElement = rowControl;
             timeEntry = row;
-
+            timeCodeClientNumber = clientNumber;
+            
             setEditColumnElements(rowControl);
 
             rowControl.find(":input").change(function (evt) {

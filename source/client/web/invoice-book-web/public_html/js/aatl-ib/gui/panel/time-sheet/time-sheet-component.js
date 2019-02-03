@@ -19,11 +19,13 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
         let onActionButtonClicked = null;
         let afterInit = null;
         let loadEmployeeOptions = undefined;
+        let loadClientOptions = undefined;
         let onCriteriaChanged = undefined;
-        
+
         let errorComponent = new $aatl_ib.ErrorComponent({componentId: "timeSheetErrors", parentComponent: component.getControl});
         let titleComponent = new $aatl_ib.gui.Component({componentId: "panelTitle", parentComponent: component.getControl});
         let employeeField = new $aatl_ib.gui.Component({componentId: "employee", parentComponent: component.getControl, componentName: "employee"});
+        let clientField = new $aatl_ib.gui.Component({componentId: "client", parentComponent: component.getControl, componentName: "client"});
         let yearMonthField = new $aatl_ib.gui.Component({componentId: "timesheetYearMonth", parentComponent: component.getControl, componentName: "timesheetYearMonth"});
         let timeEntryTable = new $aatl_ib.gui.TableComponent({componentId: "timeSheeTimeRecords", parentComponent: component.getControl});
         let timeEntryRowEdit = new $aatl_ib.gui.TimeSheetTimeEntryRowEdit();
@@ -40,6 +42,10 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             return yearMonthField.getControl();
         }
 
+        function getClientField() {
+            return clientField.getControl();
+        }
+
         function afterLoad() {
 
             bindEvents();
@@ -50,6 +56,10 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             if (typeof loadEmployeeOptions === 'function') {
                 loadEmployeeOptions(getEmpolyeeField());
+            }
+
+            if (typeof loadClientOptions === 'function') {
+                loadClientOptions(getClientField());
             }
 
             getYearMonthField().datepicker({
@@ -92,7 +102,10 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                     if (keyValue !== timeEntryRowEdit.getTimeEntry().uid) {
                         let startDate = getYearMonthField().datepicker('getDate');
 
-                        timeEntryRowEdit.setRow(timeEntryTable.getRowControl(keyValue), timeEntry, startDate);
+                        timeEntryRowEdit.setRow(timeEntryTable.getRowControl(keyValue)
+                                , timeEntry
+                                , startDate
+                                , getClientField().val());
 
                         setElementsEnabled(false);
 
@@ -111,6 +124,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             element.attributes = ['for'];
 
             element.html = employeeField.updateElementId(element);
+            element.html = clientField.updateElementId(element);
             element.html = yearMonthField.updateElementId(element);
 
             return element.html;
@@ -126,11 +140,11 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 columnValues: []};
 
             rowData.columnValues.push(index + 1);
-            rowData.columnValues.push(timeEntry.date);
+            rowData.columnValues.push($aatl_ib.utils.displayDateFomat(timeEntry.date));
             rowData.columnValues.push(timeEntry.timeCode.name);
-            rowData.columnValues.push(timeEntry.startTime);
-            rowData.columnValues.push(timeEntry.endTime);
-            rowData.columnValues.push(timeEntry.hours);
+            rowData.columnValues.push($aatl_ib.utils.displayTimeFomat(timeEntry.startTime));
+            rowData.columnValues.push($aatl_ib.utils.displayTimeFomat(timeEntry.endTime));
+            rowData.columnValues.push(timeEntry.hours.toFixed(2));
 
             return rowData;
         }
@@ -147,6 +161,9 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             getEmpolyeeField().prop("disabled", !value);
             getYearMonthField().prop("disabled", !value);
+            getClientField().prop("disabled", !value);
+
+            setPrintEnabled();
         }
 
         function removeEditRow(keyValue) {
@@ -179,38 +196,66 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             let id = $(evt.target).attr('id');
 
-            if (id === employeeField.getId() || id === yearMonthField.getId()) {
+            if (id === employeeField.getId()
+                    || id === yearMonthField.getId()
+                    || id === clientField.getId()) {
+
                 refreshList();
-            }else{
+
+            } else {
                 timeEntryRowEdit.calcHours(id);
-                
+
                 // set save enabled
                 setButtonActionEnabled("save", true);
             }
         }
-        
-        function refreshList(){
+
+        function createCriteria() {
+
             let employeeNumber = getEmpolyeeField().val();
             let yearMonthDate = getYearMonthField().datepicker('getDate');
+            let clientNumber = getClientField().val();
+
+            let criteria = {
+                employeeNumber: employeeNumber,
+                yearMonthDate: "",
+                clientNumber: clientNumber
+            }
             
-            if(yearMonthDate instanceof Date && !$aatl_ib.utils.isStringEmpty(employeeNumber)){
-                
-                if(typeof onCriteriaChanged === 'function'){
-                    
-                    onCriteriaChanged(employeeNumber, yearMonthDate.toISOString().slice(0, 10));
+            if(yearMonthDate instanceof Date){
+                criteria.yearMonthDate = yearMonthDate.toISOString().slice(0, 10);
+            }
+            
+            return criteria;
+        }
+
+        function refreshList() {
+            
+            let criteria = createCriteria();
+            
+            if (!$aatl_ib.utils.isStringEmpty(criteria.employeeNumber)
+                    && !$aatl_ib.utils.isStringEmpty(criteria.yearMonthDate)) {
+
+                if (typeof onCriteriaChanged === 'function') {
+
+                    onCriteriaChanged(criteria);
+
+                    setButtonActionEnabled("add", true);
                 }
-            }else{
+            } else {
                 timeEntries = [];
                 loadTimeEntries();
                 setButtonActionEnabled("add", false);
             }
+
+            setPrintEnabled();
         }
-        
-        function loadTimeEntries(){
+
+        function loadTimeEntries() {
             timeEntryTable.clearRows();
             setTableRows();
         }
-        
+
         function setTableRows() {
 
             let rows = [];
@@ -223,7 +268,15 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             timeEntryTable.addRows(rows);
         }
-        
+
+        function setPrintEnabled() {
+            let enable = timeEntryRowEdit.getEditMode() === false
+                    && timeEntries.length > 0
+                    && !$aatl_ib.utils.isStringEmpty(getClientField().val());
+
+            setButtonActionEnabled("print", enable);
+        }
+
         this.init = function () {
             $aatl_ib.ViewService.getViewContent("time-sheet", loadView);
 
@@ -233,10 +286,10 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             onActionButtonClicked = actionClicked;
         };
 
-        this.registerOnCriteriaChanged = function(criteriaChanged){
+        this.registerOnCriteriaChanged = function (criteriaChanged) {
             onCriteriaChanged = criteriaChanged;
         };
-        
+
         this.setAfterInit = function (callback) {
             afterInit = callback;
         };
@@ -256,7 +309,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 date: "",
                 startTime: "",
                 endTime: "",
-                hours: "",
+                hours: 0,
                 timeCode: {
                     uid: "",
                     name: ""
@@ -281,6 +334,11 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             loadEmployeeOptions = loadOptions;
         };
 
+        this.registerLoadClientOptions = function (loadOptions) {
+
+            loadClientOptions = loadOptions;
+        };
+
         this.registerLoadTimeCodeOptions = function (loadOptions) {
 
             timeEntryRowEdit.registerLoadTimeCodeOptions(loadOptions);
@@ -293,7 +351,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
         this.getEditTimeEntry = function () {
             return timeEntryRowEdit.getTimeEntry();
         };
-     
+
         this.cancelTimeEntryEdit = function () {
             let editTimeEntry = timeEntryRowEdit.getTimeEntry();
 
@@ -330,11 +388,19 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             errorComponent.hide();
         };
-        
-        this.setTimeEntries = function(list){
+
+        this.setTimeEntries = function (list) {
             timeEntries = list;
-            
+
             loadTimeEntries();
+        };
+
+        this.selectTimeCode = function () {
+            timeEntryRowEdit.selectTimeCode();
+        };
+
+        this.getCriteria = function () {
+            return createCriteria();
         };
     }
     return TimeSheetComponent;

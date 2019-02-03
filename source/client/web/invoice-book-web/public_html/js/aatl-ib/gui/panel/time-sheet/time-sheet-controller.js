@@ -27,6 +27,9 @@ $aatl_ib.gui.TimeSheetController = (function () {
                 case "cancel":
                     component.cancelTimeEntryEdit();
                     break;
+                case "print":
+                    printTimeSheet();;
+                    break;
             }
         }
 
@@ -40,8 +43,8 @@ $aatl_ib.gui.TimeSheetController = (function () {
 //            });
         }
 
-        function crteriaChanged(employeeNumber, yearMonthDate) {
-            $aatl_ib.TimeEntryService.find({employeeNumber: employeeNumber, yearMonthDate: yearMonthDate}, function (list, err) {
+        function crteriaChanged(criteria) {
+            $aatl_ib.TimeEntryService.find(criteria, function (list, err) {
                 if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                     component.showError(err);
                 } else {
@@ -99,9 +102,27 @@ $aatl_ib.gui.TimeSheetController = (function () {
             });
         }
 
-        function loadTimeCodeDropdownOptions(dropdownControl) {
+        function loadClientDropdownOptions(clientControl) {
 
-            $aatl_ib.TimeCodeService.list(function (timeCodes, err) {
+            $aatl_ib.ClientService.list(function (clients, err) {
+
+                if (err !== undefined && err !== null) {
+                    component.showError();
+                } else {
+                    let options = [{code: "", name: ""}];
+
+                    clients.forEach((client) => {
+                        options.push({code: client.number, name: client.name});
+                    });
+
+                    $aatl_ib.utils.addDropdownOptions(clientControl, options);
+
+                }
+            });
+        }
+        function loadTimeCodeDropdownOptions(dropdownControl, clientNumber) {
+
+            $aatl_ib.TimeCodeService.find({clientNumber: clientNumber}, function (timeCodes, err) {
 
                 if (err !== undefined && err !== null) {
                     component.showError();
@@ -114,17 +135,43 @@ $aatl_ib.gui.TimeSheetController = (function () {
 
                     $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
 
+                    component.selectTimeCode();
                 }
             });
         }
 
+        function afterPrint(pdf, err){
+            if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
+                component.showError(err);
+            } else {
+                
+                let byteCharacters = window.atob(pdf);
+                let byteNumbers = new Array(byteCharacters.length);
+                
+                for(var i = 0; i < byteCharacters.length; i++){
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+
+                var byteArray = new Uint8Array(byteNumbers);
+                var blob = new Blob([byteArray], {type: "application/pdf"});
+                var fileURL = URL.createObjectURL(blob);
+                window.open(fileURL, "print-timesheet");
+                //window.navigator.msSaveOrOpenBlob(blob, "print-timesheet.pdf");
+            }
+        }
+        
+        function printTimeSheet(){
+            $aatl_ib.TimeSheetService.print(component.getCriteria(), afterPrint);
+        }
+        
         this.init = function () {
-            component.setAfterInit(afterInit);
             component.registerLoadEmployeeOptions(loadEmployeeDropdownOptions);
-            component.init();
+            component.registerLoadClientOptions(loadClientDropdownOptions);
             component.registerOnActionButtonClicked(onActionButtonClicked);
             component.registerLoadTimeCodeOptions(loadTimeCodeDropdownOptions);
             component.registerOnCriteriaChanged(crteriaChanged);
+            component.setAfterInit(afterInit);
+            component.init();
         };
 
         this.getComponent = function () {

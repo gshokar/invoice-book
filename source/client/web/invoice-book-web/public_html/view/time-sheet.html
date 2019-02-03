@@ -4,9 +4,10 @@
             <h1 id="panelTitle" class="h5">Time Sheet</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group mr-2 time-sheet-action-btn-group">
-                    <button class="btn btn-sm btn-outline-light" data-action="add">Add</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="add" disabled>Add</button>
                     <button class="btn btn-sm btn-outline-light" data-action="save" disabled>Save</button>
                     <button class="btn btn-sm btn-outline-light" data-action="cancel" disabled>Cancel</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="print" disabled>Print</button>
                 </div>
             </div>
         </div>
@@ -15,7 +16,7 @@
         </div>
         <form>
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="employee">Employee</label>
                     <select id="employee" class="form-control">
                         <option selected>Choose...</option>
@@ -25,6 +26,13 @@
                 <div class="form-group col-md-4">
                     <label for="timesheetYearMonth">Month</label>
                     <input type="text" class="form-control" id="timesheetYearMonth" data-provide="datepicker">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="client">Client</label>
+                    <select id="client" class="form-control">
+                        <option selected>Choose...</option>
+                        <option>...</option>
+                    </select>
                 </div>
             </div>
         </form>
