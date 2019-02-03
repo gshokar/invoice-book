@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice-book-time-sheet" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0ef21191-c59e-4de3-b220-ffbdeea78af3">
+	<property name="template.engine" value="tabular_template"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JSON Data Adapter "/>
+	<property name="com.jaspersoft.studio.unit." value="inch"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="inch"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.text.SimpleDateFormat"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="SUBREPORT_LOCATION" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="JSON">
+		<![CDATA[]]>
+	</queryString>
+	<field name="company.name" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.name"/>
+		<fieldDescription><![CDATA[company.name]]></fieldDescription>
+	</field>
+	<field name="company.address.address1" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.address.address1"/>
+		<fieldDescription><![CDATA[company.address.address1]]></fieldDescription>
+	</field>
+	<field name="company.address.address2" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.address.address2"/>
+		<fieldDescription><![CDATA[company.address.address2]]></fieldDescription>
+	</field>
+	<field name="company.address.city" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.address.city"/>
+		<fieldDescription><![CDATA[company.address.city]]></fieldDescription>
+	</field>
+	<field name="company.address.province" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.address.province"/>
+		<fieldDescription><![CDATA[company.address.province]]></fieldDescription>
+	</field>
+	<field name="company.address.postalCode" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.address.postalCode"/>
+		<fieldDescription><![CDATA[company.address.postalCode]]></fieldDescription>
+	</field>
+	<field name="company.contact.phone" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="company.contact.phone"/>
+		<fieldDescription><![CDATA[company.contact.phone]]></fieldDescription>
+	</field>
+	<field name="employee.name" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="employee.name"/>
+		<fieldDescription><![CDATA[employee.name]]></fieldDescription>
+	</field>
+	<field name="month" class="java.util.Date">
+		<property name="net.sf.jasperreports.json.field.expression" value="month"/>
+		<fieldDescription><![CDATA[month]]></fieldDescription>
+	</field>
+	<field name="client.name" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="client.name"/>
+		<fieldDescription><![CDATA[client.name]]></fieldDescription>
+	</field>
+	<field name="timeEntries" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="timeEntries"/>
+		<fieldDescription><![CDATA[timeEntries]]></fieldDescription>
+	</field>
+	<variable name="PRINTED_DATE" class="java.lang.String">
+		<variableExpression><![CDATA[String.format("Printed: %1$td-%1$tb-%1$tY %1$tI:%1$tM %1$Tp", new java.util.Date())]]></variableExpression>
+	</variable>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="129" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="2" width="572" height="24" uuid="c871a297-4e62-4155-98c8-e00d9bf6ed05"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{company.name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="56" width="112" height="24" forecolor="#999797" uuid="2baba3ad-b27b-4265-b0ca-172e98b82953"/>
+				<box bottomPadding="0">
+					<pen lineColor="#030202"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" markup="none">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIME SHEET]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="48" width="572" height="1" uuid="d2c8a7e1-a53a-4571-ad0e-07d7bf6f585c"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="31" width="572" height="16" uuid="d284a421-dbea-4f3c-a312-abf17c861ec8"/>
+				<textElement textAlignment="Center" markup="html">
+					<font size="9"/>
+					<paragraph lineSpacing="1_1_2" lineSpacingSize="1.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{company.address.address1} + "   " + 
+($F{company.address.address2} == null || $F{company.address.address2}.isEmpty() ? "" : $F{company.address.address2} + "   ") +
+$F{company.address.city} + ", " + $F{company.address.province} + "   " +
+$F{company.address.postalCode} + "   " +
+"Phone: " + $F{company.contact.phone}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="56" width="60" height="18" forecolor="#757373" uuid="5db026e6-a8da-4d4d-8f69-0e5b9b9f2ac5"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Employee:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="61" y="56" width="232" height="18" uuid="ddb7f128-eb39-4537-8b71-737d11b72d99"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employee.name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="78" width="60" height="18" forecolor="#757373" uuid="f7f0559a-ec9d-4850-8f2e-27249355c6af"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Month:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="100" width="60" height="18" forecolor="#757373" uuid="d04ffb40-6ceb-47fd-bf5b-825a00aa7c10"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Client:]]></text>
+			</staticText>
+			<textField pattern="MMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="61" y="78" width="232" height="18" uuid="9743e650-a5c4-4b2a-b994-4cd8ed59337c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{month}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="61" y="100" width="232" height="18" uuid="ccd98989-b93e-43e8-bd0a-99d5a8006a83"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{client.name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="61" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<subreport>
+				<reportElement x="0" y="0" width="572" height="60" uuid="c3b045e9-c497-43db-ab05-1bc887cab0b2"/>
+				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("timeEntries")]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_LOCATION} + "invoice-book-time-sheet-time-entries.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="572" height="1" uuid="8ae08813-96c4-4d34-8a6a-f3c3a86d1089"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="180" y="1" width="100" height="20" uuid="6782c727-2f04-4c7d-9675-630804fd0c3b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="280" y="1" width="100" height="20" uuid="c12a353f-3958-4edb-b842-e2f644705bef"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="1" width="192" height="20" uuid="713f9ebf-290c-4f14-8a0a-c13a9247153f"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PRINTED_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch">
+			<property name="local_mesure_unitheight" value="pixel"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</summary>
+</jasperReport>

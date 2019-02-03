@@ -1,0 +1,4 @@
+VAR#>mvn install -DskipTests
+VAR#>mvn install -DskipTests;
+EXPRESSION#>exit
+EXPRESSION#>quit
