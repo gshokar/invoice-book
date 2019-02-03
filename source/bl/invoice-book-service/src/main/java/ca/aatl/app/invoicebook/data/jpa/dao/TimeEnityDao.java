@@ -10,8 +10,12 @@
  */
 package ca.aatl.app.invoicebook.data.jpa.dao;
 
+import ca.aatl.app.invoicebook.data.jpa.entity.Client;
+import ca.aatl.app.invoicebook.data.jpa.entity.Client_;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee_;
+import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
+import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode_;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry_;
 import ca.aatl.app.invoicebook.util.AppUtils;
@@ -105,7 +109,7 @@ public class TimeEnityDao extends AbstractDao<TimeEntry> {
         return list;
     }
 
-    public List<TimeEntry> find(String employeeNumber, Date yearMonthDate) {
+    public List<TimeEntry> find(String employeeNumber, Date yearMonthDate, String clientNumber) {
         List<TimeEntry> list = null;
 
         try {
@@ -140,6 +144,13 @@ public class TimeEnityDao extends AbstractDao<TimeEntry> {
                 } else {
                     predicate = cb.and(predicate, p);
                 }
+            }
+            
+            if (!AppUtils.isNullOrEmpty(clientNumber)) {
+                Join<TimeEntry, TimeCode> timeCode = root.join(TimeEntry_.timeCode);
+                Join<TimeCode, Client> client = timeCode.join(TimeCode_.client);
+                
+                predicate = cb.equal(client.get(Client_.number), clientNumber);
             }
             
             if (predicate != null) {

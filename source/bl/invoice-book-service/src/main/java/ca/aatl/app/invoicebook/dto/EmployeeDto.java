@@ -14,29 +14,9 @@ package ca.aatl.app.invoicebook.dto;
  *
  * @author GShokar
  */
-public class EmployeeDto {
-    
-    private String number;
+public class EmployeeDto extends CommonDto {
 
-    /**
-     * Get the value of number
-     *
-     * @return the value of number
-     */
-    public String getNumber() {
-        return number;
-    }
-
-    /**
-     * Set the value of number
-     *
-     * @param number new value of number
-     */
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-        private String firstName;
+    private String firstName;
 
     /**
      * Get the value of firstName
@@ -94,65 +74,6 @@ public class EmployeeDto {
      */
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
-    }
-
-    private AddressDto address;
-
-    /**
-     * Get the value of address
-     *
-     * @return the value of address
-     */
-    public AddressDto getAddress() {
-        return address;
-    }
-
-    /**
-     * Set the value of address
-     *
-     * @param address new value of address
-     */
-    public void setAddress(AddressDto address) {
-        this.address = address;
-    }
-    
-    private ContactDto contact;
-
-    /**
-     * Get the value of contact
-     *
-     * @return the value of contact
-     */
-    public ContactDto getContact() {
-        return contact;
-    }
-
-    /**
-     * Set the value of contact
-     *
-     * @param contact new value of contact
-     */
-    public void setContact(ContactDto contact) {
-        this.contact = contact;
-    }
-    private String name;
-
-    /**
-     * Get the value of name
-     *
-     * @return the value of name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the value of name
-     *
-     * @param name new value of name
-     */
-    public void setName(String name) {
-        this.name = name;
     }
 
 }

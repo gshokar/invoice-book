@@ -108,7 +108,7 @@ public class TimeEntryService {
         return dao.list();
     }
 
-    public List<TimeEntry> find(String employeeNumber, Date yearMonthDate) throws Exception{
-        return dao.find(employeeNumber, yearMonthDate);
+    public List<TimeEntry> find(String employeeNumber, Date yearMonthDate, String clientNumber) throws Exception{
+        return dao.find(employeeNumber, yearMonthDate, clientNumber);
     }
 }

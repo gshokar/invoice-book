@@ -92,7 +92,7 @@ public class ClientResourceService extends ResponseService {
             setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid client search data - " + ex.getMessage());
 
             Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid ClientSearchDto Json", ex);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -110,25 +110,12 @@ public class ClientResourceService extends ResponseService {
     public String getClient(@PathParam("number") String number) {
         try {
 
-            ClientDto dto = newClientDto();
+            ClientDto dto = getDto(number);
 
-            if (number != null && !number.trim().isEmpty()) {
+            setResponseSuccess(dto);
 
-                Client client = clientService.find(number);
-
-                if (client != null) {
-
-                    mappingService.updateClientDto(dto, client);
-
-                    setResponseSuccess(dto);
-
-                } else {
-                    setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Client number " + number + " do not exists.");
-                }
-
-            } else {
-                setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid client number");
-            }
+        } catch (DataValidationException dex) {
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, dex.getValidationMessage());
         } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
@@ -165,7 +152,7 @@ public class ClientResourceService extends ResponseService {
 
             setResponseSuccess(dtoClients);
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -195,8 +182,8 @@ public class ClientResourceService extends ResponseService {
 
             } else {
                 client = clientService.find(clientDto.getNumber());
-                
-                if(client == null){
+
+                if (client == null) {
                     throw new DataValidationException("Invalid client number do not exists.");
                 }
             }
@@ -224,7 +211,7 @@ public class ClientResourceService extends ResponseService {
 
             Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto data for update", ex);
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -233,7 +220,7 @@ public class ClientResourceService extends ResponseService {
 
         return this.getResponseJson();
     }
- 
+
     private ClientDto newClientDto() {
         ClientDto dto = new ClientDto();
 
@@ -250,8 +237,31 @@ public class ClientResourceService extends ResponseService {
         Client client = clientService.newEntity();
 
         mappingService.updateClient(client, clientDto);
-        
+
         client.setNumber(clientDto.getNumber());
         clientService.validate(client);
+    }
+
+    public ClientDto getDto(String number) throws Exception {
+
+        ClientDto dto = newClientDto();
+
+        if (number != null && !number.trim().isEmpty()) {
+
+            Client client = clientService.find(number);
+
+            if (client != null) {
+
+                mappingService.updateClientDto(dto, client);
+
+            } else {
+                throw new DataValidationException("Client number " + number + " do not exists.");
+            }
+
+        } else {
+            throw new DataValidationException("Invalid client number");
+        }
+
+        return dto;
     }
 }

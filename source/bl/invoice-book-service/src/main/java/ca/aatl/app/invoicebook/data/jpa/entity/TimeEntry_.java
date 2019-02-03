@@ -25,4 +25,5 @@ public class TimeEntry_ extends BaseEntity_{
     public static volatile SingularAttribute<TimeEntry, Date> date;
     public static volatile SingularAttribute<TimeEntry, Date> startTime;
     public static volatile SingularAttribute<TimeEntry, Employee> employee;
+    public static volatile SingularAttribute<TimeEntry, TimeCode> timeCode;
 }

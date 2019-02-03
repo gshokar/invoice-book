@@ -22,6 +22,7 @@ import ca.aatl.app.invoicebook.data.service.MappingService;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.dto.TimeEntryDto;
+import ca.aatl.app.invoicebook.dto.TimeSheetDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import com.google.gson.JsonSyntaxException;
@@ -134,23 +135,8 @@ public class TimeEntryResourceService extends ResponseService {
     //@RolesAllowed(AppSecurity.ROLE_ADMIN)
     public String list() {
         try {
-            List<TimeEntryDto> dtoList = new ArrayList<>();
-
-            List<TimeEntry> entityList = timeEntryService.list();
-
-            if (entityList.isEmpty()) {
-                addWarningMessage("No time entries record found");
-            } else {
-                entityList.forEach(tc -> {
-
-                    TimeEntryDto dto = newTimeEntryDto();
-
-                    mappingService.updateTimeEntryDto(dto, tc);
-
-                    dtoList.add(dto);
-
-                });
-            }
+           
+            List<TimeEntryDto> dtoList = getDtoList(timeEntryService.list());
 
             setResponseSuccess(dtoList);
 
@@ -162,6 +148,25 @@ public class TimeEntryResourceService extends ResponseService {
         }
 
         return getResponseJson();
+    }
+
+    private List<TimeEntryDto> getDtoList(List<TimeEntry> entityList) throws Exception {
+        List<TimeEntryDto> dtoList = new ArrayList<>();
+        
+        if (entityList.isEmpty()) {
+            addWarningMessage("No time entries record found");
+        } else {
+            entityList.forEach(tc -> {
+                
+                TimeEntryDto dto = newTimeEntryDto();
+                
+                mappingService.updateTimeEntryDto(dto, tc);
+                
+                dtoList.add(dto);
+                
+            });
+        }
+        return dtoList;
     }
 
     @GET
@@ -172,28 +177,12 @@ public class TimeEntryResourceService extends ResponseService {
     //@RolesAllowed(AppSecurity.ROLE_ADMIN)
     public String find(
             @QueryParam("employeeNumber") String employeeNumber,
-            @QueryParam("yearMonthDate") String yearMonth) {
+            @QueryParam("yearMonthDate") String yearMonth,
+            @QueryParam("clientNumber") String clientNumber) {
         
         try {
-            Date yearMonthDate = AppUtils.dateFormat.parse(yearMonth);
-                    
-            List<TimeEntryDto> dtoList = new ArrayList<>();
-                                
-            List<TimeEntry> entityList = timeEntryService.find(employeeNumber, yearMonthDate);
-
-            if (entityList.isEmpty()) {
-                addWarningMessage("No time entries record found");
-            } else {
-                entityList.forEach(tc -> {
-
-                    TimeEntryDto dto = newTimeEntryDto();
-
-                    mappingService.updateTimeEntryDto(dto, tc);
-
-                    dtoList.add(dto);
-
-                });
-            }
+                   
+            List<TimeEntryDto> dtoList = getDtoList(employeeNumber, yearMonth, clientNumber);
 
             setResponseSuccess(dtoList);
 
@@ -206,6 +195,7 @@ public class TimeEntryResourceService extends ResponseService {
 
         return getResponseJson();
     }
+        
     private void validate(TimeEntryDto dto) throws Exception{
         // This is workaround for now
         // There should be dto validations
@@ -226,7 +216,7 @@ public class TimeEntryResourceService extends ResponseService {
 
         if (dto != null && !AppUtils.isNullOrEmpty(dto.getUid())) {
 
-            TimeCode timeCode = timeCodeService.find(dto.getUid());
+            TimeCode timeCode = timeCodeService.findByGuid(dto.getUid());
 
             if (timeCode == null) {
                 throw new DataValidationException("Invalid time code selected, does not exists.");
@@ -272,4 +262,13 @@ public class TimeEntryResourceService extends ResponseService {
         
         return dto;
     }
+
+    public List<TimeEntryDto> getDtoList(String employeeNumber, String yearMonth, String clientNumber) throws Exception{
+            Date yearMonthDate = AppUtils.dateFormat.parse(yearMonth);
+                    
+            List<TimeEntryDto> dtoList = getDtoList(timeEntryService.find(employeeNumber, yearMonthDate, clientNumber));
+            
+            return dtoList;
+    }
+    
 }

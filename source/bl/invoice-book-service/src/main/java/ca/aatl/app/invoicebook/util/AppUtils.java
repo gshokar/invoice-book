@@ -22,7 +22,7 @@ import java.util.UUID;
 public final class AppUtils {
     
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    public static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     
     public static String getGUID(){
         return UUID.randomUUID().toString().toUpperCase();

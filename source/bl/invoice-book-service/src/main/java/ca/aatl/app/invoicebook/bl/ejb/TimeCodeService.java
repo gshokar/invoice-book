@@ -65,8 +65,8 @@ public class TimeCodeService {
 
     }
 
-    public TimeCode find(String guid) throws Exception {
-        return dao.find(guid);
+    public TimeCode findByGuid(String guid) throws Exception {
+        return dao.findByGuid(guid);
     }
 
     public void save(TimeCode timeCode) throws Exception {
@@ -90,6 +90,10 @@ public class TimeCodeService {
 
     public List<TimeCode> list() throws Exception{
         return dao.list();
+    }
+
+    public List<TimeCode> find(String clientNumber) throws Exception {
+        return dao.find(clientNumber);
     }
     
 }

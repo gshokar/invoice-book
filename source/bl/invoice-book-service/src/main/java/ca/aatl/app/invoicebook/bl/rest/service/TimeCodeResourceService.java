@@ -38,6 +38,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -82,7 +83,7 @@ public class TimeCodeResourceService extends ResponseService {
                 timeCode = timeCodeService.newEntity();
 
             } else {
-                timeCode = timeCodeService.find(dto.getUid());
+                timeCode = timeCodeService.findByGuid(dto.getUid());
 
                 if (timeCode == null) {
                     throw new DataValidationException("Invalid timeCode uid do not exists.");
@@ -131,23 +132,7 @@ public class TimeCodeResourceService extends ResponseService {
     //@RolesAllowed(AppSecurity.ROLE_ADMIN)
     public String list() {
         try {
-            List<TimeCodeDto> dtoList = new ArrayList<>();
-
-            List<TimeCode> timeCodes = timeCodeService.list();
-
-            if (timeCodes.isEmpty()) {
-                addWarningMessage("No client record found");
-            } else {
-                timeCodes.forEach(tc -> {
-
-                    TimeCodeDto dto = newTimeCodeDto();
-
-                    mappingService.updateTimeCodeDto(dto, tc);
-
-                    dtoList.add(dto);
-
-                });
-            }
+            List<TimeCodeDto> dtoList = getDtoList(timeCodeService.list());
 
             setResponseSuccess(dtoList);
 
@@ -161,6 +146,48 @@ public class TimeCodeResourceService extends ResponseService {
         return getResponseJson();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/find")
+    @Authenticated
+    //@RolesAllowed(AppSecurity.ROLE_ADMIN)
+    public String find(@QueryParam("clientNumber") String clientNumber) {
+        
+        try {
+            
+            List<TimeCodeDto> dtoList = getDtoList(timeCodeService.find(clientNumber));
+
+            setResponseSuccess(dtoList);
+
+        } catch (Exception ex) {
+
+            setResponseError("System error - " + ex.getMessage());
+
+            Logger.getLogger(TimeCodeResourceService.class.getName()).log(Level.SEVERE, "System error TimeCodeResourceService find", ex);
+        }
+
+        return getResponseJson();
+    }
+    
+    private List<TimeCodeDto> getDtoList(List<TimeCode> entityList) throws Exception {
+        List<TimeCodeDto> dtoList = new ArrayList<>();
+        
+        if (entityList.isEmpty()) {
+            addWarningMessage("No time code record found");
+        } else {
+            entityList.forEach(tc -> {
+                
+                TimeCodeDto dto = newTimeCodeDto();
+                
+                mappingService.updateTimeCodeDto(dto, tc);
+                
+                dtoList.add(dto);
+                
+            });
+        }
+        return dtoList;
+    }
     private void setClientLocation(TimeCode timeCode, ClientLocationDto dto) throws Exception {
 
         if (dto != null && !AppUtils.isNullOrEmpty(dto.getNumber())) {

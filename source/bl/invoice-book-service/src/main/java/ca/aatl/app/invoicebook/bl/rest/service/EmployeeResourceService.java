@@ -43,18 +43,17 @@ import javax.ws.rs.core.SecurityContext;
  *
  * @author GShokar
  */
-
 @Stateless
 @LocalBean
 @Path("employees")
-public class EmployeeResourceService extends ResponseService{
-    
+public class EmployeeResourceService extends ResponseService {
+
     @EJB
     EmployeeService employeeService;
 
     @EJB
     MappingService mappingService;
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -105,26 +104,13 @@ public class EmployeeResourceService extends ResponseService{
     public String getEmployee(@PathParam("number") String number) {
         try {
 
-            EmployeeDto dto = newEmployeeDto();
+            EmployeeDto dto = getDto(number);
 
-            if (number != null && !number.trim().isEmpty()) {
+            setResponseSuccess(dto);
 
-                Employee employee = employeeService.find(number);
-
-                if (employee != null) {
-
-                    mappingService.updateEmployeeDto(dto, employee);
-
-                    setResponseSuccess(dto);
-
-                } else {
-                    setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Employee number " + number + " do not exists.");
-                }
-
-            } else {
-                setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid employee number");
-            }
-        }catch (Exception ex) {
+        } catch (DataValidationException dex) {
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, dex.getValidationMessage());
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -133,6 +119,7 @@ public class EmployeeResourceService extends ResponseService{
 
         return getResponseJson();
     }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Authenticated
@@ -159,7 +146,7 @@ public class EmployeeResourceService extends ResponseService{
 
             setResponseSuccess(dtoList);
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -168,7 +155,7 @@ public class EmployeeResourceService extends ResponseService{
 
         return getResponseJson();
     }
-    
+
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -214,7 +201,7 @@ public class EmployeeResourceService extends ResponseService{
 
             Logger.getLogger(ClientResourceService.class.getName()).log(Level.INFO, "Invalid EmployeeDto data for update", ex);
 
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
 
@@ -223,7 +210,7 @@ public class EmployeeResourceService extends ResponseService{
 
         return this.getResponseJson();
     }
-    
+
     private EmployeeDto newEmployeeDto() {
         EmployeeDto dto = new EmployeeDto();
 
@@ -232,7 +219,7 @@ public class EmployeeResourceService extends ResponseService{
         return dto;
     }
 
-    private void validate(EmployeeDto dto) throws Exception{
+    private void validate(EmployeeDto dto) throws Exception {
         // This is workaround for now
         // There should be dto validations
         // There should be bean validations too
@@ -242,5 +229,27 @@ public class EmployeeResourceService extends ResponseService{
 
         //employee.setNumber(dto.getNumber());
         employeeService.validate(employee);
+    }
+
+    public EmployeeDto getDto(String number) throws Exception {
+        EmployeeDto dto = newEmployeeDto();
+
+        if (number != null && !number.trim().isEmpty()) {
+
+            Employee employee = employeeService.find(number);
+
+            if (employee != null) {
+
+                mappingService.updateEmployeeDto(dto, employee);
+
+            } else {
+                throw new DataValidationException("Employee number " + number + " do not exists.");
+            }
+
+        } else {
+            throw new DataValidationException("Invalid employee number");
+        }
+
+        return dto;
     }
 }

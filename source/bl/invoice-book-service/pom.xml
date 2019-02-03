@@ -22,7 +22,12 @@
             <artifactId>invoicebook-common</artifactId>
             <version>1.0</version>
         </dependency>
-         <dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>invoice-book-report</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>

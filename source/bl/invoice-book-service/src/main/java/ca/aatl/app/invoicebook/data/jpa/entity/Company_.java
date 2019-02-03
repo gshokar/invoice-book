@@ -5,14 +5,13 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2019-Jan-23  GShokar         Created
+ * 2019-Feb-02  GShokar         Created
  * =============================================================================
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
-import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
-import ca.aatl.app.invoicebook.data.jpa.entity.base.TypeEntity_;
-import javax.persistence.metamodel.SingularAttribute;
+import ca.aatl.app.invoicebook.data.jpa.entity.base.BusinessEntity_;
+import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
 /**
@@ -20,7 +19,8 @@ import javax.persistence.metamodel.StaticMetamodel;
  * @author GShokar
  */
 
-@StaticMetamodel(TimeCode.class)
-public class TimeCode_ extends TypeEntity_{
-    public static volatile SingularAttribute<TimeCode, Client> client;
+@StaticMetamodel(Company.class)
+public class Company_ extends BusinessEntity_{
+    public static volatile ListAttribute<Company, CompanyContact> contacts;
+    
 }

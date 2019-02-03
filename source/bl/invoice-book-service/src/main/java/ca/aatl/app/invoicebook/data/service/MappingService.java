@@ -14,6 +14,7 @@ import ca.aatl.app.invoicebook.bl.ejb.LookupService;
 import ca.aatl.app.invoicebook.data.jpa.entity.Address;
 import ca.aatl.app.invoicebook.data.jpa.entity.Client;
 import ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation;
+import ca.aatl.app.invoicebook.data.jpa.entity.Company;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
@@ -22,6 +23,7 @@ import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry;
 import ca.aatl.app.invoicebook.dto.AddressDto;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.ClientLocationDto;
+import ca.aatl.app.invoicebook.dto.CompanyDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
@@ -318,7 +320,26 @@ public class MappingService {
             
             if (entity.getTimeCode() != null) {
                 dto.getTimeCode().setUid(entity.getTimeCode().getGuid());
-                dto.getTimeCode().setName(entity.getEmployee().getName());
+                dto.getTimeCode().setName(entity.getTimeCode().getName());
+            }
+        }
+    }
+
+    public void updateCompanyDto(CompanyDto dto, Company entity) {
+         if (entity != null && dto != null) {
+
+            dto.setName(entity.getName());
+            dto.setNumber(entity.getNumber());
+
+            if (entity.hasAddress()) {
+
+                updateAddressDto(dto.getAddress(), entity.primaryAddress().getAddress());
+
+            }
+
+            if (entity.hasContact()) {
+
+                updateContactDto(dto.getContact(), entity.primaryContact().getContact());
             }
         }
     }
