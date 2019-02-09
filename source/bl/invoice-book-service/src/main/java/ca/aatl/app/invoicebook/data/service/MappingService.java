@@ -330,7 +330,8 @@ public class MappingService {
 
             dto.setName(entity.getName());
             dto.setNumber(entity.getNumber());
-
+            dto.setTaxRegNumber(entity.getTaxRegNumber() == null ? "" : entity.getTaxRegNumber());
+            
             if (entity.hasAddress()) {
 
                 updateAddressDto(dto.getAddress(), entity.primaryAddress().getAddress());

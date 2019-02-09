@@ -13,6 +13,7 @@ package ca.aatl.app.invoicebook.data.jpa.entity;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.BusinessEntity;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,10 +27,21 @@ import javax.persistence.Table;
 @Table(name="company")
 public class Company extends BusinessEntity{
     
+    @Column(name = "TaxRegNumber", nullable = true, length = 30)
+    private String taxRegNumber;
+    
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "company")
     private List<CompanyAddress> addresses;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "company")
     private List<CompanyContact> contacts;
+
+    public String getTaxRegNumber() {
+        return taxRegNumber;
+    }
+
+    public void setTaxRegNumber(String taxRegNumber) {
+        this.taxRegNumber = taxRegNumber;
+    }
 
     public List<CompanyAddress> getAddresses() {
         return addresses;
