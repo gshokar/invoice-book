@@ -13,13 +13,13 @@
 
 $aatl_ib.LookupService = {
 
-provinces:[],
+    provinces: [],
     //provinces: [{code: "AB", name: "Alberta"}, {code: "BC", name: "British Columbia"}, {code: "ON", name: "Ontario"}],
 
     defaultProvince: {code: "ON", name: "Ontario"},
 
     loadProvinces: function (callback) {
-        
+
         if ($aatl_ib.LookupService.provinces.length === 0) {
 
             $aatl_ib.ApiService.get("lookups/provinces",
@@ -43,5 +43,21 @@ provinces:[],
 
             callback($aatl_ib.LookupService.provinces);
         }
+    },
+    companyServices: function (callback) {
+        $aatl_ib.ApiService.get("lookups/company-services",
+                {},
+                function (res, err) {
+                    if (err) {
+                        callback([], "Company services list request failed: " + err);
+
+                    } else if (res.status === "failure") {
+                        callback([], res.message);
+                    } else if (res.status === "success") {
+                        callback(JSON.parse(res.data));
+                    } else {
+                        callback([], "Invalid response from server")
+                    }
+                });
     }
 };

@@ -78,6 +78,27 @@ $aatl_ib.gui.TimeCodesController = (function () {
                 });
             }
         }
+        
+        function loadCompanyServiceDropdownOptions(dropdownControl) {
+
+            $aatl_ib.LookupService.companyServices(function (list, err) {
+
+                if (err !== undefined && err !== null) {
+                    component.showError();
+                } else {
+                    let options = [{code: "", name: ""}];
+
+                    list.forEach((entity) => {
+                        options.push({code: entity.code, name: entity.name});
+                    });
+
+                    $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
+
+                    component.selectCompanyService();
+                }
+            });
+        }
+        
         function afterInit() {
             $aatl_ib.TimeCodeService.list(function (list, err) {
                 if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
@@ -138,6 +159,7 @@ $aatl_ib.gui.TimeCodesController = (function () {
             component.registerOnActionButtonClicked(onActionButtonClicked);
             component.registerOnFieldValueChanged(onValueChanged);
             component.registerLoadClientOptions(loadClientDropdownOptions);
+            component.registerLoadCompanyServiceOptions(loadCompanyServiceDropdownOptions);
         };
 
         this.getComponent = function () {
