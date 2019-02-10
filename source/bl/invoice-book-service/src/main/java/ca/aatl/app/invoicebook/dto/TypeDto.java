@@ -15,6 +15,15 @@ package ca.aatl.app.invoicebook.dto;
  * @author GShokar
  */
 public class TypeDto {
+
+    public TypeDto() {
+    }
+
+    public TypeDto(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+    
     private String code;
 
     /**

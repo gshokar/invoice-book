@@ -43,6 +43,10 @@ public class TimeCode extends TypeEntity{
     @ManyToOne(optional = true)
     private ClientLocation clientLocation;
 
+    @JoinColumn(name = "CompanyServiceId", referencedColumnName = "TypeId")
+    @ManyToOne(optional = true)
+    private CompanyService companyService;
+    
     public boolean isActive() {
         return active;
     }
@@ -73,6 +77,14 @@ public class TimeCode extends TypeEntity{
 
     public void setClientLocation(ClientLocation clientLocation) {
         this.clientLocation = clientLocation;
+    }
+
+    public CompanyService getCompanyService() {
+        return companyService;
+    }
+
+    public void setCompanyService(CompanyService companyService) {
+        this.companyService = companyService;
     }
     
 }

@@ -136,4 +136,24 @@ public class TimeCodeDto {
         this.clientLocation = clientLocation;
     }
 
+    private CompanyServiceDto companyService;
+
+    /**
+     * Get the value of companyService
+     *
+     * @return the value of companyService
+     */
+    public CompanyServiceDto getCompanyService() {
+        return companyService;
+    }
+
+    /**
+     * Set the value of companyService
+     *
+     * @param companyService new value of companyService
+     */
+    public void setCompanyService(CompanyServiceDto companyService) {
+        this.companyService = companyService;
+    }
+
 }

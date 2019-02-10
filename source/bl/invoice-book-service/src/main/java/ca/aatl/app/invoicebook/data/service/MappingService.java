@@ -24,13 +24,13 @@ import ca.aatl.app.invoicebook.dto.AddressDto;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.ClientLocationDto;
 import ca.aatl.app.invoicebook.dto.CompanyDto;
+import ca.aatl.app.invoicebook.dto.CompanyServiceDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.dto.TimeEntryDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
-import java.text.DateFormat;
 import java.text.ParseException;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -252,7 +252,8 @@ public class MappingService {
             dto.setUid(timeCode.getGuid());
             dto.setClient(new ClientDto());
             dto.setClientLocation(new ClientLocationDto());
-
+            dto.setCompanyService(new CompanyServiceDto("", ""));
+            
             if (timeCode.getClient() != null) {
 
                 dto.getClient().setName(timeCode.getClient().getName());
@@ -269,6 +270,12 @@ public class MappingService {
             } else {
                 dto.getClientLocation().setNumber("");
                 dto.getClientLocation().setName("");
+            }
+            
+            if (timeCode.getCompanyService() != null) {
+
+                dto.getCompanyService().setName(timeCode.getCompanyService().getName());
+                dto.getCompanyService().setCode(timeCode.getCompanyService().getGuid());
             }
         }
     }

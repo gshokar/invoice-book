@@ -14,6 +14,7 @@ import ca.aatl.app.invoicebook.bl.ejb.EmployeeService;
 import ca.aatl.app.invoicebook.bl.ejb.TimeCodeService;
 import ca.aatl.app.invoicebook.bl.ejb.TimeEntryService;
 import ca.aatl.app.invoicebook.bl.rest.Authenticated;
+import ca.aatl.app.invoicebook.bl.rest.ResourceResponseInitiated;
 import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
@@ -22,7 +23,6 @@ import ca.aatl.app.invoicebook.data.service.MappingService;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.dto.TimeEntryDto;
-import ca.aatl.app.invoicebook.dto.TimeSheetDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import com.google.gson.JsonSyntaxException;
@@ -71,6 +71,7 @@ public class TimeEntryResourceService extends ResponseService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Authenticated
+    @ResourceResponseInitiated
     public String save(@Context SecurityContext sc, String json) {
 
         try {

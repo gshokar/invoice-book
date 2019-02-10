@@ -150,7 +150,13 @@ public class TimeEnityDao extends AbstractDao<TimeEntry> {
                 Join<TimeEntry, TimeCode> timeCode = root.join(TimeEntry_.timeCode);
                 Join<TimeCode, Client> client = timeCode.join(TimeCode_.client);
                 
-                predicate = cb.equal(client.get(Client_.number), clientNumber);
+                Predicate p = cb.equal(client.get(Client_.number), clientNumber);
+                
+                if (predicate == null) {
+                    predicate = p;
+                } else {
+                    predicate = cb.and(predicate, p);
+                }
             }
             
             if (predicate != null) {

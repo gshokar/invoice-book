@@ -16,16 +16,15 @@
     
     <dependencies>
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-       
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>invoicebook-common</artifactId>
-            <version>1.0</version>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>invoice-book-report</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>invoicebook-common</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
