@@ -156,4 +156,24 @@ public class TimeEntryDto {
         this.timeCode = timeCode;
     }
 
+    private boolean approved;
+
+    /**
+     * Get the value of approved
+     *
+     * @return the value of approved
+     */
+    public boolean isApproved() {
+        return approved;
+    }
+
+    /**
+     * Set the value of approved
+     *
+     * @param approved new value of approved
+     */
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
 }

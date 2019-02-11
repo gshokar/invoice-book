@@ -12,7 +12,6 @@ package ca.aatl.app.invoicebook.data.jpa.entity;
 
 import ca.aatl.app.invoicebook.data.jpa.entity.base.BaseEntity;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Objects;
@@ -61,6 +60,10 @@ public class TimeEntry extends BaseEntity{
     @Basic(optional = false)
     @Column(name = "WorkedHours", nullable = false, precision = 19, scale = 2)
     private BigDecimal hours;
+    
+    @Basic(optional = false)
+    @Column(name = "Approved", nullable = false)
+    private boolean approved;
     
     @JoinColumn(name = "EmployeeId", referencedColumnName = "EntityId")
     @ManyToOne(optional = false)
@@ -126,6 +129,14 @@ public class TimeEntry extends BaseEntity{
 
     public void setTimeCode(TimeCode timeCode) {
         this.timeCode = timeCode;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     @Override

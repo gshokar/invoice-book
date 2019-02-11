@@ -282,7 +282,9 @@ public class MappingService {
 
     public void updateTimeEntry(TimeEntry entity, TimeEntryDto dto) {
         if (dto != null && entity != null) {
-
+            
+            entity.setApproved(dto.isApproved());
+            
             if (!AppUtils.isNullOrEmpty(dto.getDate())) {
                 try {
                     entity.setDate(AppUtils.dateFormat.parse(dto.getDate()));
@@ -319,7 +321,8 @@ public class MappingService {
             dto.setHours(entity.getHours() == null ? 0 : entity.getHours().doubleValue());
             dto.setTimeCode(new TimeCodeDto());
             dto.setUid(entity.getGuid());
-
+            dto.setApproved(entity.isApproved());
+            
             if (entity.getEmployee() != null) {
                 dto.getEmployee().setNumber(entity.getEmployee().getNumber());
                 dto.getEmployee().setName(entity.getEmployee().getName());
