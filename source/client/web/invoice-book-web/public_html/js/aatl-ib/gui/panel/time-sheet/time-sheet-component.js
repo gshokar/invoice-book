@@ -140,11 +140,12 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 columnValues: []};
 
             rowData.columnValues.push(index + 1);
-            rowData.columnValues.push($aatl_ib.utils.displayDateFomat(timeEntry.date));
+            rowData.columnValues.push($aatl_ib.utils.displayDateFormat(timeEntry.date));
             rowData.columnValues.push(timeEntry.timeCode.name);
-            rowData.columnValues.push($aatl_ib.utils.displayTimeFomat(timeEntry.startTime));
-            rowData.columnValues.push($aatl_ib.utils.displayTimeFomat(timeEntry.endTime));
+            rowData.columnValues.push($aatl_ib.utils.displayTimeFormat(timeEntry.startTime));
+            rowData.columnValues.push($aatl_ib.utils.displayTimeFormat(timeEntry.endTime));
             rowData.columnValues.push(timeEntry.hours.toFixed(2));
+            rowData.columnValues.push(timeEntry.approved);
 
             return rowData;
         }
@@ -310,6 +311,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 startTime: "",
                 endTime: "",
                 hours: 0,
+                approved: false,
                 timeCode: {
                     uid: "",
                     name: ""

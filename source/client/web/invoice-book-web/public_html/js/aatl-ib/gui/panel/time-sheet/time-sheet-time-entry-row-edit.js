@@ -19,10 +19,12 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
         let startTimeFieldId = "";
         let endTimeFieldId = "";
         let hoursFieldId = "";
+        let approvedFieldId = "";
+
         let rowElement = undefined;
         let editMode = false;
         let timeCodeClientNumber = "";
-        
+
         let onFieldValueChanged = undefined;
         let loadTimeCodeOptions = undefined;
 
@@ -71,6 +73,15 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
             return row;
         }
 
+        function getApprovedElement() {
+
+            approvedFieldId = $aatl_ib.utils.createUniqueId();
+
+            let row = '<input type="checkbox" class="form-control" id="' + approvedFieldId + '">';
+
+            return row;
+        }
+
         function setEditColumnElements(rowControl) {
             let columns = rowControl.children();
 
@@ -95,6 +106,9 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
                         break;
                     case 5:
                         $element.append(getHoursElement());
+                        break;
+                    case 6:
+                        $element.append(getApprovedElement());
                         break;
                 }
 
@@ -132,6 +146,10 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
             return rowElement.find('#' + hoursFieldId);
         }
 
+        function getApprovedField() {
+            return rowElement.find('#' + approvedFieldId);
+        }
+
         function setValues() {
 
             let date = $aatl_ib.utils.parseDate(timeEntry.date);
@@ -143,6 +161,7 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
             getStartTimeField().val(timeEntry.startTime);
             getEndTimeField().val(timeEntry.endTime);
             getHoursField().val(timeEntry.hours.toFixed(2));
+            getApprovedField().prop("checked", timeEntry.approved === true);
         }
 
         function setDatePickerControls(startDate) {
@@ -179,7 +198,8 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
                 editTimeEntry.timeCode.uid = getTimeCodeField().val();
                 editTimeEntry.startTime = getStartTimeField().val();
                 editTimeEntry.endTime = getEndTimeField().val();
-
+                editTimeEntry.approved = getApprovedField().prop("checked");
+                
                 return editTimeEntry;
             }
 
@@ -190,7 +210,7 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
             rowElement = rowControl;
             timeEntry = row;
             timeCodeClientNumber = clientNumber;
-            
+
             setEditColumnElements(rowControl);
 
             rowControl.find(":input").change(function (evt) {
@@ -212,7 +232,7 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
         this.registerOnFieldValueChanged = function (valueChanged) {
             onFieldValueChanged = valueChanged;
         };
-       
+
         this.selectTimeCode = function () {
 
             getTimeCodeControl(rowElement).val(timeEntry.timeCode.uid);
@@ -238,7 +258,7 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
         };
 
         this.calcHours = function (id) {
-            
+
             if (id === startTimeFieldId || id === endTimeFieldId) {
 
                 getHoursField().val($aatl_ib.utils.calcHours(getStartTimeField().val(), getEndTimeField().val()));

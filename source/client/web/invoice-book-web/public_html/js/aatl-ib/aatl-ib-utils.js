@@ -112,7 +112,7 @@ $aatl_ib.utils = {
 
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 
-    displayDateFomat: function (date) {
+    displayDateFormat: function (date) {
 
         let displayVal = "";
         let displayDate = undefined;
@@ -183,7 +183,7 @@ $aatl_ib.utils = {
         return timeVal;
     },
 
-    displayTimeFomat: function (time) {
+    displayTimeFormat: function (time) {
 
         let displayVal = "";
         let displayTime = undefined;
