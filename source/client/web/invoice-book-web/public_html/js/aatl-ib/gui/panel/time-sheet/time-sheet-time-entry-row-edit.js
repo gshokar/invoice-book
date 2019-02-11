@@ -199,6 +199,7 @@ $aatl_ib.gui.TimeSheetTimeEntryRowEdit = (function () {
                 editTimeEntry.startTime = getStartTimeField().val();
                 editTimeEntry.endTime = getEndTimeField().val();
                 editTimeEntry.approved = getApprovedField().prop("checked");
+                editTimeEntry.charged = timeEntry.charged;
                 
                 return editTimeEntry;
             }

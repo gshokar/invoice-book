@@ -146,6 +146,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             rowData.columnValues.push($aatl_ib.utils.displayTimeFormat(timeEntry.endTime));
             rowData.columnValues.push(timeEntry.hours.toFixed(2));
             rowData.columnValues.push(timeEntry.approved);
+            rowData.columnValues.push(timeEntry.charged);
 
             return rowData;
         }
@@ -312,6 +313,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 endTime: "",
                 hours: 0,
                 approved: false,
+                charged: false,
                 timeCode: {
                     uid: "",
                     name: ""
