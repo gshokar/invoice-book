@@ -65,6 +65,10 @@ public class TimeEntry extends BaseEntity{
     @Column(name = "Approved", nullable = false)
     private boolean approved;
     
+    @Basic(optional = false)
+    @Column(name = "Charged", nullable = false)
+    private boolean charged;
+    
     @JoinColumn(name = "EmployeeId", referencedColumnName = "EntityId")
     @ManyToOne(optional = false)
     private Employee employee;
@@ -137,6 +141,14 @@ public class TimeEntry extends BaseEntity{
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public boolean isCharged() {
+        return charged;
+    }
+
+    public void setCharged(boolean charged) {
+        this.charged = charged;
     }
 
     @Override

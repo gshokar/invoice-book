@@ -284,6 +284,7 @@ public class MappingService {
         if (dto != null && entity != null) {
             
             entity.setApproved(dto.isApproved());
+            entity.setCharged(dto.isCharged());
             
             if (!AppUtils.isNullOrEmpty(dto.getDate())) {
                 try {
@@ -322,6 +323,7 @@ public class MappingService {
             dto.setTimeCode(new TimeCodeDto());
             dto.setUid(entity.getGuid());
             dto.setApproved(entity.isApproved());
+            dto.setCharged(entity.isCharged());
             
             if (entity.getEmployee() != null) {
                 dto.getEmployee().setNumber(entity.getEmployee().getNumber());

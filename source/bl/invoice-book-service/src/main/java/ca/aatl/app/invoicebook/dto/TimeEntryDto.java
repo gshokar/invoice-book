@@ -176,4 +176,24 @@ public class TimeEntryDto {
         this.approved = approved;
     }
 
+    private boolean charged;
+
+    /**
+     * Get the value of charged
+     *
+     * @return the value of charged
+     */
+    public boolean isCharged() {
+        return charged;
+    }
+
+    /**
+     * Set the value of charged
+     *
+     * @param charged new value of charged
+     */
+    public void setCharged(boolean charged) {
+        this.charged = charged;
+    }
+
 }
