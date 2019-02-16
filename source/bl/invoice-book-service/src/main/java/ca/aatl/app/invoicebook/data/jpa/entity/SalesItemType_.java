@@ -18,7 +18,7 @@ import javax.persistence.metamodel.StaticMetamodel;
  *
  * @author gshokar
  */
-@StaticMetamodel(CompanyService.class)
-public class CompanyService_ extends TypeEntity_{
+@StaticMetamodel(SalesItemType.class)
+public class SalesItemType_ extends TypeEntity_{
     
 }

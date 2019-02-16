@@ -13,17 +13,18 @@ package ca.aatl.app.invoicebook.bl.rest.service;
 import ca.aatl.app.invoicebook.bl.ejb.ClientLocationService;
 import ca.aatl.app.invoicebook.bl.ejb.ClientService;
 import ca.aatl.app.invoicebook.bl.ejb.LookupService;
+import ca.aatl.app.invoicebook.bl.ejb.SalesItemService;
 import ca.aatl.app.invoicebook.bl.ejb.TimeCodeService;
 import ca.aatl.app.invoicebook.bl.rest.Authenticated;
 import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import ca.aatl.app.invoicebook.data.jpa.entity.Client;
 import ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation;
-import ca.aatl.app.invoicebook.data.jpa.entity.CompanyService;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
 import ca.aatl.app.invoicebook.data.service.MappingService;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.ClientLocationDto;
-import ca.aatl.app.invoicebook.dto.CompanyServiceDto;
+import ca.aatl.app.invoicebook.dto.SalesItemDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
@@ -70,6 +71,9 @@ public class TimeCodeResourceService extends ResponseService {
     @EJB
     LookupService lookupService;
     
+    @EJB
+    SalesItemService salesItemService;
+    
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -98,7 +102,7 @@ public class TimeCodeResourceService extends ResponseService {
 
             setClient(timeCode, dto.getClient());
             setClientLocation(timeCode, dto.getClientLocation());
-            setCompanyService(timeCode, dto.getCompanyService());
+            setServiceItem(timeCode, dto.getServiceItem());
             
             mappingService.updateTimeCode(timeCode, dto);
 
@@ -262,24 +266,24 @@ public class TimeCodeResourceService extends ResponseService {
         return timeCode;
     }
 
-    private void setCompanyService(TimeCode timeCode, CompanyServiceDto dto) throws Exception {
+    private void setServiceItem(TimeCode timeCode, SalesItemDto dto) throws Exception {
 
         if (dto != null && !AppUtils.isNullOrEmpty(dto.getCode())) {
 
-            CompanyService entity = lookupService.companyService(dto.getCode());
+            SalesItem entity = salesItemService.find(dto.getCode());
 
             if (entity == null) {
-                throw new DataValidationException("Invalid company service, do not exists.");
+                throw new DataValidationException("Invalid service item, do not exists.");
             }
 
-            if (!entity.equals(timeCode.getCompanyService())) {
+            if (!entity.equals(timeCode.getServiceItem())) {
 
-                timeCode.setCompanyService(entity);
+                timeCode.setServiceItem(entity);
             }
 
-        } else if (timeCode.getCompanyService() != null) {
+        } else if (timeCode.getServiceItem() != null) {
 
-            timeCode.setCompanyService(null);
+            timeCode.setServiceItem(null);
         } 
     }
 }

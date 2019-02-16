@@ -138,4 +138,84 @@ public class InvoiceDto {
         this.status = status;
     }
 
+    private double amount;
+
+    /**
+     * Get the value of amount
+     *
+     * @return the value of amount
+     */
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * Set the value of amount
+     *
+     * @param amount new value of amount
+     */
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    private double taxAmount;
+
+    /**
+     * Get the value of taxAmount
+     *
+     * @return the value of taxAmount
+     */
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    /**
+     * Set the value of taxAmount
+     *
+     * @param taxAmount new value of taxAmount
+     */
+    public void setTaxAmount(double taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    private double totalAmount;
+
+    /**
+     * Get the value of totalAmount
+     *
+     * @return the value of totalAmount
+     */
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * Set the value of totalAmount
+     *
+     * @param totalAmount new value of totalAmount
+     */
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    private double paidAmount;
+
+    /**
+     * Get the value of paidAmount
+     *
+     * @return the value of paidAmount
+     */
+    public double getPaidAmount() {
+        return paidAmount;
+    }
+
+    /**
+     * Set the value of paidAmount
+     *
+     * @param paidAmount new value of paidAmount
+     */
+    public void setPaidAmount(double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
 }

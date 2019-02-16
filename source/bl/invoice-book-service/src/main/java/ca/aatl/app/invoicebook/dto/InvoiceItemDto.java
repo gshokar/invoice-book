@@ -10,6 +10,9 @@
  */
 package ca.aatl.app.invoicebook.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author GShokar
@@ -76,24 +79,164 @@ public class InvoiceItemDto {
         this.uid = uid;
     }
 
-    private InvoiceItemTypeDto itemType;
+    private String description;
 
     /**
-     * Get the value of itemType
+     * Get the value of description
      *
-     * @return the value of itemType
+     * @return the value of description
      */
-    public InvoiceItemTypeDto getItemType() {
-        return itemType;
+    public String getDescription() {
+        return description;
     }
 
     /**
-     * Set the value of itemType
+     * Set the value of description
      *
-     * @param itemType new value of itemType
+     * @param description new value of description
      */
-    public void setItemType(InvoiceItemTypeDto itemType) {
-        this.itemType = itemType;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private double quantity;
+
+    /**
+     * Get the value of quantity
+     *
+     * @return the value of quantity
+     */
+    public double getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * Set the value of quantity
+     *
+     * @param quantity new value of quantity
+     */
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    private double rate;
+
+    /**
+     * Get the value of rate
+     *
+     * @return the value of rate
+     */
+    public double getRate() {
+        return rate;
+    }
+
+    /**
+     * Set the value of rate
+     *
+     * @param rate new value of rate
+     */
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    private double amount;
+
+    /**
+     * Get the value of amount
+     *
+     * @return the value of amount
+     */
+    public double getAmount() {
+        return amount;
+    }
+
+    /**
+     * Set the value of amount
+     *
+     * @param amount new value of amount
+     */
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    private double taxAmount;
+
+    /**
+     * Get the value of taxAmount
+     *
+     * @return the value of taxAmount
+     */
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    /**
+     * Set the value of taxAmount
+     *
+     * @param taxAmount new value of taxAmount
+     */
+    public void setTaxAmount(double taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    private double totalAmount;
+
+    /**
+     * Get the value of totalAmount
+     *
+     * @return the value of totalAmount
+     */
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    /**
+     * Set the value of totalAmount
+     *
+     * @param totalAmount new value of totalAmount
+     */
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    private List<InvoiceItemTaxDto> taxes = new ArrayList<>();
+
+    /**
+     * Get the value of taxes
+     *
+     * @return the value of taxes
+     */
+    public List<InvoiceItemTaxDto> getTaxes() {
+        return taxes;
+    }
+
+    /**
+     * Set the value of taxes
+     *
+     * @param taxes new value of taxes
+     */
+    public void setTaxes(List<InvoiceItemTaxDto> taxes) {
+        this.taxes = taxes;
+    }
+
+    private SalesItemDto salesItem;
+
+    /**
+     * Get the value of salesItem
+     *
+     * @return the value of salesItem
+     */
+    public SalesItemDto getSalesItem() {
+        return salesItem;
+    }
+
+    /**
+     * Set the value of salesItem
+     *
+     * @param salesItem new value of salesItem
+     */
+    public void setSalesItem(SalesItemDto salesItem) {
+        this.salesItem = salesItem;
     }
 
 }

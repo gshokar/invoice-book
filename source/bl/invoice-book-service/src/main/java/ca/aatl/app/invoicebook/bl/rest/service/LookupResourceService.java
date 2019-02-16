@@ -2,9 +2,7 @@
 package ca.aatl.app.invoicebook.bl.rest.service;
 
 import ca.aatl.app.invoicebook.bl.ejb.LookupService;
-import ca.aatl.app.invoicebook.data.jpa.entity.CompanyService;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
-import ca.aatl.app.invoicebook.dto.CompanyServiceDto;
 import ca.aatl.app.invoicebook.dto.ProvinceDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,31 +55,5 @@ public class LookupResourceService extends ResponseService{
         
         return this.getResponseJson();
     }
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/company-services")
-    public String companyServices() {
         
-        try {
-            List<CompanyService> entityList = lookupService.companyServices();
-            
-            List<CompanyServiceDto> dtoList = new ArrayList<>();
-            
-            if(entityList != null && !entityList.isEmpty()){
-                
-                entityList.forEach( p -> dtoList.add(new CompanyServiceDto(p.getGuid(), p.getName())));
-            }
-            
-            this.setResponseSuccess(dtoList);
-            
-        } catch (Exception ex) {
-            
-            setResponseError("System error failed to get the company services list - " + ex.getMessage());
-            
-            Logger.getLogger(LookupResourceService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return this.getResponseJson();
-    }
 }

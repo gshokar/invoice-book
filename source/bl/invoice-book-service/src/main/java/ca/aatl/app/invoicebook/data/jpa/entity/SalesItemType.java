@@ -8,19 +8,19 @@
  * 2019-Feb-09  GShokar         Created
  * =============================================================================
  */
-package ca.aatl.app.invoicebook.dto;
+package ca.aatl.app.invoicebook.data.jpa.entity;
+
+import ca.aatl.app.invoicebook.data.jpa.entity.base.TypeEntity;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  *
  * @author gshokar
  */
-public class CompanyServiceDto extends TypeDto{
 
-    public CompanyServiceDto() {
-    }
-
-    public CompanyServiceDto(String code, String name) {
-        super(code, name);
-    }
-
+@Entity
+@Table(name="salesitemtype")
+public class SalesItemType extends TypeEntity{
+    
 }

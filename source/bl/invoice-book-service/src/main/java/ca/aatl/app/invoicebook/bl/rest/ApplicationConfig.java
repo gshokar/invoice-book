@@ -43,6 +43,7 @@ public class ApplicationConfig extends Application {
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.CompanyResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.EmployeeResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.LookupResourceService.class);
+        resources.add(ca.aatl.app.invoicebook.bl.rest.service.SalesItemResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.TimeCodeResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.TimeEntryResourceService.class);
         resources.add(ca.aatl.app.invoicebook.bl.rest.service.TimeSheetResourceService.class);

@@ -1,12 +1,11 @@
 package ca.aatl.app.invoicebook.bl.ejb;
 
 import ca.aatl.app.invoicebook.data.jpa.dao.AddressTypeDao;
-import ca.aatl.app.invoicebook.data.jpa.dao.CompanyServiceDao;
+import ca.aatl.app.invoicebook.data.jpa.dao.SalesItemDao;
 import ca.aatl.app.invoicebook.data.jpa.dao.ContactTypeDao;
 import ca.aatl.app.invoicebook.data.jpa.dao.CountryDao;
 import ca.aatl.app.invoicebook.data.jpa.dao.ProvinceDao;
 import ca.aatl.app.invoicebook.data.jpa.entity.AddressType;
-import ca.aatl.app.invoicebook.data.jpa.entity.CompanyService;
 import ca.aatl.app.invoicebook.data.jpa.entity.ContactType;
 import ca.aatl.app.invoicebook.data.jpa.entity.Country;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
@@ -28,21 +27,21 @@ public class LookupService {
 
     @EJB
     AddressTypeDao addressTypeDao;
-    
+
     @EJB
     ContactTypeDao contactTypeDao;
 
     @EJB
     CountryDao countryDao;
-    
+
     @EJB
-    CompanyServiceDao companyServiceDao;
-    
+    SalesItemDao salesItemDao;
+
     private static AddressType defaultAddressType;
     private static ContactType defaultContactType;
     private static Province defaultProvince;
     private static Country defaultCountry;
-    
+
     public List<Province> provinces() throws Exception {
 
         return provinceDao.list();
@@ -73,7 +72,7 @@ public class LookupService {
         return defaultProvince;
     }
 
-    public synchronized Country defaultCountry() throws Exception{
+    public synchronized Country defaultCountry() throws Exception {
         if (defaultCountry == null) {
 
             defaultCountry = countryDao.find("CA");
@@ -84,7 +83,7 @@ public class LookupService {
     }
 
     public synchronized ContactType defaultContactType() {
-        
+
         if (defaultContactType == null) {
 
             defaultContactType = contactTypeDao.find("Business");
@@ -92,14 +91,6 @@ public class LookupService {
         }
 
         return defaultContactType;
-    }
-
-    public List<CompanyService> companyServices() throws Exception{
-        return companyServiceDao.list();
-    }
-
-    public CompanyService companyService(String guid) throws Exception{
-        return companyServiceDao.find(guid);
     }
 
 }

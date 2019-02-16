@@ -22,7 +22,9 @@
     <class>ca.aatl.app.invoicebook.data.jpa.entity.Company</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.CompanyAddress</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.CompanyContact</class>
-    <class>ca.aatl.app.invoicebook.data.jpa.entity.CompanyService</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItemType</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.ItemUnit</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItem</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <validation-mode>NONE</validation-mode>

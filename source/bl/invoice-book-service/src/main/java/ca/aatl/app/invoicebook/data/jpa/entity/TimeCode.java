@@ -43,9 +43,9 @@ public class TimeCode extends TypeEntity{
     @ManyToOne(optional = true)
     private ClientLocation clientLocation;
 
-    @JoinColumn(name = "CompanyServiceId", referencedColumnName = "TypeId")
+    @JoinColumn(name = "ServiceItemId", referencedColumnName = "SalesItemId")
     @ManyToOne(optional = true)
-    private CompanyService companyService;
+    private SalesItem serviceItem;
     
     public boolean isActive() {
         return active;
@@ -79,12 +79,12 @@ public class TimeCode extends TypeEntity{
         this.clientLocation = clientLocation;
     }
 
-    public CompanyService getCompanyService() {
-        return companyService;
+    public SalesItem getServiceItem() {
+        return serviceItem;
     }
 
-    public void setCompanyService(CompanyService companyService) {
-        this.companyService = companyService;
+    public void setServiceItem(SalesItem serviceItem) {
+        this.serviceItem = serviceItem;
     }
-    
+      
 }

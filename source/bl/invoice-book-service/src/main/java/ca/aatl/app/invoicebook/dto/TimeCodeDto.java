@@ -136,24 +136,24 @@ public class TimeCodeDto {
         this.clientLocation = clientLocation;
     }
 
-    private CompanyServiceDto companyService;
+    private SalesItemDto serviceItem;
 
     /**
      * Get the value of companyService
      *
      * @return the value of companyService
      */
-    public CompanyServiceDto getCompanyService() {
-        return companyService;
+    public SalesItemDto getServiceItem() {
+        return serviceItem;
     }
 
     /**
      * Set the value of companyService
      *
-     * @param companyService new value of companyService
+     * @param serviceItem new value of SalesItemDto
      */
-    public void setCompanyService(CompanyServiceDto companyService) {
-        this.companyService = companyService;
+    public void setServiceItem(SalesItemDto serviceItem) {
+        this.serviceItem = serviceItem;
     }
 
 }
