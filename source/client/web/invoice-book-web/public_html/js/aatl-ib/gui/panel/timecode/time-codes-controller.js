@@ -79,9 +79,9 @@ $aatl_ib.gui.TimeCodesController = (function () {
             }
         }
         
-        function loadCompanyServiceDropdownOptions(dropdownControl) {
+        function loadServiceItemDropdownOptions(dropdownControl) {
 
-            $aatl_ib.LookupService.companyServices(function (list, err) {
+            $aatl_ib.SalesItemService.serviceItems(function (list, err) {
 
                 if (err !== undefined && err !== null) {
                     component.showError();
@@ -94,7 +94,7 @@ $aatl_ib.gui.TimeCodesController = (function () {
 
                     $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
 
-                    component.selectCompanyService();
+                    component.selectServiceItem();
                 }
             });
         }
@@ -159,7 +159,7 @@ $aatl_ib.gui.TimeCodesController = (function () {
             component.registerOnActionButtonClicked(onActionButtonClicked);
             component.registerOnFieldValueChanged(onValueChanged);
             component.registerLoadClientOptions(loadClientDropdownOptions);
-            component.registerLoadCompanyServiceOptions(loadCompanyServiceDropdownOptions);
+            component.registerLoadServiceItemOptions(loadServiceItemDropdownOptions);
         };
 
         this.getComponent = function () {

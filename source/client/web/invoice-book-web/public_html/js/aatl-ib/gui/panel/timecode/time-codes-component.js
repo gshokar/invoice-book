@@ -98,7 +98,7 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
 
             rowData.columnValues.push(index + 1);
             rowData.columnValues.push(timeCode.name);
-            rowData.columnValues.push(timeCode.companyService.name);
+            rowData.columnValues.push(timeCode.serviceItem.name);
             rowData.columnValues.push(timeCode.client.name);
             rowData.columnValues.push(timeCode.clientLocation.name);
             rowData.columnValues.push(timeCode.active);
@@ -193,7 +193,7 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
                     number: "",
                     name: ""
                 },
-                companyService: {
+                serviceItem: {
                     code: "",
                     name: ""
                 },
@@ -223,8 +223,8 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
             timeCodeRowEdit.selectClient();
         };
 
-        this.selectCompanyService = function(){
-            timeCodeRowEdit.selectCompanyService();
+        this.selectServiceItem = function(){
+            timeCodeRowEdit.selectServiceItem();
         };
         
         this.registerLoadClientOptions = function (loadOptions) {
@@ -232,9 +232,9 @@ $aatl_ib.gui.TimeCodesComponent = (function () {
             timeCodeRowEdit.registerLoadClientOptions(loadOptions);
         };
 
-        this.registerLoadCompanyServiceOptions = function (loadOptions) {
+        this.registerLoadServiceItemOptions = function (loadOptions) {
 
-            timeCodeRowEdit.registerLoadCompanyServiceOptions(loadOptions);
+            timeCodeRowEdit.registerLoadServiceItemOptions(loadOptions);
         };
 
         this.getLocationControl = function () {

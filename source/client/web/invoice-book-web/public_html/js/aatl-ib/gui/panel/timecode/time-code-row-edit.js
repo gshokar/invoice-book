@@ -20,7 +20,7 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
         let locationFieldId = "";
         let activeFieldId = "";
         let chargeableFieldId = "";
-        let companyServiceFieldId = "";
+        let serviceItemFieldId = "";
 
         let rowElement = undefined;
         let editMode = false;
@@ -28,7 +28,7 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
 
         let onFieldValueChanged = undefined;
         let loadClientOptions = undefined;
-        let loadCompanyServiceOptions = undefined;
+        let loadServiceItemOptions = undefined;
 
         function getNameElement() {
 
@@ -75,11 +75,11 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             return row;
         }
 
-        function getCompanyServiceElement() {
+        function getServiceItemElement() {
 
-            companyServiceFieldId = $aatl_ib.utils.createUniqueId();
+            serviceItemFieldId = $aatl_ib.utils.createUniqueId();
 
-            let row = '<select class="form-control" id="' + companyServiceFieldId + '"><option selected></option></select>';
+            let row = '<select class="form-control" id="' + serviceItemFieldId + '"><option selected></option></select>';
 
             return row;
         }
@@ -98,7 +98,7 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
                         $element.append(getNameElement());
                         break;
                     case 2:
-                        $element.append(getCompanyServiceElement());
+                        $element.append(getServiceItemElement());
                         break;
                     case 3:
                         $element.append(getClientElement());
@@ -125,8 +125,8 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             return rowControl.find('#' + locationFieldId);
         }
 
-        function getCompanyServiceControl(rowControl) {
-            return rowControl.find('#' + companyServiceFieldId);
+        function getServiceItemControl(rowControl) {
+            return rowControl.find('#' + serviceItemFieldId);
         }
 
         function setClientDropdown(rowControl) {
@@ -136,10 +136,10 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             }
         }
 
-        function setCompanyServiceDropdown(rowControl) {
+        function setServiceItemDropdown(rowControl) {
 
-            if (typeof loadCompanyServiceOptions === 'function') {
-                loadCompanyServiceOptions(getCompanyServiceControl(rowControl));
+            if (typeof loadServiceItemOptions === 'function') {
+                loadServiceItemOptions(getServiceItemControl(rowControl));
             }
         }
 
@@ -163,8 +163,8 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             return rowElement.find('#' + chargeableFieldId);
         }
 
-        function getCompanyServiceField() {
-            return rowElement.find('#' + companyServiceFieldId);
+        function getServiceItemField() {
+            return rowElement.find('#' + serviceItemFieldId);
         }
 
         function setValues() {
@@ -180,20 +180,20 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             $clientField.val(timeCode.client.number);
             $clientField.change();
 
-            setCompanyServiceFieldVal();
+            setServiceItemFieldVal();
 
         }
         
-        function setCompanyServiceFieldVal(){
+        function setServiceItemFieldVal(){
             
-            getCompanyServiceField().val(timeCode.companyService.code);
+            getServiceItemField().val(timeCode.serviceItem.code);
         }
         
         this.getTimeCode = function () {
 
             if (editMode === true) {
 
-                let editTimeCode = {client: {}, clientLocation: {}, companyService: {}};
+                let editTimeCode = {client: {}, clientLocation: {}, serviceItem: {}};
 
                 editTimeCode.uid = timeCode.uid;
                 editTimeCode.name = getNameField().val().trim();
@@ -201,7 +201,7 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
                 editTimeCode.clientLocation.number = getClientLocationField().val();
                 editTimeCode.active = getActiveField().prop("checked");
                 editTimeCode.chargeable = getChargeableField().prop("checked");
-                editTimeCode.companyService.code = getCompanyServiceField().val();
+                editTimeCode.serviceItem.code = getServiceItemField().val();
 
                 return editTimeCode;
             }
@@ -223,7 +223,7 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             });
 
             setClientDropdown(rowControl);
-            setCompanyServiceDropdown(rowControl);
+            setServiceItemDropdown(rowControl);
 
             editMode = true;
 
@@ -245,8 +245,8 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             $clientField.change();
         };
         
-        this.selectCompanyService = function(){
-            setCompanyServiceFieldVal();
+        this.selectServiceItem = function(){
+            setServiceItemFieldVal();
         };
         
         this.registerLoadClientOptions = function (loadOptions) {
@@ -254,9 +254,9 @@ $aatl_ib.gui.TimeCodeRowEdit = (function () {
             loadClientOptions = loadOptions;
         };
 
-        this.registerLoadCompanyServiceOptions = function (loadOptions) {
+        this.registerLoadServiceItemOptions = function (loadOptions) {
 
-            loadCompanyServiceOptions = loadOptions;
+            loadServiceItemOptions = loadOptions;
         };
 
         this.getLocationControl = function () {
