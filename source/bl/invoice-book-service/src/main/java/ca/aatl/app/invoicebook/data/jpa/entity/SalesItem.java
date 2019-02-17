@@ -39,26 +39,26 @@ public class SalesItem extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SalesItemId", unique = true, nullable = false)
-    protected Integer id;
+    private Integer id;
     
     @NotNull(message = "Please provide the name")
     @Size(min =1, max = 100)
     @Column(name = "Name", nullable = false, length = 100)
-    protected String name;
+    private String name;
     
-    @Column(name = "SalesItemCode", nullable = true, length = 12)
-    protected String code;
+    @Column(name = "SalesItemCode", nullable = false, length = 12)
+    private String code;
     
     @Basic(optional = false)
     @Column(name = "Active", nullable = false)
-    protected boolean active;
+    private boolean active;
     
     @Column(name = "TerminatedDate")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date terminatedDate;
+    private Date terminatedDate;
     
     @Column(name = "Description", length = 200)
-    protected String description;
+    private String description;
     
     @Basic(optional = false)
     @Column(name = "rate", nullable = false, precision = 19, scale = 2)

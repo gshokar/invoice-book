@@ -56,24 +56,24 @@ public class InvoiceItemTaxDto {
         this.amount = amount;
     }
 
-    private SalesTaxDto salesTax;
+    private SalesItemTaxRateDto taxRate;
 
     /**
      * Get the value of salesTax
      *
      * @return the value of salesTax
      */
-    public SalesTaxDto getSalesTax() {
-        return salesTax;
+    public SalesItemTaxRateDto getSalesItemTaxRate() {
+        return taxRate;
     }
 
     /**
      * Set the value of salesTax
      *
-     * @param salesTax new value of salesTax
+     * @param taxRate new value of salesTax
      */
-    public void setSalesTax(SalesTaxDto salesTax) {
-        this.salesTax = salesTax;
+    public void setSalesItemTaxRate(SalesItemTaxRateDto taxRate) {
+        this.taxRate = taxRate;
     }
 
 }

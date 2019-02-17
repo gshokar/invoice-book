@@ -41,7 +41,7 @@ public class SalesItemTaxRate extends BaseEntity{
     private Integer id;
     
     @Basic(optional = false)
-    @Column(name = "rate", nullable = false, precision = 19, scale = 2)
+    @Column(name = "Rate", nullable = false, precision = 19, scale = 2)
     private BigDecimal rate;
     
     @Basic(optional = false)
