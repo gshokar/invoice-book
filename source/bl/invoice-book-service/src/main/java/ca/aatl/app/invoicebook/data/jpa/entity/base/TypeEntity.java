@@ -20,12 +20,12 @@ public class TypeEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TypeId", unique = true, nullable = false)
-    private Integer id;
+    protected Integer id;
     @Column(name = "Name", nullable = false, length = 40)
-    private String name;
+    protected String name;
     @Column(name = "TerminatedDate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date terminatedDate;
+    protected Date terminatedDate;
 
     public Integer getId() {
         return id;

@@ -25,6 +25,8 @@
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItemType</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.ItemUnit</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItem</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesTax</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <validation-mode>NONE</validation-mode>
