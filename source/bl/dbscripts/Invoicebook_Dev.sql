@@ -22,3 +22,12 @@ INSERT INTO salestax (TypeId, `Name`, `Code`,GUID, AddedBy, AddedDate, LastUpdat
 INSERT INTO `tblsequence`(SequenceId, Filler, IdGenerator, LastNo, MaxLength, `Name`, PostFixString, PreFixString) VALUES (1,'0',NULL,100000,6,'ClientNumber',NULL,NULL);
 INSERT INTO `tblsequence`(SequenceId, Filler, IdGenerator, LastNo, MaxLength, `Name`, PostFixString, PreFixString) VALUES (2,'0',NULL,100000,6,'EmployeeNumber',NULL,NULL);
 INSERT INTO `tblsequence`(SequenceId, Filler, IdGenerator, LastNo, MaxLength, `Name`, PostFixString, PreFixString) VALUES (3,'0',NULL,100000,6,'ClientLocationNumber',NULL,NULL);
+
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'New', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(2, 'Sent', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(3, 'Paid', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(4, 'Closed', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(5, 'Modified', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(6, 'Resent', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(7, 'Canceled', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salesinvoicestatus (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(8, 'PartiallyPaid', UPPER(UUID()), 0, Now(), 0, Now());
