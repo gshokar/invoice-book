@@ -17,6 +17,7 @@ INSERT INTO `province` (`ProvinceId`,`ProvinceCode`,`GUID`,`Province`,`CountryId
 INSERT INTO addresstype (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'Business', UPPER(UUID()), 0, Now(), 0, Now());
 INSERT INTO contacttype (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'Business', UPPER(UUID()), 0, Now(), 0, Now());
 INSERT INTO itemunit (TypeId, `Name`, GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'Hour', UPPER(UUID()), 0, Now(), 0, Now());
+INSERT INTO salestax (TypeId, `Name`, `Code`,GUID, AddedBy, AddedDate, LastUpdatedBy, LastUpdatedDate) VALUES(1, 'Harmonized Sales Tax', 'HST', UPPER(UUID()), 0, Now(), 0, Now());
 
 INSERT INTO `tblsequence`(SequenceId, Filler, IdGenerator, LastNo, MaxLength, `Name`, PostFixString, PreFixString) VALUES (1,'0',NULL,100000,6,'ClientNumber',NULL,NULL);
 INSERT INTO `tblsequence`(SequenceId, Filler, IdGenerator, LastNo, MaxLength, `Name`, PostFixString, PreFixString) VALUES (2,'0',NULL,100000,6,'EmployeeNumber',NULL,NULL);
