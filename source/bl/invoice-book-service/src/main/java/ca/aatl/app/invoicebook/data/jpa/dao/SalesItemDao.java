@@ -110,4 +110,28 @@ public class SalesItemDao extends BaseDao{
         
         return entity;
     }
+
+    public List<SalesItemType> itemTypes() {
+        List<SalesItemType> list = null;
+
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+
+            CriteriaQuery<SalesItemType> cq = cb.createQuery(SalesItemType.class);
+
+            Root<SalesItemType> root = cq.from(SalesItemType.class);
+          
+            cq.select(root);
+            cq.orderBy(cb.asc(root.get(SalesItemType_.name)));
+
+            TypedQuery<SalesItemType> q = em.createQuery(cq);
+
+            list =  q.getResultList();
+            
+        } catch (NoResultException ex) {
+
+        }
+        
+        return list;
+    }
 }

@@ -15,6 +15,14 @@ package ca.aatl.app.invoicebook.dto;
  * @author GShokar
  */
 public class SalesItemTypeDto {
+
+    public SalesItemTypeDto() {
+    }
+
+    public SalesItemTypeDto(String uid, String name) {
+        this.uid = uid;
+        this.name = name;
+    }
     
     private String uid;
 

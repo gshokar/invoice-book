@@ -12,7 +12,9 @@ package ca.aatl.app.invoicebook.bl.rest.service;
 
 import ca.aatl.app.invoicebook.bl.ejb.SalesItemService;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemType;
 import ca.aatl.app.invoicebook.dto.SalesItemDto;
+import ca.aatl.app.invoicebook.dto.SalesItemTypeDto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -61,6 +63,33 @@ public class SalesItemResourceService extends ResponseService {
             Logger.getLogger(LookupResourceService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        return this.getResponseJson();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/item-types")
+    public String salesItemTypes() {
+        
+        try {
+            List<SalesItemType> entities = salesItemService.itemTypes();
+            
+            List<SalesItemTypeDto> dtoList = new ArrayList<>();
+            
+            if(entities != null && !entities.isEmpty()){
+                
+                entities.forEach( e -> dtoList.add(new SalesItemTypeDto(e.getGuid(), e.getName())));
+            }
+            
+            this.setResponseSuccess(dtoList);
+            
+        } catch (Exception ex) {
+            
+            setResponseError("System error failed to get the sales item type list - " + ex.getMessage());
+            
+            Logger.getLogger(LookupResourceService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return this.getResponseJson();
     }
 }

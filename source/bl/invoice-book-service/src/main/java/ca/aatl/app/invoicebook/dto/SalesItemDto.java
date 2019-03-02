@@ -84,7 +84,7 @@ public class SalesItemDto {
         this.description = description;
     }
 
-    private SalesItemTypeDto ItemType;
+    private SalesItemTypeDto itemType;
 
     /**
      * Get the value of ItemType
@@ -92,16 +92,16 @@ public class SalesItemDto {
      * @return the value of ItemType
      */
     public SalesItemTypeDto getItemType() {
-        return ItemType;
+        return itemType;
     }
 
     /**
      * Set the value of ItemType
      *
-     * @param ItemType new value of ItemType
+     * @param itemType new value of ItemType
      */
-    public void setItemType(SalesItemTypeDto ItemType) {
-        this.ItemType = ItemType;
+    public void setItemType(SalesItemTypeDto itemType) {
+        this.itemType = itemType;
     }
 
     private double rate;

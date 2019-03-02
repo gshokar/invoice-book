@@ -12,6 +12,7 @@ package ca.aatl.app.invoicebook.bl.ejb;
 
 import ca.aatl.app.invoicebook.data.jpa.dao.SalesItemDao;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemType;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -35,6 +36,10 @@ public class SalesItemService {
 
     public SalesItem find(String code) throws Exception{
         return dao.find(code);
+    }
+
+    public List<SalesItemType> itemTypes() throws Exception{
+        return dao.itemTypes();
     }
     
 }
