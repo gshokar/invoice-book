@@ -1,0 +1,56 @@
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+            <h1 id="panelTitle" class="h5">Invoice Search</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group mr-2 invoice-search-action-btn-group">
+                    <button class="btn btn-sm btn-outline-light" data-action="find">Find</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="open">Open</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="new">New</button>
+                    <button class="btn btn-sm btn-outline-light" data-action="clear">Clear</button>
+                </div>
+            </div>
+        </div>
+        <div id="invoiceSearchErrors" class="alert alert-danger" role="alert" hidden>
+
+        </div>
+        <form>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="client">Client</label>
+                    <select id="client" class="form-control">
+                        <option selected>Choose...</option>
+                        <option>...</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="date">Invoice Date</label>
+                    <input type="text" class="form-control" id="date" data-provide="datepicker">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="number">Invoice Number</label>
+                    <input type="text" class="form-control " id="number">
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive" id="invoiceSearchRecords">
+            <table class="table table-striped table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 5%">#</th>
+                        <th scope="col" style="width: 10%">Number</th>
+                        <th scope="col" style="width: 15%">Date</th>
+                        <th scope="col" style="width: 25%">Client</th>
+                        <th scope="col" style="width: 15%">Amount</th>
+                        <th scope="col" style="width: 15%">Tax</th>
+                        <th scope="col" style="width: 15%">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

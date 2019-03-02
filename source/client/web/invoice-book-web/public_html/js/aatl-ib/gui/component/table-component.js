@@ -119,6 +119,10 @@ $aatl_ib.gui.TableComponent = (function () {
             
             $aatl_ib.gui.replaceIcons();
         };
+        
+        this.updateElementId = function (element) {
+            return component.updateElementId(element);
+        };
     }
     
     return TableComponent;

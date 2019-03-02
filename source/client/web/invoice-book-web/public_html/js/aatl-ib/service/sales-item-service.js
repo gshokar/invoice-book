@@ -14,6 +14,7 @@
 
 $aatl_ib.SalesItemService = {
 
+    itemTypeList: [],
     serviceItems: function (callback) {
         $aatl_ib.ApiService.get("sales-item/service-items",
                 {},
@@ -29,5 +30,27 @@ $aatl_ib.SalesItemService = {
                         callback([], "Invalid response from server")
                     }
                 });
+    },
+       itemTypes: function (callback) {
+
+        if ($aatl_ib.SalesItemService.itemTypeList.length > 0) {
+            callback($aatl_ib.SalesItemService.itemTypeList);
+        } else {
+            $aatl_ib.ApiService.get("sales-item/item-types",
+                    {},
+                    function (res, err) {
+                        if (err) {
+                            callback([], "Item types list request failed: " + err);
+
+                        } else if (res.status === "failure") {
+                            callback([], res.message);
+                        } else if (res.status === "success") {
+                            $aatl_ib.SalesItemService.itemTypeList = JSON.parse(res.data);
+                            callback($aatl_ib.SalesItemService.itemTypeList);
+                        } else {
+                            callback([], "Invalid response from server");
+                        }
+                    });
+        }
     }
 };

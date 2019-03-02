@@ -47,6 +47,8 @@ $aatl_ib.gui.ActionItemTypeCode = {
     EmployeeDetail: 'employeeDetail',
     TimeCodes: "timeCodes",
     TimeSheet: "timeSheet",
+    InvoiceSearch: "invoiceSearch",
+    InvoiceDetail: "invoiceDetail",
     Save: 'save',
     Open: 'open',
     Close: 'close',
@@ -63,11 +65,15 @@ $aatl_ib.gui.ActionItemIcon = {
     EmployeeDetail: 'user',
     TimeCodes: "code",
     Save: 'save',
+    InvoiceDetail: "dollar-sign",
     getIcon: function (actionItemTypeCode) {
 
         let icon = undefined;
 
         switch (actionItemTypeCode) {
+            case $aatl_ib.gui.ActionItemTypeCode.InvoiceDetail:
+                icon = $aatl_ib.gui.ActionItemIcon.InvoiceDetail;
+                break;
             case $aatl_ib.gui.ActionItemTypeCode.ClientDetail:
                 icon = $aatl_ib.gui.ActionItemIcon.ClientDetail;
                 break;

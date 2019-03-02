@@ -62,6 +62,12 @@ $aatl_ib.MainController = (function () {
                     case $aatl_ib.gui.ActionItemTypeCode.TimeSheet:
                         controlId = openTimeSheet(actionItem);
                         break;
+                    case $aatl_ib.gui.ActionItemTypeCode.InvoiceSearch:
+                        controlId = openInvoiceSearch(actionItem);
+                        break;
+                    case $aatl_ib.gui.ActionItemTypeCode.InvoiceDetail:
+                        controlId = openInvoiceDetail(actionItem);
+                        break;
                 }
 
                 if (controlId) {
@@ -178,7 +184,7 @@ $aatl_ib.MainController = (function () {
 
             return panel.controlId;
         }
-        
+
         function openTimeSheet(actionItem) {
 
             let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.TimeSheet, actionItem);
@@ -190,6 +196,32 @@ $aatl_ib.MainController = (function () {
             return panel.controlId;
         }
 
+        function openInvoiceSearch(actionItem) {
+
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.InvoiceSearch, actionItem);
+
+            panel.controller = new $aatl_ib.gui.InvoiceSearchController(panel.controlId, component.getCenterView());
+
+            panel.controller.init();
+
+            return panel.controlId;
+        }
+        
+        function openInvoiceDetail(actionItem) {
+
+            actionItem.icon = "dollar-sign";
+
+            let panel = createPanel($aatl_ib.model.gui.PanelTypeCode.Invoice, actionItem);
+
+            panel.controller = new $aatl_ib.gui.InvoiceDetailController(panel.controlId, component.getCenterView());
+            panel.controller.setTitle(actionItem.text);
+            panel.controller.setInvoiceNumber(actionItem.data);
+
+            panel.controller.init();
+
+            return panel.controlId;
+        }
+        
         this.init = function () {
 
             component.init();

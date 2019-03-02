@@ -34,7 +34,7 @@ $aatl_ib.LookupService = {
                             $aatl_ib.LookupService.provinces = JSON.parse(res.data);
                             callback($aatl_ib.LookupService.provinces);
                         } else {
-                            callback([], "Invalid response from server")
+                            callback([], "Invalid response from server");
                         }
                     });
 
@@ -43,21 +43,5 @@ $aatl_ib.LookupService = {
 
             callback($aatl_ib.LookupService.provinces);
         }
-    },
-    companyServices: function (callback) {
-        $aatl_ib.ApiService.get("lookups/company-services",
-                {},
-                function (res, err) {
-                    if (err) {
-                        callback([], "Company services list request failed: " + err);
-
-                    } else if (res.status === "failure") {
-                        callback([], res.message);
-                    } else if (res.status === "success") {
-                        callback(JSON.parse(res.data));
-                    } else {
-                        callback([], "Invalid response from server")
-                    }
-                });
     }
 };

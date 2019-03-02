@@ -5,15 +5,18 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2019-Jan-25  GShokar         Created
+ * 2019-Feb-21  GShokar         Created
  * =============================================================================
  */
 "use strict";
 
-$aatl_ib.gui.TimeSheetController = (function () {
-    function TimeSheetController(componentId, parentComponent) {
+$aatl_ib.gui.InvoiceDetailController = (function () {
+    function InvoiceDetailController(componentId, parentComponent) {
 
-        var component = new $aatl_ib.gui.TimeSheetComponent({componentId: componentId, parentComponent: parentComponent});
+        let invoiceNumber = "";
+        let title = "";
+        
+        var component = new $aatl_ib.gui.InvoiceDetailComponent({componentId: componentId, parentComponent: parentComponent});
 
         function onActionButtonClicked(action) {
 
@@ -21,38 +24,26 @@ $aatl_ib.gui.TimeSheetController = (function () {
                 case "save":
                     saveData();
                     break;
-                case "add":
-                    component.addTimeEntry();
+                case "addItem":
+                    component.addItem();
                     break;
                 case "cancel":
-                    component.cancelTimeEntryEdit();
+                    component.cancelItemEdit();
                     break;
                 case "print":
-                    printTimeSheet();;
+                    printInvoice();;
                     break;
             }
         }
 
         function afterInit() {
-//            $aatl_ib.TimeEntryService.list(function (list, err) {
-//                if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
-//                    component.showError(err);
-//                } else {
-//                    component.setTimeEntries(list);
-//                }
-//            });
-        }
 
-        function crteriaChanged(criteria) {
-            $aatl_ib.TimeEntryService.find(criteria, function (list, err) {
-                if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
-                    component.showError(err);
-                } else {
-                    component.setTimeEntries(list);
-                }
-            });
-        }
+            component.setTitle(title);
 
+            //$aatl_ib.InvoiceService.get(invoiceNumber, component.setInvoice);
+
+        }
+   
         function beforeSave(data) {
 
             let value = true;
@@ -61,12 +52,12 @@ $aatl_ib.gui.TimeSheetController = (function () {
 
             return value;
         }
-        function afterSave(timeEntry, err) {
+        function afterSave(invoiceItem, err) {
 
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
             } else {
-                component.afterSaved(timeEntry);
+                component.afterSaved(invoiceItem);
 
             }
 
@@ -80,26 +71,6 @@ $aatl_ib.gui.TimeSheetController = (function () {
                 $aatl_ib.TimeEntryService.save(timeEntry, afterSave);
             }
 
-        }
-
-
-        function loadEmployeeDropdownOptions(dropdownControl) {
-
-            $aatl_ib.EmployeeService.list(function (employees, err) {
-
-                if (err !== undefined && err !== null) {
-                    component.showError();
-                } else {
-                    let options = [{code: "", name: ""}];
-
-                    employees.forEach((employee) => {
-                        options.push({code: employee.number, name: employee.name});
-                    });
-
-                    $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
-
-                }
-            });
         }
 
         function loadClientDropdownOptions(clientControl) {
@@ -120,26 +91,25 @@ $aatl_ib.gui.TimeSheetController = (function () {
                 }
             });
         }
-        function loadTimeCodeDropdownOptions(dropdownControl, clientNumber) {
-
-            $aatl_ib.TimeCodeService.find({clientNumber: clientNumber}, function (timeCodes, err) {
+       
+       function loadItemTypeDropdownOptions(control){
+           $aatl_ib.SalesItemService.itemTypes(function (optionList, err) {
 
                 if (err !== undefined && err !== null) {
                     component.showError();
                 } else {
-                    let options = [{code: "", name: ""}];
+                    let options = [];
 
-                    timeCodes.forEach((timeCode) => {
-                        options.push({code: timeCode.uid, name: timeCode.name});
+                    optionList.forEach((option) => {
+                        options.push({code: option.number, name: option.name});
                     });
 
-                    $aatl_ib.utils.addDropdownOptions(dropdownControl, options);
-
-                    component.selectTimeCode();
+                    $aatl_ib.utils.addDropdownOptions(control, options);
+                    
+                    component.selectItemType();
                 }
             });
-        }
-
+       }
         function afterPrint(pdf, err){
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
@@ -165,11 +135,9 @@ $aatl_ib.gui.TimeSheetController = (function () {
         }
         
         this.init = function () {
-            component.registerLoadEmployeeOptions(loadEmployeeDropdownOptions);
             component.registerLoadClientOptions(loadClientDropdownOptions);
             component.registerOnActionButtonClicked(onActionButtonClicked);
-            component.registerLoadTimeCodeOptions(loadTimeCodeDropdownOptions);
-            component.registerOnCriteriaChanged(crteriaChanged);
+            component.registerLoadItemTypeOptions(loadItemTypeDropdownOptions)
             component.setAfterInit(afterInit);
             component.init();
         };
@@ -177,7 +145,15 @@ $aatl_ib.gui.TimeSheetController = (function () {
         this.getComponent = function () {
             return component;
         };
+        
+        this.setTitle = function (value) {
+            title = value;
+        };
+
+        this.setInvoiceNumber = function (number) {
+            invoiceNumber = number;
+        };
     }
 
-    return TimeSheetController;
+    return InvoiceDetailController;
 }());
