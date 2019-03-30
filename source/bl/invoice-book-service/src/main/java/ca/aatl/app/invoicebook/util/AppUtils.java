@@ -12,6 +12,7 @@ package ca.aatl.app.invoicebook.util;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -20,40 +21,52 @@ import java.util.UUID;
  * @author GShokar
  */
 public final class AppUtils {
-    
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-    
-    public static String getGUID(){
+
+    public final static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public final static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    private static Date minimumDate = null;
+
+    public static Date getMinimumDate() {
+
+        if (minimumDate == null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(1900, 0, 1, 0, 0, 0);
+            minimumDate = calendar.getTime();
+        }
+        
+        return minimumDate;
+    }
+
+    public static String getGUID() {
         return UUID.randomUUID().toString().toUpperCase();
     }
-    
-    public static Date currentDate(){
-        
+
+    public static Date currentDate() {
+
         return java.sql.Date.valueOf(LocalDate.now());
     }
-    
-    public static boolean isNullOrEmpty(String value){
+
+    public static boolean isNullOrEmpty(String value) {
         return value == null || value.trim().length() == 0;
     }
-    
-    public static String dateToString(Date date){
+
+    public static String dateToString(Date date) {
         String value = null;
-        
-        if(date != null){
+
+        if (date != null) {
             value = dateFormat.format(date);
         }
-        
+
         return value;
     }
-    
-    public static String timeToString(Date date){
+
+    public static String timeToString(Date date) {
         String value = null;
-        
-        if(date != null){
+
+        if (date != null) {
             value = timeFormat.format(date);
         }
-        
+
         return value;
     }
 }

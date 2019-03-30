@@ -15,6 +15,14 @@ package ca.aatl.app.invoicebook.dto;
  * @author GShokar
  */
 public class ItemUnitDto {
+
+    public ItemUnitDto() {
+    }
+
+    public ItemUnitDto(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
     
     private String code;
 

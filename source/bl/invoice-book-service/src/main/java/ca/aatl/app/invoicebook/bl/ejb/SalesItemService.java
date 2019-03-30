@@ -41,5 +41,9 @@ public class SalesItemService {
     public List<SalesItemType> itemTypes() throws Exception{
         return dao.itemTypes();
     }
+
+    public List<SalesItem> itemsByItemType(String itemTypeName) throws Exception{
+        return dao.listByItemType(itemTypeName);
+    }
     
 }

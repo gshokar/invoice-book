@@ -18,6 +18,8 @@ import ca.aatl.app.invoicebook.data.jpa.entity.Company;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry;
 import ca.aatl.app.invoicebook.dto.AddressDto;
@@ -26,11 +28,15 @@ import ca.aatl.app.invoicebook.dto.ClientLocationDto;
 import ca.aatl.app.invoicebook.dto.CompanyDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
+import ca.aatl.app.invoicebook.dto.InvoiceItemDto;
+import ca.aatl.app.invoicebook.dto.ItemUnitDto;
 import ca.aatl.app.invoicebook.dto.SalesItemDto;
+import ca.aatl.app.invoicebook.dto.SalesItemTypeDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.dto.TimeEntryDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -253,7 +259,7 @@ public class MappingService {
             dto.setClient(new ClientDto());
             dto.setClientLocation(new ClientLocationDto());
             dto.setServiceItem(new SalesItemDto("", ""));
-            
+
             if (timeCode.getClient() != null) {
 
                 dto.getClient().setName(timeCode.getClient().getName());
@@ -271,7 +277,7 @@ public class MappingService {
                 dto.getClientLocation().setNumber("");
                 dto.getClientLocation().setName("");
             }
-            
+
             if (timeCode.getServiceItem() != null) {
 
                 dto.getServiceItem().setName(timeCode.getServiceItem().getName());
@@ -282,10 +288,10 @@ public class MappingService {
 
     public void updateTimeEntry(TimeEntry entity, TimeEntryDto dto) {
         if (dto != null && entity != null) {
-            
+
             entity.setApproved(dto.isApproved());
             entity.setCharged(dto.isCharged());
-            
+
             if (!AppUtils.isNullOrEmpty(dto.getDate())) {
                 try {
                     entity.setDate(AppUtils.dateFormat.parse(dto.getDate()));
@@ -324,12 +330,12 @@ public class MappingService {
             dto.setUid(entity.getGuid());
             dto.setApproved(entity.isApproved());
             dto.setCharged(entity.isCharged());
-            
+
             if (entity.getEmployee() != null) {
                 dto.getEmployee().setNumber(entity.getEmployee().getNumber());
                 dto.getEmployee().setName(entity.getEmployee().getName());
             }
-            
+
             if (entity.getTimeCode() != null) {
                 dto.getTimeCode().setUid(entity.getTimeCode().getGuid());
                 dto.getTimeCode().setName(entity.getTimeCode().getName());
@@ -338,12 +344,12 @@ public class MappingService {
     }
 
     public void updateCompanyDto(CompanyDto dto, Company entity) {
-         if (entity != null && dto != null) {
+        if (entity != null && dto != null) {
 
             dto.setName(entity.getName());
             dto.setNumber(entity.getNumber());
             dto.setTaxRegNumber(entity.getTaxRegNumber() == null ? "" : entity.getTaxRegNumber());
-            
+
             if (entity.hasAddress()) {
 
                 updateAddressDto(dto.getAddress(), entity.primaryAddress().getAddress());
@@ -355,5 +361,27 @@ public class MappingService {
                 updateContactDto(dto.getContact(), entity.primaryContact().getContact());
             }
         }
+    }
+
+    public void updateSalesItemDto(SalesItemDto dto, SalesItem entity) {
+        dto.setCode(entity.getCode());
+        dto.setDescription(entity.getDescription());
+        dto.setName(entity.getName());
+        dto.setRate(entity.getRate().doubleValue());
+
+        if (entity.getItemType() != null) {
+            dto.setItemType(new SalesItemTypeDto(entity.getItemType().getGuid(), entity.getItemType().getName()));
+        }
+
+        if (entity.getUnit() != null) {
+            dto.setUnit(new ItemUnitDto(entity.getUnit().getGuid(), entity.getUnit().getName()));
+        }
+    }
+
+    public void updateInvoiceItem(SalesInvoiceItem entity, InvoiceItemDto dto) {
+        entity.setDescription(dto.getDescription());
+        entity.setLineNumber(dto.getLineNumber());
+        entity.setQuantity(BigDecimal.valueOf(dto.getQuantity()));
+        entity.setRate(BigDecimal.valueOf(dto.getRate()));
     }
 }

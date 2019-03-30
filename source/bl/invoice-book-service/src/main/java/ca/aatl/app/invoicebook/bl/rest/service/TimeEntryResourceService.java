@@ -110,15 +110,15 @@ public class TimeEntryResourceService extends ResponseService {
 
         } catch (JsonSyntaxException ex) {
 
-            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid client data - " + ex.getMessage());
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid timeEntry data - " + ex.getMessage());
 
-            Logger.getLogger(TimeEntryResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto Json for update", ex);
+            Logger.getLogger(TimeEntryResourceService.class.getName()).log(Level.INFO, "Invalid TimeEntryDto Json for update", ex);
 
         } catch (DataValidationException ex) {
 
             setResponseError(ErrorResponse.CODE_BAD_REQUEST, ex.getValidationMessage());
 
-            Logger.getLogger(TimeEntryResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto data for update", ex);
+            Logger.getLogger(TimeEntryResourceService.class.getName()).log(Level.INFO, "Invalid TimeEntryDto data for update", ex);
 
         } catch (Exception ex) {
 
