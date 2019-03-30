@@ -164,17 +164,17 @@ $aatl_ib.utils = {
 
             if (!isNaN(hours) && !isNaN(mintues)) {
                 timeVal = new Date();
-                
+
                 timeVal.setHours(parseInt(hours));
                 timeVal.setMinutes(parseInt(mintues));
                 timeVal.setSeconds(0);
-                
+
                 if (time.length === 8) {
                     let seconds = time.slice(6, 8);
-                    
-                    if (!isNaN(seconds)){
+
+                    if (!isNaN(seconds)) {
                         timeVal.setSeconds(parseInt(seconds));
-                    }else{
+                    } else {
                         timeVal = undefined;
                     }
                 }
@@ -202,11 +202,11 @@ $aatl_ib.utils = {
         if (displayTime instanceof Date) {
             let marker = "AM";
             let hours = displayTime.getHours();
-            
-            if(hours > 11){
+
+            if (hours > 11) {
                 marker = 'PM';
-                
-                if(hours > 12){
+
+                if (hours > 12) {
                     hours = hours - 12;
                 }
             }
@@ -215,5 +215,11 @@ $aatl_ib.utils = {
                     + marker;
         }
         return displayVal;
+    },
+    isDate: function (value) {
+
+        let dateValue = $aatl_ib.utils.parseDate(value);
+
+        return dateValue instanceof Date;
     }
 };

@@ -15,7 +15,7 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
 
         let invoiceNumber = "";
         let title = "";
-        
+
         var component = new $aatl_ib.gui.InvoiceDetailComponent({componentId: componentId, parentComponent: parentComponent});
 
         function onActionButtonClicked(action) {
@@ -27,11 +27,18 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                 case "addItem":
                     component.addItem();
                     break;
+                case "editItem":
+                    component.editItem();
+                    break;
+                case "updateItem":
+                    component.updateItem();
+                    break;
                 case "cancel":
                     component.cancelItemEdit();
                     break;
                 case "print":
-                    printInvoice();;
+                    printInvoice();
+                    ;
                     break;
             }
         }
@@ -40,10 +47,10 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
 
             component.setTitle(title);
 
-            //$aatl_ib.InvoiceService.get(invoiceNumber, component.setInvoice);
+            $aatl_ib.InvoiceService.get(invoiceNumber, component.setInvoice);
 
         }
-   
+
         function beforeSave(data) {
 
             let value = true;
@@ -52,23 +59,21 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
 
             return value;
         }
-        function afterSave(invoiceItem, err) {
+        function afterSave(invoice, err) {
 
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
             } else {
-                component.afterSaved(invoiceItem);
-
+                component.setInvoice(invoice);
             }
-
         }
 
         function saveData() {
 
-            let timeEntry = component.getEditTimeEntry();
+            let invoice = component.getEditInvoice();
 
-            if (beforeSave(timeEntry)) {
-                $aatl_ib.TimeEntryService.save(timeEntry, afterSave);
+            if (beforeSave(invoice)) {
+                $aatl_ib.InvoiceService.save(invoice, afterSave);
             }
 
         }
@@ -78,7 +83,7 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
             $aatl_ib.ClientService.list(function (clients, err) {
 
                 if (err !== undefined && err !== null) {
-                    component.showError();
+                    component.showError(err);
                 } else {
                     let options = [{code: "", name: ""}];
 
@@ -91,34 +96,54 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                 }
             });
         }
-       
-       function loadItemTypeDropdownOptions(control){
-           $aatl_ib.SalesItemService.itemTypes(function (optionList, err) {
+
+        function loadItemTypeDropdownOptions(control) {
+            $aatl_ib.SalesItemService.itemTypes(function (optionList, err) {
 
                 if (err !== undefined && err !== null) {
-                    component.showError();
+                    component.showError(err);
                 } else {
                     let options = [];
 
                     optionList.forEach((option) => {
-                        options.push({code: option.number, name: option.name});
+                        options.push({code: option.name, name: option.name});
                     });
 
                     $aatl_ib.utils.addDropdownOptions(control, options);
-                    
+
                     component.selectItemType();
                 }
             });
-       }
-        function afterPrint(pdf, err){
+        }
+
+        function loadItemDropdownOptions(control, itemType) {
+            $aatl_ib.SalesItemService.itemsByItemType(itemType, function (optionList, err) {
+
+                if (err !== undefined && err !== null) {
+                    component.showError(err);
+                } else {
+                    let options = [{code: "", name: ""}];
+
+                    optionList.forEach((option) => {
+                        options.push({code: option.code, name: option.name});
+                    });
+
+                    $aatl_ib.utils.addDropdownOptions(control, options);
+
+                    component.setSalesItems(optionList);
+                    component.selectItem();
+                }
+            });
+        }
+        function afterPrint(pdf, err) {
             if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                 component.showError(err);
             } else {
-                
+
                 let byteCharacters = window.atob(pdf);
                 let byteNumbers = new Array(byteCharacters.length);
-                
-                for(var i = 0; i < byteCharacters.length; i++){
+
+                for (var i = 0; i < byteCharacters.length; i++) {
                     byteNumbers[i] = byteCharacters.charCodeAt(i);
                 }
 
@@ -129,15 +154,35 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                 //window.navigator.msSaveOrOpenBlob(blob, "print-timesheet.pdf");
             }
         }
-        
-        function printTimeSheet(){
+
+        function printTimeSheet() {
             $aatl_ib.TimeSheetService.print(component.getCriteria(), afterPrint);
         }
-        
+
+        function onValueChanged(evt) {
+
+            let $element = $(evt.target);
+
+            if (component.isItemTypeControl($element)) {
+
+                let itemControl = component.getItemControl();
+
+                loadItemDropdownOptions(itemControl, $element.val());
+
+            } else if (component.isItemControl($element)) {
+                component.itemChanged($element.val());
+            } else if (component.isCalcAmount($element)) {
+                component.calcAmount();
+            }
+
+            // set save enabled
+            component.setSaveEnabled(true);
+        }
         this.init = function () {
             component.registerLoadClientOptions(loadClientDropdownOptions);
             component.registerOnActionButtonClicked(onActionButtonClicked);
-            component.registerLoadItemTypeOptions(loadItemTypeDropdownOptions)
+            component.registerLoadItemTypeOptions(loadItemTypeDropdownOptions);
+            component.registerOnFieldValueChanged(onValueChanged);
             component.setAfterInit(afterInit);
             component.init();
         };
@@ -145,7 +190,7 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
         this.getComponent = function () {
             return component;
         };
-        
+
         this.setTitle = function (value) {
             title = value;
         };

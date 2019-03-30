@@ -18,8 +18,8 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
         let afterInit = null;
         let isDataLoading = false;
         let loadClientOptions = undefined;
-        let items = [];
         let changedItems = [];
+        let invoice = undefined;
 
         let component = new $aatl_ib.gui.Component(props);
         let errorComponent = new $aatl_ib.ErrorComponent({componentId: "invoiceErrors", parentComponent: component.getControl});
@@ -52,15 +52,15 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
         function onFieldValueChanged(evt) {
             let id = $(evt.target).attr('id');
-            
-            switch(id){
+
+            switch (id) {
                 case clientField.getId():
                     let client = getClientField().val();
-                    
+
                     setButtonActionEnabled("addItem", client.length > 0);
                     break;
             }
-            
+
             if (isDataLoading === false) {
                 setModified(true);
             }
@@ -143,7 +143,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
         function getNextLineNumber() {
             let lineNumber = 1;
 
-            items.forEach(function (item) {
+            invoice.items.forEach(function (item) {
                 if (item.lineNumber >= lineNumber) {
                     lineNumber = item.lineNumber + 1;
                 }
@@ -173,7 +173,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
             if (itemRowEdit.getEditMode() === false) {
 
-                let item = items.find(function (i) {
+                let item = invoice.items.find(function (i) {
                     return i.lineNumber === keyValue;
                 });
 
@@ -186,9 +186,78 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
                         //setElementsEnabled(false);
 
                         //setButtonActionEnabled("save", false);
+                        setButtonActionEnabled("addItem", false);
+                        setButtonActionEnabled("updateItem", false);
+                        setButtonActionEnabled("editItem", false);
+                        setButtonActionEnabled("cancel", true);
+                        setButtonActionEnabled("print", false);
                     }
                 }
             }
+        }
+
+        function setItemTableRows() {
+            let rows = [];
+
+            for (var i = 0; i < invoice.items.length; i++) {
+
+                rows.push(getTableRowData(invoice.items[i], i));
+
+            }
+
+            itemTable.addRows(rows);
+        }
+        function setInvoiceItems() {
+            itemTable.clearRows();
+            setItemTableRows();
+        }
+        function onInvoiceChanged() {
+
+            setModified(false);
+
+            isDataLoading = true;
+
+            if (invoice === null || invoice === undefined) {
+                getNumberField().val("");
+                getDateField().val("");
+                getClientField().val("");
+
+
+            } else {
+                getNumberField().val(invoice.number);
+                getDateField().val(invoice.date);
+                getClientField().val(invoice.client.number);
+            }
+
+            setInvoiceItems();
+
+            isDataLoading = false;
+        }
+
+        function removeEditRow(keyValue) {
+
+            let index = invoice.items.findIndex(function (tc) {
+                return tc.lineNumber === keyValue;
+            });
+
+            if (index >= 0) {
+                invoice.items.splice(index, 1);
+                itemTable.getRowControl(keyValue).remove();
+            }
+        }
+
+        function resetTableRow(keyValue) {
+
+            let index = invoice.items.findIndex(function (tc) {
+                return tc.uid === keyValue;
+            });
+
+            let item = invoice.items[index];
+
+            let rowData = getTableRowData(item, index);
+
+            itemTable.replaceRow(keyValue, rowData);
+
         }
 
         this.init = function () {
@@ -212,11 +281,11 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
             loadClientOptions = loadOptions;
         };
-        
-        this.registerLoadItemTypeOptions = function(loadOptions){
+
+        this.registerLoadItemTypeOptions = function (loadOptions) {
             itemRowEdit.registerLoadItemTypeOptions(loadOptions);
         };
-        
+
         this.addItem = function () {
             let item = {
                 lineNumber: getNextLineNumber(),
@@ -236,18 +305,129 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
                 }
             };
 
-            items.push(item);
+            invoice.items.push(item);
             changedItems.push(item);
 
-            let rowData = getTableRowData(item, items.length - 1);
+            let rowData = getTableRowData(item, invoice.items.length - 1);
 
             itemTable.addRow(rowData);
 
             onItemTableRowDoubleClicked(item.lineNumber);
         };
-        
-        this.selectItemType = function(){
+
+        this.editItem = function () {
+
+        };
+
+        this.updateItem = function () {
+
+        };
+
+        this.selectItemType = function () {
             itemRowEdit.selectItemType();
+        };
+
+        this.selectItem = function () {
+            itemRowEdit.selectItem();
+        };
+
+        this.registerOnFieldValueChanged = function (valueChanged) {
+            itemRowEdit.registerOnFieldValueChanged(valueChanged);
+        };
+
+        this.isItemTypeControl = function (control) {
+            return itemRowEdit.isItemTypeControl(control);
+        };
+
+        this.isItemControl = function (control) {
+            return itemRowEdit.isItemControl(control);
+        };
+
+        this.getItemControl = function () {
+            return itemRowEdit.getItemControl();
+        };
+
+        this.setSaveEnabled = function (value) {
+
+        };
+
+        this.setSalesItems = function (list) {
+            itemRowEdit.setSalesItems(list);
+        };
+
+        this.itemChanged = function (value) {
+            itemRowEdit.itemChanged(value);
+        };
+
+        this.showError = function (err) {
+            errorComponent.show(err.messages);
+        };
+
+        this.isCalcAmount = function (control) {
+            return itemRowEdit.isCalcAmount(control);
+        };
+
+        this.calcAmount = function () {
+            itemRowEdit.calcAmount();
+        };
+
+        this.setInvoice = function (value) {
+            invoice = value;
+
+            onInvoiceChanged();
+        };
+
+        this.getEditInvoice = function () {
+            let editInvoice = {
+                client: {
+                    number: "",
+                    name: ""
+                },
+                items: []
+            };
+
+            editInvoice.number = invoice.number;
+
+            let date = getDateField().datepicker('getDate');
+
+            if (date instanceof Date) {
+                // this will be yyyy-MM-dd
+                editInvoice.date = date.toISOString().slice(0, 10);
+            } else {
+                editInvoice.date = "";
+            }
+
+            editInvoice.client.number = getClientField().val();
+
+            let editItem = itemRowEdit.getItem();
+
+            if (editItem && editItem.lineNumber) {
+                editInvoice.items.push(editItem);
+            }
+            
+            return editInvoice;
+        };
+
+        this.cancelItemEdit = function () {
+
+            let editItem = itemRowEdit.getItem();
+
+            if ($aatl_ib.utils.isStringEmpty(editItem.uid)) {
+
+                removeEditRow(editItem.lineNumber);
+            } else {
+                resetTableRow(editItem.uid);
+            }
+
+            itemRowEdit.reset();
+
+            setButtonActionEnabled("addItem", true);
+
+            errorComponent.hide();
+        };
+
+        this.hideError = function () {
+            errorComponent.hide();
         };
     }
 

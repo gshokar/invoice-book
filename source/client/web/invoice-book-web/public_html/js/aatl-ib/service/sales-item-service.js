@@ -31,6 +31,22 @@ $aatl_ib.SalesItemService = {
                     }
                 });
     },
+    itemsByItemType: function (itemType, callback) {
+        $aatl_ib.ApiService.get("sales-item/items-by-item-type",
+                {itemType: itemType},
+                function (res, err) {
+                    if (err) {
+                        callback([], {messages: ["Item list by item type request failed: " + err]});
+
+                    } else if (res.status === "failure") {
+                        callback([], res.message);
+                    } else if (res.status === "success") {
+                        callback(JSON.parse(res.data));
+                    } else {
+                        callback([], "Invalid response from server")
+                    }
+                });
+    },
        itemTypes: function (callback) {
 
         if ($aatl_ib.SalesItemService.itemTypeList.length > 0) {
