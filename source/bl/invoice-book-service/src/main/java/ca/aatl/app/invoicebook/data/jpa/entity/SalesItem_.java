@@ -24,4 +24,5 @@ public class SalesItem_ extends BaseEntity_{
     public static volatile SingularAttribute<SalesItem, SalesItemType> itemType;
     public static volatile SingularAttribute<SalesItem, String> name;
     public static volatile SingularAttribute<SalesItem, String> code;
+    public static volatile SingularAttribute<SalesItem, Integer> id;
 }

@@ -14,6 +14,7 @@ import ca.aatl.app.invoicebook.data.jpa.dao.SalesInvoiceDao;
 import ca.aatl.app.invoicebook.data.jpa.entity.ClientAddress;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoice;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItemTax;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
@@ -167,7 +168,30 @@ public class SalesInvoiceService {
            provinceId = address.getAddress().getProvince().getId();
         }
         
-        List<SalesItemTaxRate> taxRates = salesItemTaxRateService.list(sit.getId(), sit.getInvoice().getDate(), countryId, provinceId);
+        List<SalesItemTaxRate> taxRates = salesItemTaxRateService.list(sit.getSalesItem().getId(), sit.getInvoice().getDate(), countryId, provinceId);
+        
+        if(taxRates != null && !taxRates.isEmpty()){
+            
+            for(SalesItemTaxRate sitr : taxRates){
+                
+                if(!isSalesItemTaxRateContains(sit.getTaxes(),sitr)){
+                    sit.getTaxes().add(createSalesInvoiceItemTax(sit, sitr));
+                }
+            }
+        }
+    }
+
+    private boolean isSalesItemTaxRateContains(List<SalesInvoiceItemTax> taxes, SalesItemTaxRate sitr) {
+        boolean value = false;
+        
+        if(taxes != null && !taxes.isEmpty()){
+            value = taxes.stream().anyMatch( tr -> tr.getTaxRate().equals(sitr));
+        }
+        return value;
+    }
+
+    private SalesInvoiceItemTax createSalesInvoiceItemTax(SalesInvoiceItem sit, SalesItemTaxRate sitr) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
