@@ -23,8 +23,10 @@ import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
 import ca.aatl.app.invoicebook.data.service.MappingService;
 import ca.aatl.app.invoicebook.dto.ClientDto;
+import ca.aatl.app.invoicebook.dto.CompanyDto;
 import ca.aatl.app.invoicebook.dto.InvoiceDto;
 import ca.aatl.app.invoicebook.dto.InvoiceItemDto;
+import ca.aatl.app.invoicebook.dto.InvoiceStatusDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import com.google.gson.JsonSyntaxException;
@@ -39,9 +41,12 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -63,13 +68,91 @@ public class InvoiceResourceService extends ResponseService {
 
     @EJB
     ClientService clientService;
-    
+
     @EJB
     SalesItemService salesItemService;
-    
+
     @EJB
     MappingService mappingService;
-    
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/find")
+    @Authenticated
+    @ResourceResponseInitiated
+    //@RolesAllowed(AppSecurity.ROLE_ADMIN)
+    public String find(
+            @QueryParam("number") String number,
+            @QueryParam("date") String date,
+            @QueryParam("clientNumber") String clientNumber) {
+
+        try {
+
+            Date invoiceDate = null;
+
+            if (!AppUtils.isNullOrEmpty(date)) {
+
+                invoiceDate = AppUtils.parseDate(date);
+
+                if (invoiceDate == null) {
+                    throw new DataValidationException("Invalid invoice date in search criteria");
+                }
+            }
+
+            List<InvoiceDto> invoiceDtos = new ArrayList<>();
+
+            List<SalesInvoice> salesInvoices = salesInvoiceService.find(number, invoiceDate, clientNumber);
+
+            if (salesInvoices.isEmpty()) {
+                addWarningMessage("No invoice record found");
+            } else {
+
+                invoiceDtos = mappingService.invoiceDtos(salesInvoices);
+
+            }
+
+            setResponseSuccess(invoiceDtos);
+
+        } catch (DataValidationException ex) {
+
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid invoice search data - " + ex.getMessage());
+
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid ClientSearchDto Json", ex);
+        } catch (Exception ex) {
+
+            setResponseError("System error - " + ex.getMessage());
+
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.SEVERE, "System error InvoiceResourceService find", ex);
+        }
+
+        return getResponseJson();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/{number}")
+    @Authenticated
+    public String getInvoice(@PathParam("number") String number) {
+        try {
+
+            InvoiceDto dto = getInvoiceDto(number);
+
+            setResponseSuccess(dto);
+
+        } catch (DataValidationException dex) {
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, dex.getValidationMessage());
+        } catch (Exception ex) {
+
+            setResponseError("System error - " + ex.getMessage());
+
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.SEVERE, "System error ClientResponseService getClient", ex);
+        }
+
+        return getResponseJson();
+    }
+
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -99,23 +182,27 @@ public class InvoiceResourceService extends ResponseService {
             updateClient(invoice, dto.getClient());
             updateInvoiceDate(invoice, dto.getDate());
             updateItems(invoice, dto.getItems());
-            
+
             invoice.setLastUpdatedBy(getUserId(sc));
             invoice.setLastUpdatedDate(Calendar.getInstance().getTime());
-            
+
             salesInvoiceService.save(invoice);
-            
+
+            mappingService.updateSalesInvoiceDto(dto, invoice);
+
+            setResponseSuccess(dto);
+
         } catch (JsonSyntaxException ex) {
 
             setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid invoice data - " + ex.getMessage());
 
-            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto Json for update", ex);
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid InvoiceDto Json for update", ex);
 
         } catch (DataValidationException ex) {
 
             setResponseError(ErrorResponse.CODE_BAD_REQUEST, ex.getValidationMessage());
 
-            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid ClientDto data for update", ex);
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid InvoiceDto data for update", ex);
 
         } catch (Exception ex) {
 
@@ -131,15 +218,7 @@ public class InvoiceResourceService extends ResponseService {
         boolean isValid = true;
 
         StringBuilder sb = new StringBuilder();
-        Date invoiceDate = null;
-
-        if (!AppUtils.isNullOrEmpty(dto.getDate())) {
-            try {
-                invoiceDate = AppUtils.dateFormat.parse(dto.getDate());
-            } catch (ParseException ex) {
-
-            }
-        }
+        Date invoiceDate = AppUtils.parseDate(dto.getDate());
 
         if (invoiceDate == null) {
             isValid = false;
@@ -217,42 +296,89 @@ public class InvoiceResourceService extends ResponseService {
         }
     }
 
-    private void updateItems(SalesInvoice invoice, List<InvoiceItemDto> dtoInvoiceItems) throws Exception{
+    private void updateItems(SalesInvoice invoice, List<InvoiceItemDto> dtoInvoiceItems) throws Exception {
 
         if (dtoInvoiceItems != null && !dtoInvoiceItems.isEmpty()) {
 
             if (invoice.getItems() == null) {
                 invoice.setItems(new ArrayList<>());
             }
-            
-            for(InvoiceItemDto dtoItem : dtoInvoiceItems) {
+
+            for (InvoiceItemDto dtoItem : dtoInvoiceItems) {
                 updateInvoiceItem(invoice.getItems(), dtoItem);
+
+                invoice.getItems().forEach(i -> {
+                    if (i.getInvoice() == null) {
+                        i.setInvoice(invoice);
+                    }
+                });
             }
         }
     }
 
-    private void updateInvoiceItem(List<SalesInvoiceItem> items, InvoiceItemDto dtoItem) throws Exception{
-        if(dtoItem != null){
-            
-            if(AppUtils.isNullOrEmpty(dtoItem.getUid())){
-                
-                if(dtoItem.getSalesItem() != null && !AppUtils.isNullOrEmpty(dtoItem.getSalesItem().getCode())){
-                    
+    private void updateInvoiceItem(List<SalesInvoiceItem> items, InvoiceItemDto dtoItem) throws Exception {
+        if (dtoItem != null) {
+
+            SalesInvoiceItem invoiceItem = null;
+
+            if (AppUtils.isNullOrEmpty(dtoItem.getUid())) {
+
+                if (dtoItem.getSalesItem() != null && !AppUtils.isNullOrEmpty(dtoItem.getSalesItem().getCode())) {
+
                     SalesItem salesItem = salesItemService.find(dtoItem.getSalesItem().getCode());
-                    
-                    if(salesItem == null){
+
+                    if (salesItem == null) {
                         throw new DataValidationException("Invalid salse item selected, does not exists.");
                     }
-                    
-                    SalesInvoiceItem invoiceItem = new SalesInvoiceItem();
-                    
+
+                    invoiceItem = new SalesInvoiceItem();
+
                     invoiceItem.setSalesItem(salesItem);
-                    
-                    mappingService.updateInvoiceItem(invoiceItem, dtoItem);
-                    
+
                     items.add(invoiceItem);
                 }
+            } else {
+                invoiceItem = items.stream().filter(i -> i.getGuid().equals(dtoItem.getUid())).findFirst().orElse(null);
+            }
+
+            if (invoiceItem != null) {
+                mappingService.updateInvoiceItem(invoiceItem, dtoItem);
             }
         }
+    }
+
+    public InvoiceDto getInvoiceDto(String number) throws Exception {
+
+        InvoiceDto dto = newInvoiceDto();
+
+        if (number != null && !number.trim().isEmpty()) {
+
+            SalesInvoice salesInvoice = salesInvoiceService.find(number);
+
+            if (salesInvoice != null) {
+
+                mappingService.updateSalesInvoiceDto(dto, salesInvoice);
+
+            } else {
+                throw new DataValidationException("Invoice number " + number + " do not exists.");
+            }
+
+        } else {
+            throw new DataValidationException("Invalid invoiceS number");
+        }
+
+        return dto;
+    }
+
+    private InvoiceDto newInvoiceDto() {
+        InvoiceDto dto = new InvoiceDto();
+
+        dto.setClient(new ClientDto());
+        dto.setCompany(new CompanyDto());
+        dto.setItems(new ArrayList<>());
+        dto.setStatus(new InvoiceStatusDto());
+        dto.setTaxes(new ArrayList<>());
+
+        return dto;
     }
 }

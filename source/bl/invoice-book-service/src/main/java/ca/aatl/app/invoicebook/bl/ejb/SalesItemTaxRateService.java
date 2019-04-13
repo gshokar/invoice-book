@@ -11,6 +11,7 @@
 package ca.aatl.app.invoicebook.bl.ejb;
 
 import ca.aatl.app.invoicebook.data.jpa.dao.SalesItemTaxRateDao;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItemTax;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +32,7 @@ public class SalesItemTaxRateService {
     @EJB
     SalesItemTaxRateDao dao;
     
-    public List<SalesItemTaxRate> list(Integer salesItemId, Date date, Integer countryId, Integer provinceId) {
+    public List<SalesItemTaxRate> list(Integer salesItemId, Date date, Integer countryId, Integer provinceId) throws Exception{
         List<SalesItemTaxRate> taxRates = new ArrayList<>();
         
         List<SalesItemTaxRate> list = dao.list(salesItemId, date, countryId, provinceId);
@@ -66,6 +67,10 @@ public class SalesItemTaxRateService {
             }
         }
         return taxRates;
+    }
+
+    public void delete(SalesInvoiceItemTax entity) throws Exception{
+        dao.delete(entity);
     }
     
 }

@@ -195,7 +195,7 @@ $aatl_ib.gui.InvoiceItemRowEdit = (function () {
                     description: getDescriptionElementControl().val(),
                     quantity: getQuantityElementControl().val(),
                     rate: getRateElementControl().val(),
-                    amount: getAmountElementControl(),
+                    amount: getAmountElementControl().val(),
                     taxAmount: 0.00,
                     totalAmount: 0.00,
                     taxes: [],
@@ -248,13 +248,13 @@ $aatl_ib.gui.InvoiceItemRowEdit = (function () {
 
             if (item.salesItem
                     && item.salesItem.itemType
-                    && item.salesItem.itemType.uid
-                    && item.salesItem.itemType.uid.length > 0) {
+                    && item.salesItem.itemType.name
+                    && item.salesItem.itemType.name.length > 0) {
 
-                $itemTypeField.val(item.salesItem.itemType.uid);
+                $itemTypeField.val(item.salesItem.itemType.name);
             }
 
-            $itemTypeField.change();
+            $itemTypeField.trigger('change');
         };
 
         this.selectItem = function () {
@@ -271,7 +271,7 @@ $aatl_ib.gui.InvoiceItemRowEdit = (function () {
                 $itemField.val("");
             }
 
-            $itemField.change();
+            $itemField.trigger('change');
         };
 
         this.isItemTypeControl = function (control) {

@@ -83,6 +83,9 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
                 onActionButtonClicked(action);
             });
+
+            itemTable.setOnRowDoubleClicked(onItemTableRowDoubleClicked);
+            //itemRowEdit.registerOnFieldValueChanged(onFieldValueChanged);
         }
 
         function updateElementIds(html) {
@@ -106,10 +109,6 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
             bindEvents();
 
-            if (afterInit !== null && typeof afterInit === "function") {
-                afterInit();
-            }
-
             if (typeof loadClientOptions === 'function') {
                 loadClientOptions(getClientField());
             }
@@ -118,6 +117,10 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
                 autoclose: true,
                 format: "dd-M-yyyy"
             });
+
+            if (afterInit !== null && typeof afterInit === "function") {
+                afterInit();
+            }
 
             setModified(false);
         }
@@ -154,7 +157,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
         function getTableRowData(item, index = 0) {
 
-            let rowData = {keyValue: item.lineNumber,
+            let rowData = {keyValue: item.uid,
                 columnValues: []};
 
             rowData.columnValues.push(index + 1);
@@ -174,11 +177,11 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
             if (itemRowEdit.getEditMode() === false) {
 
                 let item = invoice.items.find(function (i) {
-                    return i.lineNumber === keyValue;
+                    return i.uid === keyValue;
                 });
 
                 if (item !== undefined) {
-                    if (keyValue !== itemRowEdit.getItem().lineNumber) {
+                    if (keyValue !== itemRowEdit.getItem().uid) {
 
                         itemRowEdit.setRow(itemTable.getRowControl(keyValue)
                                 , item);
@@ -222,22 +225,37 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
                 getDateField().val("");
                 getClientField().val("");
 
+                setButtonActionEnabled("print", false);
 
             } else {
                 getNumberField().val(invoice.number);
-                getDateField().val(invoice.date);
                 getClientField().val(invoice.client.number);
+                setButtonActionEnabled("print", !$aatl_ib.utils.isStringEmpty(invoice.number));
+
+                let date = $aatl_ib.utils.parseDate(invoice.date);
+
+                if (date instanceof Date) {
+                    getDateField().datepicker('setDate', date);
+                }
+
             }
 
             setInvoiceItems();
 
             isDataLoading = false;
+
+            //setButtonActionEnabled("save", false);
+            setButtonActionEnabled("addItem", true);
+            setButtonActionEnabled("updateItem", false);
+            setButtonActionEnabled("editItem", true);
+            setButtonActionEnabled("cancel", false);
+
         }
 
         function removeEditRow(keyValue) {
 
             let index = invoice.items.findIndex(function (tc) {
-                return tc.lineNumber === keyValue;
+                return tc.uid === keyValue;
             });
 
             if (index >= 0) {
@@ -312,7 +330,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
             itemTable.addRow(rowData);
 
-            onItemTableRowDoubleClicked(item.lineNumber);
+            onItemTableRowDoubleClicked(item.uid);
         };
 
         this.editItem = function () {
@@ -348,7 +366,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
         };
 
         this.setSaveEnabled = function (value) {
-
+            setButtonActionEnabled("save", value);
         };
 
         this.setSalesItems = function (list) {
@@ -404,7 +422,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
             if (editItem && editItem.lineNumber) {
                 editInvoice.items.push(editItem);
             }
-            
+
             return editInvoice;
         };
 
@@ -414,7 +432,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
             if ($aatl_ib.utils.isStringEmpty(editItem.uid)) {
 
-                removeEditRow(editItem.lineNumber);
+                removeEditRow(editItem.uid);
             } else {
                 resetTableRow(editItem.uid);
             }
@@ -428,6 +446,12 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
         this.hideError = function () {
             errorComponent.hide();
+        };
+
+        this.selectClient = function () {
+            if (invoice && invoice !== null && invoice.client !== null) {
+                getClientField().val(invoice.client.number);
+            }
         };
     }
 

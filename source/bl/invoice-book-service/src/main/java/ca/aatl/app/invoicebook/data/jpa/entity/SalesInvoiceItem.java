@@ -53,19 +53,19 @@ public class SalesInvoiceItem extends BaseEntity{
     
     @Basic(optional = false)
     @Column(name = "Rate", nullable = false, precision = 19, scale = 2)
-    private BigDecimal rate;
+    private BigDecimal rate = BigDecimal.ZERO;
     
     @Basic(optional = false)
     @Column(name = "Amount", nullable = false, precision = 19, scale = 2)
-    private BigDecimal amount;
+    private BigDecimal amount = BigDecimal.ZERO;
     
     @Basic(optional = false)
     @Column(name = "TaxAmount", nullable = false, precision = 19, scale = 2)
-    private BigDecimal taxAmount;
+    private BigDecimal taxAmount = BigDecimal.ZERO;
     
     @Basic(optional = false)
     @Column(name = "TotalAmount", nullable = false, precision = 19, scale = 2)
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount = BigDecimal.ZERO;
     
     @JoinColumn(name = "SalesInvoiceId", referencedColumnName = "SalesInvoiceId", nullable = false)
     @ManyToOne(optional = false)

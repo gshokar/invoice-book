@@ -47,9 +47,9 @@ $aatl_ib.gui.InvoiceSearchController = (function () {
             }
         }
     
-        function onTableRowDoubleClicked(client) {
+        function onTableRowDoubleClicked(invoice) {
 
-            openInvoice(client);
+            openInvoice(invoice);
         }
         
         function loadClientDropdownOptions(clientControl) {
@@ -78,7 +78,7 @@ $aatl_ib.gui.InvoiceSearchController = (function () {
 
         function find() {
 
-            $aatl_ib.ClientService.find(component.getCriteria(), afterFind);
+            $aatl_ib.InvoiceService.find(component.getCriteria(), afterFind);
         }
 
         function createNewInvoice() {

@@ -10,6 +10,7 @@
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
+import ca.aatl.app.invoicebook.data.SalesInvoiceStatusEnum;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.TypeEntity;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,9 +19,20 @@ import javax.persistence.Table;
  *
  * @author GShokar
  */
-
 @Entity
-@Table(name="salesinvoicestatus")
-public class SalesInvoiceStatus extends TypeEntity{
-    
+@Table(name = "salesinvoicestatus")
+public class SalesInvoiceStatus extends TypeEntity {
+
+    public SalesInvoiceStatusEnum status() {
+
+        SalesInvoiceStatusEnum status = SalesInvoiceStatusEnum.UnKnown;
+
+        try {
+            status = Enum.valueOf(SalesInvoiceStatusEnum.class, name);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+
+        }
+
+        return status;
+    }
 }

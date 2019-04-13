@@ -20,6 +20,8 @@ import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate_;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem_;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -32,6 +34,9 @@ import javax.persistence.criteria.Root;
  *
  * @author gshokar
  */
+
+@Stateless
+@LocalBean
 public class SalesItemTaxRateDao extends AbstractDao<SalesItemTaxRate> {
 
     public List<SalesItemTaxRate> list(Integer salesItemId, Date date, Integer countryId, Integer provinceId) {
@@ -58,7 +63,7 @@ public class SalesItemTaxRateDao extends AbstractDao<SalesItemTaxRate> {
             }
 
             if (provinceId != null && provinceId > 0) {
-                Join<SalesItemTaxRate, Province> province = root.join(SalesItemTaxRate_.Province);
+                Join<SalesItemTaxRate, Province> province = root.join(SalesItemTaxRate_.province);
 
                 predicate = cb.and(predicate, cb.equal(province.get(Province_.id), provinceId));
             }

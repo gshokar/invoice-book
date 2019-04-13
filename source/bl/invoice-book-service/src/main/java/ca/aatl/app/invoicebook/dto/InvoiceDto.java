@@ -218,4 +218,24 @@ public class InvoiceDto {
         this.paidAmount = paidAmount;
     }
 
+    private List<SalesInvoiceTaxItemDto> taxes = new ArrayList<>();
+
+    /**
+     * Get the value of taxes
+     *
+     * @return the value of taxes
+     */
+    public List<SalesInvoiceTaxItemDto> getTaxes() {
+        return taxes;
+    }
+
+    /**
+     * Set the value of taxes
+     *
+     * @param taxes new value of taxes
+     */
+    public void setTaxes(List<SalesInvoiceTaxItemDto> taxes) {
+        this.taxes = taxes;
+    }
+
 }

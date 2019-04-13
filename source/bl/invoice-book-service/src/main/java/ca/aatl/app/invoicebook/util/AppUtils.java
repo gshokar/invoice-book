@@ -10,6 +10,7 @@
  */
 package ca.aatl.app.invoicebook.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -33,7 +34,7 @@ public final class AppUtils {
             calendar.set(1900, 0, 1, 0, 0, 0);
             minimumDate = calendar.getTime();
         }
-        
+
         return minimumDate;
     }
 
@@ -44,6 +45,20 @@ public final class AppUtils {
     public static Date currentDate() {
 
         return java.sql.Date.valueOf(LocalDate.now());
+    }
+
+    public static Date parseDate(String dateValue) {
+        Date date = null;
+
+        if (!isNullOrEmpty(dateValue)) {
+            try {
+                date = AppUtils.dateFormat.parse(dateValue);
+            } catch (ParseException ex) {
+
+            }
+        }
+        
+        return date;
     }
 
     public static boolean isNullOrEmpty(String value) {

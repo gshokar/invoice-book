@@ -11,6 +11,7 @@
 package ca.aatl.app.invoicebook.data.service;
 
 import ca.aatl.app.invoicebook.bl.ejb.LookupService;
+import ca.aatl.app.invoicebook.data.SalesInvoiceTaxItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.Address;
 import ca.aatl.app.invoicebook.data.jpa.entity.Client;
 import ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation;
@@ -18,8 +19,13 @@ import ca.aatl.app.invoicebook.data.jpa.entity.Company;
 import ca.aatl.app.invoicebook.data.jpa.entity.Contact;
 import ca.aatl.app.invoicebook.data.jpa.entity.Employee;
 import ca.aatl.app.invoicebook.data.jpa.entity.Province;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoice;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItemTax;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceStatus;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesTax;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry;
 import ca.aatl.app.invoicebook.dto.AddressDto;
@@ -28,16 +34,24 @@ import ca.aatl.app.invoicebook.dto.ClientLocationDto;
 import ca.aatl.app.invoicebook.dto.CompanyDto;
 import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.EmployeeDto;
+import ca.aatl.app.invoicebook.dto.InvoiceDto;
 import ca.aatl.app.invoicebook.dto.InvoiceItemDto;
+import ca.aatl.app.invoicebook.dto.InvoiceItemTaxDto;
+import ca.aatl.app.invoicebook.dto.InvoiceStatusDto;
 import ca.aatl.app.invoicebook.dto.ItemUnitDto;
+import ca.aatl.app.invoicebook.dto.SalesInvoiceTaxItemDto;
 import ca.aatl.app.invoicebook.dto.SalesItemDto;
+import ca.aatl.app.invoicebook.dto.SalesItemTaxRateDto;
 import ca.aatl.app.invoicebook.dto.SalesItemTypeDto;
+import ca.aatl.app.invoicebook.dto.SalesTaxDto;
 import ca.aatl.app.invoicebook.dto.TimeCodeDto;
 import ca.aatl.app.invoicebook.dto.TimeEntryDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -383,5 +397,168 @@ public class MappingService {
         entity.setLineNumber(dto.getLineNumber());
         entity.setQuantity(BigDecimal.valueOf(dto.getQuantity()));
         entity.setRate(BigDecimal.valueOf(dto.getRate()));
+    }
+
+    public void updateSalesInvoiceDto(InvoiceDto dto, SalesInvoice invoice) {
+        dto.setAmount(invoice.getAmount().doubleValue());
+        dto.setDate(AppUtils.dateToString(invoice.getDate()));
+        dto.setNumber(invoice.getNumber());
+        dto.setPaidAmount(invoice.getPaidAmount().doubleValue());
+        dto.setTaxAmount(invoice.getTaxAmount().doubleValue());
+        dto.setTotalAmount(invoice.getTotalAmount().doubleValue());
+        
+        if(dto.getClient() != null){
+            updateClientDto(dto.getClient(), invoice.getClient());
+        }
+        
+        if(dto.getCompany() != null){
+            updateCompanyDto(dto.getCompany(), invoice.getCompany());
+        }
+        
+        if(dto.getStatus() != null){
+            updateSalesInvoiceStatusDto(dto.getStatus(), invoice.getStatus());
+        }
+        
+        if(dto.getItems() == null){
+            dto.setItems(new ArrayList<>());
+        }
+        
+        dto.getItems().clear();
+        
+        if(invoice.getItems() != null && !invoice.getItems().isEmpty()){
+            InvoiceItemDto itemDto = null;
+            
+            for(SalesInvoiceItem item : invoice.getItems()){
+                itemDto = new InvoiceItemDto();
+                
+                updateSalesInvoiceItemDto(itemDto, item);
+                
+                dto.getItems().add(itemDto);
+            }
+        }
+        
+        if(dto.getTaxes() == null){
+            dto.setTaxes(new ArrayList<>());
+        }
+        
+        dto.getTaxes().clear();
+        
+        List<SalesInvoiceTaxItem> taxItems = invoice.taxItems();
+        
+        if(taxItems != null && !taxItems.isEmpty()){
+            
+            for(SalesInvoiceTaxItem taxItem : taxItems){
+                SalesInvoiceTaxItemDto taxItemDto = new SalesInvoiceTaxItemDto();
+                
+                updateSalesInvoiceTaxItemDto(taxItemDto, taxItem);
+            }
+        }
+    }
+
+    public void updateSalesInvoiceStatusDto(InvoiceStatusDto statusDto, SalesInvoiceStatus status) {
+        statusDto.setCode(status.getName());
+        statusDto.setName(status.getName());
+    }
+
+    public void updateSalesInvoiceItemDto(InvoiceItemDto itemDto, SalesInvoiceItem item) {
+        itemDto.setAmount(item.getAmount().doubleValue());
+        itemDto.setDescription(item.getDescription());
+        itemDto.setLineNumber(item.getLineNumber());
+        itemDto.setQuantity(item.getQuantity().doubleValue());
+        itemDto.setRate(item.getRate().doubleValue());
+        itemDto.setTaxAmount(item.getTaxAmount().doubleValue());
+        itemDto.setTotalAmount(item.getTotalAmount().doubleValue());
+        itemDto.setUid(item.getGuid());
+        
+        if(item.getInvoice() != null){
+            itemDto.setInvoiceNumber(item.getInvoice().getNumber());
+        }
+        
+        if(itemDto.getSalesItem() == null){
+            itemDto.setSalesItem(new SalesItemDto());
+        }
+        
+        updateSalesItemDto(itemDto.getSalesItem(), item.getSalesItem());
+        
+        if(itemDto.getTaxes() == null){
+            itemDto.setTaxes(new ArrayList<>());
+        }
+        
+        itemDto.getTaxes().clear();
+        
+        for(SalesInvoiceItemTax itemTax : item.getTaxes()){
+            InvoiceItemTaxDto itemTaxDto = new InvoiceItemTaxDto();
+            
+            updateInvoiceItemTaxDto(itemTaxDto, itemTax);
+            
+            itemDto.getTaxes().add(itemTaxDto);
+        }
+    }
+
+    public void updateInvoiceItemTaxDto(InvoiceItemTaxDto dto, SalesInvoiceItemTax entity) {
+        dto.setAmount(entity.getAmount().doubleValue());
+        dto.setUid(entity.getGuid());
+        
+        if(dto.getSalesItemTaxRate() == null){
+            dto.setSalesItemTaxRate(new SalesItemTaxRateDto());
+        }
+        
+        updateSalesItemTaxRateDto(dto.getSalesItemTaxRate(), entity.getTaxRate());
+    }
+
+    public void updateSalesItemTaxRateDto(SalesItemTaxRateDto dto, SalesItemTaxRate entity) {
+        
+//        if(dto.getCountry() == null){
+//            dto.setCountry(new CountryDto());
+//        }
+//        
+//        updateCountryDto(dto.getCountry())
+
+          dto.setRate(entity.getRate().doubleValue());
+          
+          if(dto.getTax() == null){
+            dto.setTax(new SalesTaxDto());
+          }
+          
+          updateSalesTaxDto(dto.getTax(), entity.getTax());
+    }
+
+    public void updateSalesTaxDto(SalesTaxDto dto, SalesTax entity) {
+        dto.setCode(entity.getCode());
+        dto.setName(entity.getName());
+    }
+
+    public void updateSalesInvoiceTaxItemDto(SalesInvoiceTaxItemDto dto, SalesInvoiceTaxItem taxItem) {
+        dto.setAmount(taxItem.getAmount());
+        dto.setCode(taxItem.getCode());
+        dto.setCodeRateText(taxItem.codeAndRateText());
+        dto.setName(taxItem.getName());
+        dto.setRate(taxItem.getRate());
+    }
+
+    public List<InvoiceDto> invoiceDtos(List<SalesInvoice> salesInvoices) {
+        List<InvoiceDto> invoiceDtos = new ArrayList<>();
+        
+        for(SalesInvoice salesInvoice : salesInvoices){
+            InvoiceDto invoiceDto = new InvoiceDto();
+            
+            invoiceDto.setAmount(salesInvoice.getAmount().doubleValue());
+            invoiceDto.setDate(AppUtils.dateToString(salesInvoice.getDate()));
+            invoiceDto.setNumber(salesInvoice.getNumber());
+            invoiceDto.setTaxAmount(salesInvoice.getTaxAmount().doubleValue());
+            invoiceDto.setTotalAmount(salesInvoice.getTotalAmount().doubleValue());
+            
+            if(salesInvoice.getClient() != null){
+                ClientDto clientDto = new ClientDto();
+                
+                clientDto.setName(salesInvoice.getClient().getName());
+                clientDto.setNumber(salesInvoice.getClient().getNumber());
+                
+                invoiceDto.setClient(clientDto);
+            }
+            
+            invoiceDtos.add(invoiceDto);
+        }
+        return invoiceDtos;
     }
 }

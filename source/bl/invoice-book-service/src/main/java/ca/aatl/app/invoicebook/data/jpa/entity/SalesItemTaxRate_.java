@@ -27,5 +27,5 @@ public class SalesItemTaxRate_ extends BaseEntity_{
     public static SingularAttribute<SalesItemTaxRate, Date> fromDate;
     public static SingularAttribute<SalesItemTaxRate, Date> toDate;
     public static SingularAttribute<SalesItemTaxRate, Country> country;
-    public static SingularAttribute<SalesItemTaxRate, Province> Province;
+    public static SingularAttribute<SalesItemTaxRate, Province> province;
 }

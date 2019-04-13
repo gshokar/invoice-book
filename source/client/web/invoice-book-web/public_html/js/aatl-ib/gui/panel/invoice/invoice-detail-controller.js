@@ -65,6 +65,14 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                 component.showError(err);
             } else {
                 component.setInvoice(invoice);
+                
+                let currentTitle = title;
+                
+                title = 'Invoice - ' + invoice.number; 
+                
+                component.setTitle(title);
+                
+                $aatl_ib.viewController.mainController.updateActionItemText(currentTitle, title);
             }
         }
 
@@ -92,7 +100,8 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                     });
 
                     $aatl_ib.utils.addDropdownOptions(clientControl, options);
-
+                    
+                    component.selectClient();
                 }
             });
         }

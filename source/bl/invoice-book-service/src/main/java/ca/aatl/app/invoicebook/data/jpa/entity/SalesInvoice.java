@@ -10,8 +10,10 @@
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
+import ca.aatl.app.invoicebook.data.SalesInvoiceTaxItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.base.BaseEntity;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -33,52 +35,51 @@ import javax.persistence.TemporalType;
  *
  * @author GShokar
  */
-
 @Entity
-@Table(name="salesinvoice")
-public class SalesInvoice extends BaseEntity{
-    
+@Table(name = "salesinvoice")
+public class SalesInvoice extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SalesInvoiceId", unique = true, nullable = false)
     private Integer id;
-    
+
     @Basic(optional = false)
     @Column(name = "InvoiceDate", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
-    
+
     @Column(name = "InvoiceNo", nullable = true, length = 10)
     private String number;
-    
+
     @Basic(optional = false)
     @Column(name = "Amount", nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
-    
+
     @Basic(optional = false)
     @Column(name = "TaxAmount", nullable = false, precision = 19, scale = 2)
     private BigDecimal taxAmount;
-    
+
     @Basic(optional = false)
     @Column(name = "TotalAmount", nullable = false, precision = 19, scale = 2)
     private BigDecimal totalAmount;
-    
+
     @Basic(optional = false)
     @Column(name = "PaidAmount", nullable = false, precision = 19, scale = 2)
     private BigDecimal paidAmount;
-    
+
     @JoinColumn(name = "InvoiceStatusId", referencedColumnName = "TypeId", nullable = false)
     @ManyToOne(optional = false)
     private SalesInvoiceStatus status;
-    
+
     @JoinColumn(name = "CompanyId", referencedColumnName = "EntityId", nullable = false)
     @ManyToOne(optional = false)
     private Company company;
-    
+
     @JoinColumn(name = "ClientId", referencedColumnName = "EntityId", nullable = false)
     @ManyToOne(optional = false)
     private Client client;
-    
+
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "invoice")
     private List<SalesInvoiceItem> items;
 
@@ -107,6 +108,9 @@ public class SalesInvoice extends BaseEntity{
     }
 
     public BigDecimal getAmount() {
+        if (amount == null) {
+            amount = BigDecimal.ZERO;
+        }
         return amount;
     }
 
@@ -115,6 +119,9 @@ public class SalesInvoice extends BaseEntity{
     }
 
     public BigDecimal getTaxAmount() {
+        if (taxAmount == null) {
+            taxAmount = BigDecimal.ZERO;
+        }
         return taxAmount;
     }
 
@@ -123,6 +130,9 @@ public class SalesInvoice extends BaseEntity{
     }
 
     public BigDecimal getTotalAmount() {
+        if (totalAmount == null) {
+            totalAmount = BigDecimal.ZERO;
+        }
         return totalAmount;
     }
 
@@ -131,6 +141,9 @@ public class SalesInvoice extends BaseEntity{
     }
 
     public BigDecimal getPaidAmount() {
+        if (paidAmount == null) {
+            paidAmount = BigDecimal.ZERO;
+        }
         return paidAmount;
     }
 
@@ -189,11 +202,46 @@ public class SalesInvoice extends BaseEntity{
             return false;
         }
         final SalesInvoice other = (SalesInvoice) obj;
-        
+
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
-        
+
         return Objects.equals(this.getGuid(), other.getGuid());
+    }
+
+    public List<SalesInvoiceTaxItem> taxItems() {
+
+        List<SalesInvoiceTaxItem> list = new ArrayList<>();
+
+        if (this.getItems() != null && !this.getItems().isEmpty()) {
+
+            for (SalesInvoiceItem item : this.getItems()) {
+
+                if (item.getTaxes() != null && !item.getTaxes().isEmpty()) {
+
+                    for (SalesInvoiceItemTax tax : item.getTaxes()) {
+                        SalesInvoiceTaxItem taxItem = list.stream()
+                                .filter(t -> t.getCode() == tax.taxCode())
+                                .findFirst()
+                                .orElse(null);
+
+                        if (taxItem != null) {
+                            taxItem.setAmount(taxItem.getAmount() + tax.getAmount().doubleValue());
+                        }else{
+                            taxItem = new SalesInvoiceTaxItem();
+                            
+                            taxItem.setAmount(tax.getAmount().doubleValue());
+                            taxItem.setCode(tax.taxCode());
+                            taxItem.setName(tax.getTaxRate().getTax().getName());
+                            taxItem.setRate(tax.getTaxRate().getRate().doubleValue());
+                            
+                            list.add(taxItem);
+                        }
+                    }
+                }
+            }
+        }
+        return list;
     }
 }

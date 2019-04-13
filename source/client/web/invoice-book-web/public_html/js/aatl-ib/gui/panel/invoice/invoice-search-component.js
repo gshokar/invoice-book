@@ -80,7 +80,7 @@ $aatl_ib.gui.InvoiceSearchComponent = (function () {
                 rowData.columnValues.push($aatl_ib.utils.displayDateFormat(invoice.date));
                 rowData.columnValues.push(invoice.client.name);
                 rowData.columnValues.push(invoice.amount.toFixed(2));
-                rowData.columnValues.push(invoice.tax.toFixed(2));
+                rowData.columnValues.push(invoice.taxAmount.toFixed(2));
                 rowData.columnValues.push(invoice.totalAmount.toFixed(2));
 
                 rowsData.push(rowData);
