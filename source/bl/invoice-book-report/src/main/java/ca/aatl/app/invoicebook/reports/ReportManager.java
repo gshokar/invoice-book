@@ -31,27 +31,50 @@ public class ReportManager {
 
     private String reportPath = "/ca/aatl/app/invoicebook/reports/templates/";
     private String jsonDatePattern = "yyyy-MM-dd";
-    
+
     public byte[] timeSheetPdf(String timeSheetJson) throws Exception {
         byte[] pdf = null;
-        
+
         Map parameters = new HashMap();
 
         parameters.put(JsonQueryExecuterFactory.JSON_DATE_PATTERN, jsonDatePattern);
-        
+
         // Just remove the leading forward silash
         parameters.put("SUBREPORT_LOCATION", reportPath.substring(1));
-        
+
         JsonDataSource jr = new JsonDataSource(new ByteArrayInputStream(timeSheetJson.getBytes(StandardCharsets.UTF_8)));
         jr.setDatePattern(jsonDatePattern);
-        
+
         try (InputStream isRpt = ReportManager.class.getResourceAsStream(reportPath + "invoice-book-time-sheet.jasper")) {
 
             JasperPrint jp = JasperFillManager.fillReport(isRpt, parameters, jr);
 
             pdf = JasperExportManager.exportReportToPdf(jp);
         }
-        
+
+        return pdf;
+    }
+
+    public byte[] salesInvoicePdf(String invoiceJson) throws Exception{
+        byte[] pdf = null;
+
+        Map parameters = new HashMap();
+
+        parameters.put(JsonQueryExecuterFactory.JSON_DATE_PATTERN, jsonDatePattern);
+
+        // Just remove the leading forward silash
+        parameters.put("SUBREPORT_LOCATION", reportPath.substring(1));
+
+        JsonDataSource jr = new JsonDataSource(new ByteArrayInputStream(invoiceJson.getBytes(StandardCharsets.UTF_8)));
+        jr.setDatePattern(jsonDatePattern);
+
+        try (InputStream isRpt = ReportManager.class.getResourceAsStream(reportPath + "invoice-book-sales-invoice.jasper")) {
+
+            JasperPrint jp = JasperFillManager.fillReport(isRpt, parameters, jr);
+
+            pdf = JasperExportManager.exportReportToPdf(jp);
+        }
+
         return pdf;
     }
 }

@@ -57,7 +57,7 @@ public final class AppUtils {
 
             }
         }
-        
+
         return date;
     }
 
@@ -83,5 +83,32 @@ public final class AppUtils {
         }
 
         return value;
+    }
+
+    public static String formatPhoneNumber(String phoneNumber) {
+        String formattedPhoneNumber = phoneNumber;
+
+        if (!isNullOrEmpty(phoneNumber) && phoneNumber.length() >= 10) {
+
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+
+            if (phoneNumber.substring(i, i + 1).equals("1")) {
+                sb.append("1-");
+                i++;
+            }
+
+            sb.append(phoneNumber.substring(i, i + 3));
+            sb.append("-");
+            i = i + 3;
+            sb.append(phoneNumber.substring(i, i + 3));
+            sb.append("-");
+            i = i + 3;
+            sb.append(phoneNumber.substring(i));
+
+            formattedPhoneNumber = sb.toString();
+
+        }
+        return formattedPhoneNumber;
     }
 }

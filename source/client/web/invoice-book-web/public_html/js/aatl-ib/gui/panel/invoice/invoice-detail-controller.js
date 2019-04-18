@@ -159,13 +159,13 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                 var byteArray = new Uint8Array(byteNumbers);
                 var blob = new Blob([byteArray], {type: "application/pdf"});
                 var fileURL = URL.createObjectURL(blob);
-                window.open(fileURL, "print-timesheet");
+                window.open(fileURL, "print-invoice");
                 //window.navigator.msSaveOrOpenBlob(blob, "print-timesheet.pdf");
             }
         }
 
-        function printTimeSheet() {
-            $aatl_ib.TimeSheetService.print(component.getCriteria(), afterPrint);
+        function printInvoice() {
+            $aatl_ib.InvoiceService.print({ number: component.getInvoiceNumber()}, afterPrint);
         }
 
         function onValueChanged(evt) {

@@ -43,12 +43,13 @@ $aatl_ib.gui.TimeSheetController = (function () {
 //            });
         }
 
-        function crteriaChanged(criteria) {
+        function crteriaChanged(criteria, callback) {
             $aatl_ib.TimeEntryService.find(criteria, function (list, err) {
                 if (err !== undefined && Array.isArray(err.messages) && err.messages.length > 0) {
                     component.showError(err);
                 } else {
                     component.setTimeEntries(list);
+                    callback();
                 }
             });
         }

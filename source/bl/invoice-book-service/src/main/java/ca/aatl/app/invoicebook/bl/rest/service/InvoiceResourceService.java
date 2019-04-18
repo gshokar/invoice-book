@@ -24,14 +24,17 @@ import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
 import ca.aatl.app.invoicebook.data.service.MappingService;
 import ca.aatl.app.invoicebook.dto.ClientDto;
 import ca.aatl.app.invoicebook.dto.CompanyDto;
+import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.InvoiceDto;
 import ca.aatl.app.invoicebook.dto.InvoiceItemDto;
 import ca.aatl.app.invoicebook.dto.InvoiceStatusDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
+import ca.aatl.app.invoicebook.reports.ReportManager;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import com.google.gson.JsonSyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -118,7 +121,7 @@ public class InvoiceResourceService extends ResponseService {
 
             setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid invoice search data - " + ex.getMessage());
 
-            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid ClientSearchDto Json", ex);
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid invoice search criteria Json", ex);
         } catch (Exception ex) {
 
             setResponseError("System error - " + ex.getMessage());
@@ -147,12 +150,50 @@ public class InvoiceResourceService extends ResponseService {
 
             setResponseError("System error - " + ex.getMessage());
 
-            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.SEVERE, "System error ClientResponseService getClient", ex);
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.SEVERE, "System error InvoiceResourceService getClient", ex);
         }
 
         return getResponseJson();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/print")
+    @Authenticated
+    @ResourceResponseInitiated
+    //@RolesAllowed(AppSecurity.ROLE_ADMIN)
+    public String print(
+            @QueryParam("number") String number) {
+
+        try {
+
+            InvoiceDto dto = getInvoiceDto(number);
+            
+            formatPhoneNumbersForDisplay(dto);
+            
+            ReportManager reportManager = new ReportManager();
+            
+            byte[] pdf = reportManager.salesInvoicePdf(this.getGson().toJson(dto));
+            
+            setResponseSuccess(Base64.getEncoder().encodeToString(pdf));
+
+        } catch (DataValidationException ex) {
+
+            setResponseError(ErrorResponse.CODE_BAD_REQUEST, "Invalid invoice number for print request - " + ex.getMessage());
+
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.INFO, "Invalid invoice number Json", ex);
+        } catch (Exception ex) {
+
+            setResponseError("System error - " + ex.getMessage());
+
+            Logger.getLogger(InvoiceResourceService.class.getName()).log(Level.SEVERE, "System error InvoiceResourceService find", ex);
+        }
+
+        return getResponseJson();
+    }
+
+    
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -380,5 +421,23 @@ public class InvoiceResourceService extends ResponseService {
         dto.setTaxes(new ArrayList<>());
 
         return dto;
+    }
+
+    private void formatPhoneNumbersForDisplay(InvoiceDto dto) {
+        if(dto != null){
+            if(dto.getClient() != null){
+                formatPhoneNumber(dto.getClient().getContact());
+            }
+            
+            if(dto.getCompany() != null){
+                formatPhoneNumber(dto.getCompany().getContact());
+            }
+        }
+    }
+
+    private void formatPhoneNumber(ContactDto contactDto) {
+        if(contactDto != null){
+            contactDto.setPhone(AppUtils.formatPhoneNumber(contactDto.getPhone()));
+        }
     }
 }

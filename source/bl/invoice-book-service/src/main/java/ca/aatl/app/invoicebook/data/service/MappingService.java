@@ -76,11 +76,19 @@ public class MappingService {
 
             if (client.hasAddress()) {
 
+                if (dto.getAddress() == null) {
+                    dto.setAddress(new AddressDto());
+                }
+
                 updateAddressDto(dto.getAddress(), client.primaryAddress().getAddress());
 
             }
 
             if (client.hasContact()) {
+
+                if (dto.getContact() == null) {
+                    dto.setContact(new ContactDto());
+                }
 
                 updateContactDto(dto.getContact(), client.primaryContact().getContact());
             }
@@ -365,12 +373,20 @@ public class MappingService {
             dto.setTaxRegNumber(entity.getTaxRegNumber() == null ? "" : entity.getTaxRegNumber());
 
             if (entity.hasAddress()) {
-
+                
+                if (dto.getAddress() == null) {
+                    dto.setAddress(new AddressDto());
+                }
+                
                 updateAddressDto(dto.getAddress(), entity.primaryAddress().getAddress());
 
             }
 
             if (entity.hasContact()) {
+
+                if (dto.getContact() == null) {
+                    dto.setContact(new ContactDto());
+                }
 
                 updateContactDto(dto.getContact(), entity.primaryContact().getContact());
             }
@@ -406,50 +422,50 @@ public class MappingService {
         dto.setPaidAmount(invoice.getPaidAmount().doubleValue());
         dto.setTaxAmount(invoice.getTaxAmount().doubleValue());
         dto.setTotalAmount(invoice.getTotalAmount().doubleValue());
-        
-        if(dto.getClient() != null){
+
+        if (dto.getClient() != null) {
             updateClientDto(dto.getClient(), invoice.getClient());
         }
-        
-        if(dto.getCompany() != null){
+
+        if (dto.getCompany() != null) {
             updateCompanyDto(dto.getCompany(), invoice.getCompany());
         }
-        
-        if(dto.getStatus() != null){
+
+        if (dto.getStatus() != null) {
             updateSalesInvoiceStatusDto(dto.getStatus(), invoice.getStatus());
         }
-        
-        if(dto.getItems() == null){
+
+        if (dto.getItems() == null) {
             dto.setItems(new ArrayList<>());
         }
-        
+
         dto.getItems().clear();
-        
-        if(invoice.getItems() != null && !invoice.getItems().isEmpty()){
+
+        if (invoice.getItems() != null && !invoice.getItems().isEmpty()) {
             InvoiceItemDto itemDto = null;
-            
-            for(SalesInvoiceItem item : invoice.getItems()){
+
+            for (SalesInvoiceItem item : invoice.getItems()) {
                 itemDto = new InvoiceItemDto();
-                
+
                 updateSalesInvoiceItemDto(itemDto, item);
-                
+
                 dto.getItems().add(itemDto);
             }
         }
-        
-        if(dto.getTaxes() == null){
+
+        if (dto.getTaxes() == null) {
             dto.setTaxes(new ArrayList<>());
         }
-        
+
         dto.getTaxes().clear();
-        
+
         List<SalesInvoiceTaxItem> taxItems = invoice.taxItems();
-        
-        if(taxItems != null && !taxItems.isEmpty()){
-            
-            for(SalesInvoiceTaxItem taxItem : taxItems){
+
+        if (taxItems != null && !taxItems.isEmpty()) {
+
+            for (SalesInvoiceTaxItem taxItem : taxItems) {
                 SalesInvoiceTaxItemDto taxItemDto = new SalesInvoiceTaxItemDto();
-                
+
                 updateSalesInvoiceTaxItemDto(taxItemDto, taxItem);
             }
         }
@@ -469,28 +485,28 @@ public class MappingService {
         itemDto.setTaxAmount(item.getTaxAmount().doubleValue());
         itemDto.setTotalAmount(item.getTotalAmount().doubleValue());
         itemDto.setUid(item.getGuid());
-        
-        if(item.getInvoice() != null){
+
+        if (item.getInvoice() != null) {
             itemDto.setInvoiceNumber(item.getInvoice().getNumber());
         }
-        
-        if(itemDto.getSalesItem() == null){
+
+        if (itemDto.getSalesItem() == null) {
             itemDto.setSalesItem(new SalesItemDto());
         }
-        
+
         updateSalesItemDto(itemDto.getSalesItem(), item.getSalesItem());
-        
-        if(itemDto.getTaxes() == null){
+
+        if (itemDto.getTaxes() == null) {
             itemDto.setTaxes(new ArrayList<>());
         }
-        
+
         itemDto.getTaxes().clear();
-        
-        for(SalesInvoiceItemTax itemTax : item.getTaxes()){
+
+        for (SalesInvoiceItemTax itemTax : item.getTaxes()) {
             InvoiceItemTaxDto itemTaxDto = new InvoiceItemTaxDto();
-            
+
             updateInvoiceItemTaxDto(itemTaxDto, itemTax);
-            
+
             itemDto.getTaxes().add(itemTaxDto);
         }
     }
@@ -498,29 +514,28 @@ public class MappingService {
     public void updateInvoiceItemTaxDto(InvoiceItemTaxDto dto, SalesInvoiceItemTax entity) {
         dto.setAmount(entity.getAmount().doubleValue());
         dto.setUid(entity.getGuid());
-        
-        if(dto.getSalesItemTaxRate() == null){
+
+        if (dto.getSalesItemTaxRate() == null) {
             dto.setSalesItemTaxRate(new SalesItemTaxRateDto());
         }
-        
+
         updateSalesItemTaxRateDto(dto.getSalesItemTaxRate(), entity.getTaxRate());
     }
 
     public void updateSalesItemTaxRateDto(SalesItemTaxRateDto dto, SalesItemTaxRate entity) {
-        
+
 //        if(dto.getCountry() == null){
 //            dto.setCountry(new CountryDto());
 //        }
 //        
 //        updateCountryDto(dto.getCountry())
+        dto.setRate(entity.getRate().doubleValue());
 
-          dto.setRate(entity.getRate().doubleValue());
-          
-          if(dto.getTax() == null){
+        if (dto.getTax() == null) {
             dto.setTax(new SalesTaxDto());
-          }
-          
-          updateSalesTaxDto(dto.getTax(), entity.getTax());
+        }
+
+        updateSalesTaxDto(dto.getTax(), entity.getTax());
     }
 
     public void updateSalesTaxDto(SalesTaxDto dto, SalesTax entity) {
@@ -538,25 +553,25 @@ public class MappingService {
 
     public List<InvoiceDto> invoiceDtos(List<SalesInvoice> salesInvoices) {
         List<InvoiceDto> invoiceDtos = new ArrayList<>();
-        
-        for(SalesInvoice salesInvoice : salesInvoices){
+
+        for (SalesInvoice salesInvoice : salesInvoices) {
             InvoiceDto invoiceDto = new InvoiceDto();
-            
+
             invoiceDto.setAmount(salesInvoice.getAmount().doubleValue());
             invoiceDto.setDate(AppUtils.dateToString(salesInvoice.getDate()));
             invoiceDto.setNumber(salesInvoice.getNumber());
             invoiceDto.setTaxAmount(salesInvoice.getTaxAmount().doubleValue());
             invoiceDto.setTotalAmount(salesInvoice.getTotalAmount().doubleValue());
-            
-            if(salesInvoice.getClient() != null){
+
+            if (salesInvoice.getClient() != null) {
                 ClientDto clientDto = new ClientDto();
-                
+
                 clientDto.setName(salesInvoice.getClient().getName());
                 clientDto.setNumber(salesInvoice.getClient().getNumber());
-                
+
                 invoiceDto.setClient(clientDto);
             }
-            
+
             invoiceDtos.add(invoiceDto);
         }
         return invoiceDtos;

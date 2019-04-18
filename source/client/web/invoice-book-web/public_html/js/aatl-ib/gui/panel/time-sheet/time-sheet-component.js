@@ -240,7 +240,7 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
                 if (typeof onCriteriaChanged === 'function') {
 
-                    onCriteriaChanged(criteria);
+                    onCriteriaChanged(criteria, afterRefresh);
 
                     setButtonActionEnabled("add", true);
                 }
@@ -252,7 +252,11 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             setPrintEnabled();
         }
-
+        
+        function afterRefresh(){
+            setPrintEnabled();
+        }
+        
         function loadTimeEntries() {
             timeEntryTable.clearRows();
             setTableRows();

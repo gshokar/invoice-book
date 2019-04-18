@@ -68,6 +68,24 @@ $aatl_ib.InvoiceService = {
                     });
         }
     },
+    print: function (criteria, callback) {
+
+        $aatl_ib.ApiService.get("invoices/print",
+                criteria,
+                function (res, err) {
+                    if (err) {
+                        callback(null, {messages: ["Faild to get invoice print: " + err]});
+
+                    } else if (res.status === "failure") {
+                        callback(null, {messages: [res.message]});
+                    } else if (res.status === "success") {
+                        let list = JSON.parse(res.data);
+                        callback(list);
+                    } else {
+                        callback(null, {messages: ["Invalid response from server"]});
+                    }
+                });
+    },
     save: function (invoice, callback) {
 
         let err = $aatl_ib.InvoiceService.validate(invoice);

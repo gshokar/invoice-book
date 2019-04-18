@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice-book-time-sheet-time-entries" pageWidth="572" pageHeight="792" columnWidth="572" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="9e605899-87cc-4d5d-9b1e-c9b0fc6afc6d">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JSON Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JSON Data Adapter - Invoice book Sales Invoice"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.text.SimpleDateFormat"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<queryString language="json">
-		<![CDATA[timeEntries]]>
+		<![CDATA[items]]>
 	</queryString>
-	<field name="date" class="java.util.Date">
-		<property name="net.sf.jasperreports.json.field.expression" value="date"/>
-		<fieldDescription><![CDATA[date]]></fieldDescription>
+	<field name="description" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="description"/>
+		<fieldDescription><![CDATA[description]]></fieldDescription>
 	</field>
-	<field name="name" class="java.lang.String">
-		<property name="net.sf.jasperreports.json.field.expression" value="timeCode.name"/>
-		<fieldDescription><![CDATA[timeCode.name]]></fieldDescription>
+	<field name="quantity" class="java.lang.Double">
+		<property name="net.sf.jasperreports.json.field.expression" value="quantity"/>
+		<fieldDescription><![CDATA[quantity]]></fieldDescription>
 	</field>
-	<field name="startTime" class="java.lang.String">
-		<property name="net.sf.jasperreports.json.field.expression" value="startTime"/>
-		<fieldDescription><![CDATA[startTime]]></fieldDescription>
+	<field name="salesItem.unit.name" class="java.lang.String">
+		<property name="net.sf.jasperreports.json.field.expression" value="salesItem.unit.name"/>
+		<fieldDescription><![CDATA[salesItem.unit.name]]></fieldDescription>
 	</field>
-	<field name="endTime" class="java.lang.String">
-		<property name="net.sf.jasperreports.json.field.expression" value="endTime"/>
-		<fieldDescription><![CDATA[endTime]]></fieldDescription>
+	<field name="rate" class="java.lang.Double">
+		<property name="net.sf.jasperreports.json.field.expression" value="rate"/>
+		<fieldDescription><![CDATA[rate]]></fieldDescription>
 	</field>
-	<field name="hours" class="java.lang.Double">
-		<property name="net.sf.jasperreports.json.field.expression" value="hours"/>
-		<fieldDescription><![CDATA[hours]]></fieldDescription>
+	<field name="amount" class="java.lang.Double">
+		<property name="net.sf.jasperreports.json.field.expression" value="amount"/>
+		<fieldDescription><![CDATA[amount]]></fieldDescription>
 	</field>
-	<variable name="TOTAL_HOURS" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{hours}]]></variableExpression>
+	<variable name="SUM_HOURS" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
 	</variable>
 	<variable name="TIME_FORMAT" class="java.text.SimpleDateFormat">
 		<variableExpression><![CDATA[new java.text.SimpleDateFormat("HH:mm")]]></variableExpression>
@@ -40,7 +40,7 @@
 	<columnHeader>
 		<band height="26" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="80" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="3544da15-1394-4787-852e-603f53e7e0e6">
+				<reportElement mode="Opaque" x="0" y="0" width="292" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="3544da15-1394-4787-852e-603f53e7e0e6">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee0cc5c5-8208-4049-b483-ce1f794bf7ca"/>
 				</reportElement>
 				<box>
@@ -52,43 +52,43 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Date]]></text>
+				<text><![CDATA[Description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="80" y="0" width="312" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="fb422f17-370c-4e38-9062-83954ce10780">
+				<reportElement mode="Opaque" x="292" y="0" width="80" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="fb422f17-370c-4e38-9062-83954ce10780">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9551add0-2de2-4694-95df-1e404b77a7a2"/>
-				</reportElement>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Time Code]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="392" y="0" width="60" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="00da870f-75b7-4615-9d60-6e66eb0e925d">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ee8f6a2-13e1-49ee-9f75-ae457373ee6f"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Time In ]]></text>
+				<text><![CDATA[Quantity ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="452" y="0" width="60" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="e9a18a5a-9e28-45e9-b1db-b2b42b0c3a8f">
+				<reportElement mode="Opaque" x="372" y="0" width="60" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="00da870f-75b7-4615-9d60-6e66eb0e925d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ee8f6a2-13e1-49ee-9f75-ae457373ee6f"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="432" y="0" width="60" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="e9a18a5a-9e28-45e9-b1db-b2b42b0c3a8f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ad7fc91-6d02-4c75-a87e-860a17c1bc54"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Time Out ]]></text>
+				<text><![CDATA[Rate ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="512" y="0" width="60" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="187ee344-8472-48ab-bbf9-1a2d5b4647da">
+				<reportElement mode="Opaque" x="492" y="0" width="80" height="25" forecolor="#FFFFFF" backcolor="#B0ABAB" uuid="187ee344-8472-48ab-bbf9-1a2d5b4647da">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6af95ee7-6f05-4e37-81d7-540e448e7b27"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Hours ]]></text>
+				<text><![CDATA[Amount ]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="0" width="572" height="1" uuid="856b3bc1-6b5c-4592-8479-eef217a36c1e"/>
@@ -99,17 +99,17 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement mode="Opaque" x="0" y="0" width="572" height="25" backcolor="#F0E6E6" uuid="ef1b411e-eac0-4427-99e7-92c6d48ec4cc">
+				<reportElement mode="Opaque" x="0" y="0" width="572" height="20" backcolor="#F0E6E6" uuid="ef1b411e-eac0-4427-99e7-92c6d48ec4cc">
 					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.0"/>
 				</graphicElement>
 			</rectangle>
-			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="80" height="25" uuid="0efe9ec6-c2dc-4135-a91d-1bcc813d18f9">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="292" height="20" uuid="0efe9ec6-c2dc-4135-a91d-1bcc813d18f9">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ee0cc5c5-8208-4049-b483-ce1f794bf7ca"/>
 				</reportElement>
 				<box>
@@ -118,44 +118,44 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="80" y="0" width="312" height="25" uuid="afb310b4-0a72-4ab0-9ad8-6b4a916b1f4d">
+			<textField pattern="#,##0.00">
+				<reportElement x="292" y="0" width="80" height="20" uuid="afb310b4-0a72-4ab0-9ad8-6b4a916b1f4d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9551add0-2de2-4694-95df-1e404b77a7a2"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
-			</textField>
-			<textField pattern="hh:mm a">
-				<reportElement x="392" y="0" width="60" height="25" uuid="e96ad9d2-4d96-44e5-b603-759c33bdb355">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ee8f6a2-13e1-49ee-9f75-ae457373ee6f"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TIME_FORMAT}.parse($F{startTime})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
 			</textField>
-			<textField pattern="hh:mm a">
-				<reportElement x="452" y="0" width="60" height="25" uuid="88aed5df-80b9-445a-bd22-afd12504c239">
+			<textField>
+				<reportElement x="372" y="0" width="60" height="20" uuid="e96ad9d2-4d96-44e5-b603-759c33bdb355">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9ee8f6a2-13e1-49ee-9f75-ae457373ee6f"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salesItem.unit.name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="432" y="0" width="60" height="20" uuid="88aed5df-80b9-445a-bd22-afd12504c239">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ad7fc91-6d02-4c75-a87e-860a17c1bc54"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{TIME_FORMAT}.parse($F{endTime})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{rate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="##0.00">
-				<reportElement x="512" y="0" width="60" height="25" uuid="b391c9a6-d0c8-47f9-87ce-b27a1aa3f5ab">
+			<textField pattern="¤#,##0.00;¤-#,##0.00">
+				<reportElement x="492" y="0" width="80" height="20" uuid="b391c9a6-d0c8-47f9-87ce-b27a1aa3f5ab">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6af95ee7-6f05-4e37-81d7-540e448e7b27"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{hours}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

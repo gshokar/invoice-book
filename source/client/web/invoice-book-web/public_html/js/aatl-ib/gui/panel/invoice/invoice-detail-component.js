@@ -453,6 +453,10 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
                 getClientField().val(invoice.client.number);
             }
         };
+        
+        this.getInvoiceNumber = function () {
+            return invoice.number;
+        };
     }
 
     return InvoiceDetailComponent;

@@ -68,6 +68,7 @@
 	<variable name="PRINTED_DATE" class="java.lang.String">
 		<variableExpression><![CDATA[String.format("Printed: %1$td-%1$tb-%1$tY %1$tI:%1$tM %1$Tp", new java.util.Date())]]></variableExpression>
 	</variable>
+	<variable name="TOTAL_HOURS" class="java.lang.Double"/>
 	<title>
 		<band splitType="Stretch"/>
 	</title>
@@ -76,12 +77,12 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="2" width="572" height="24" uuid="c871a297-4e62-4155-98c8-e00d9bf6ed05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16" isBold="true"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{company.name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="460" y="56" width="112" height="24" forecolor="#999797" uuid="2baba3ad-b27b-4265-b0ca-172e98b82953"/>
+				<reportElement x="460" y="46" width="112" height="24" forecolor="#999797" uuid="2baba3ad-b27b-4265-b0ca-172e98b82953"/>
 				<box bottomPadding="0">
 					<pen lineColor="#030202"/>
 				</box>
@@ -91,13 +92,13 @@
 				<text><![CDATA[TIME SHEET]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="48" width="572" height="1" uuid="d2c8a7e1-a53a-4571-ad0e-07d7bf6f585c"/>
+				<reportElement x="0" y="68" width="572" height="1" uuid="d2c8a7e1-a53a-4571-ad0e-07d7bf6f585c"/>
 				<graphicElement>
 					<pen lineWidth="1.0"/>
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="0" y="31" width="572" height="16" uuid="d284a421-dbea-4f3c-a312-abf17c861ec8"/>
+				<reportElement x="0" y="31" width="572" height="29" uuid="d284a421-dbea-4f3c-a312-abf17c861ec8"/>
 				<textElement textAlignment="Center" markup="html">
 					<font size="9"/>
 					<paragraph lineSpacing="1_1_2" lineSpacingSize="1.0"/>
@@ -105,25 +106,25 @@
 				<textFieldExpression><![CDATA[$F{company.address.address1} + "   " + 
 ($F{company.address.address2} == null || $F{company.address.address2}.isEmpty() ? "" : $F{company.address.address2} + "   ") +
 $F{company.address.city} + ", " + $F{company.address.province} + "   " +
-$F{company.address.postalCode} + "   " +
+$F{company.address.postalCode} + "<br/>" +
 "Phone: " + $F{company.contact.phone}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="56" width="60" height="18" forecolor="#757373" uuid="5db026e6-a8da-4d4d-8f69-0e5b9b9f2ac5"/>
+				<reportElement x="1" y="78" width="60" height="18" forecolor="#757373" uuid="5db026e6-a8da-4d4d-8f69-0e5b9b9f2ac5"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Employee:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="61" y="56" width="232" height="18" uuid="ddb7f128-eb39-4537-8b71-737d11b72d99"/>
+				<reportElement x="61" y="78" width="232" height="18" uuid="ddb7f128-eb39-4537-8b71-737d11b72d99"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{employee.name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="78" width="60" height="18" forecolor="#757373" uuid="f7f0559a-ec9d-4850-8f2e-27249355c6af"/>
+				<reportElement x="471" y="78" width="40" height="18" forecolor="#757373" uuid="f7f0559a-ec9d-4850-8f2e-27249355c6af"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
@@ -137,7 +138,7 @@ $F{company.address.postalCode} + "   " +
 				<text><![CDATA[Client:]]></text>
 			</staticText>
 			<textField pattern="MMM-yyyy" isBlankWhenNull="true">
-				<reportElement x="61" y="78" width="232" height="18" uuid="9743e650-a5c4-4b2a-b994-4cd8ed59337c"/>
+				<reportElement x="512" y="78" width="60" height="18" uuid="9743e650-a5c4-4b2a-b994-4cd8ed59337c"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -158,6 +159,7 @@ $F{company.address.postalCode} + "   " +
 			<subreport>
 				<reportElement x="0" y="0" width="572" height="60" uuid="c3b045e9-c497-43db-ab05-1bc887cab0b2"/>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("timeEntries")]]></dataSourceExpression>
+				<returnValue subreportVariable="TOTAL_HOURS" toVariable="TOTAL_HOURS"/>
 				<subreportExpression><![CDATA[$P{SUBREPORT_LOCATION} + "invoice-book-time-sheet-time-entries.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
@@ -187,6 +189,51 @@ $F{company.address.postalCode} + "   " +
 			</textField>
 		</band>
 	</pageFooter>
+	<lastPageFooter>
+		<band height="49">
+			<line>
+				<reportElement x="0" y="0" width="572" height="1" uuid="ba7e983e-732e-4314-89b7-c69b70dcd83a"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="180" y="29" width="100" height="20" uuid="d01f3446-689c-4dae-9372-b71d60d4275e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="280" y="29" width="100" height="20" uuid="d06864c8-5fab-4d60-a0e3-6d086260999f"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="29" width="192" height="20" uuid="c3a5e979-7ad1-403c-8f1b-0f64211ad128"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PRINTED_DATE}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="28" width="572" height="1" uuid="a78f0d74-b294-4340-aebc-b85c52ee85ea"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="460" y="2" width="52" height="25" uuid="e881fbed-c7d7-427f-a34a-461f446cb084"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="#0.00">
+				<reportElement x="512" y="2" width="60" height="25" uuid="12eec798-5a8f-42ac-b5a6-1aa1edffd39e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_HOURS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
 	<summary>
 		<band splitType="Stretch">
 			<property name="local_mesure_unitheight" value="pixel"/>
