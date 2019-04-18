@@ -30,6 +30,17 @@ $aatl_ib.gui.TableComponent = (function () {
             return getTableControl().find("tbody");
         }
         
+        function getTableFooter(){
+            return getTableControl().find("tfoot");
+        }
+        
+        function addTableFooter(){
+            let footerElement = getTableFooter();
+            
+            if(footerElement.length === 0){
+                getTableControl().append("<tfoot></tfoot>");
+            }
+        }
         function getColumnElement(value){
             
             if(typeof value === 'boolean'){
@@ -122,6 +133,24 @@ $aatl_ib.gui.TableComponent = (function () {
         
         this.updateElementId = function (element) {
             return component.updateElementId(element);
+        };
+        
+        this.addFooter = function(rowElements){
+            addTableFooter();
+            let footerElement = getTableFooter();
+            
+            footerElement.empty();
+            
+            footerElement.append(rowElements);
+        };
+        
+        this.removeFooter = function(){
+            
+            let footerElement = getTableFooter();
+            
+            if(footerElement.length > 0){
+                footerElement.remove();
+            }
         };
     }
     

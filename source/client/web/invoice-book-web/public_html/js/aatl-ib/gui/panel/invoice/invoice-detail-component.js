@@ -241,7 +241,8 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
             }
 
             setInvoiceItems();
-
+            updateInvoiceFooter();
+            
             isDataLoading = false;
 
             //setButtonActionEnabled("save", false);
@@ -278,6 +279,37 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
         }
 
+        function getTableFooterRow(text, amount){
+            return '<tr>'
+                    + '<td colspan="5">'
+                    + '</td>'
+                    + '<td colspan="2">'
+                    + text
+                    + '</td>'
+                    + '<td>'
+                    + amount.toFixed(2)
+                    + '</td>'
+                    + '</tr>';
+        }
+        function updateInvoiceFooter(){
+            
+            if(invoice 
+                    && invoice.amount 
+                    && invoice.totalAmount 
+                    && invoice.amount >= 0
+                    && invoice.totalAmount >= 0){
+                
+                let rowElements = getTableFooterRow("Sub Total:", invoice.amount);
+                
+                rowElements = rowElements + getTableFooterRow("Total:", invoice.totalAmount);
+                
+                itemTable.addFooter(rowElements);
+                
+            }else{
+                itemTable.removeFooter();
+            }
+        }
+        
         this.init = function () {
             $aatl_ib.ViewService.getViewContent("invoice-detail", loadView);
         };
