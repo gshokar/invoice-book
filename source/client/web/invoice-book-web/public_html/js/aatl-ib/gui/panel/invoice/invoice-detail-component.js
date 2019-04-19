@@ -300,7 +300,15 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
                     && invoice.totalAmount >= 0){
                 
                 let rowElements = getTableFooterRow("Sub Total:", invoice.amount);
-                
+
+                if(invoice.taxes 
+                        && Array.isArray(invoice.taxes) 
+                        && invoice.taxes.length > 0){
+                    
+                    invoice.taxes.forEach(function(value){
+                        rowElements = rowElements + getTableFooterRow(value.codeRateText + ":", value.amount);
+                    });
+                }
                 rowElements = rowElements + getTableFooterRow("Total:", invoice.totalAmount);
                 
                 itemTable.addFooter(rowElements);
