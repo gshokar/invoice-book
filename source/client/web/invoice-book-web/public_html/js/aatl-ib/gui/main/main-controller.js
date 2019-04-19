@@ -244,6 +244,34 @@ $aatl_ib.MainController = (function () {
 
         };
 
+        this.closePanel = function(panelTitle){
+            let panel = findPanel(panelTitle);
+            
+            if(panel){
+
+                component.removeActionItem(panel.linkedActionItem);
+                component.removeView(panel.controlId);
+                
+                let index = panels.findIndex(function(value){
+                   return value.controlId === panel.controlId; 
+                });
+                
+                if(index >= 0){
+                    panels.splice(index, 1);
+                    
+                    index--;
+                }
+                
+                if(panels.length > 0){
+                    if(index < 0){
+                        index = 0;
+                    }
+                   
+                    component.selectActionItem(panels[index].linkedActionItem);
+                }
+            }
+        };
+        
         this.updateActionItemText = function (currentTitle, newTitle) {
             let panel = findPanel(currentTitle);
 

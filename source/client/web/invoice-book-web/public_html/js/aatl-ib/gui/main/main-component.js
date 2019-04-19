@@ -70,6 +70,14 @@ $aatl_ib.gui.MainComponent = (function () {
         this.updateActionItemText = function(actionItem){
             sidebarComponent.getActionGroupComponent().updateActionItemText(actionItem);
         };
+        
+        this.removeActionItem = function(actionItem){
+            sidebarComponent.getActionGroupComponent().removeActionItem(actionItem);
+        };
+        
+        this.removeView = function(controlId){
+            centerComponent.removeView(controlId);
+        };
     }
 
     return MainComponent;

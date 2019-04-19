@@ -25,7 +25,7 @@ $aatl_ib.gui.ClientDetailController = (function () {
                     saveData();
                     break;
                 case "close":
-                    alert("Close");
+                    $aatl_ib.viewController.mainController.closePanel(title);
                     break;
             }
         }

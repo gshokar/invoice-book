@@ -38,7 +38,9 @@ $aatl_ib.gui.InvoiceDetailController = (function () {
                     break;
                 case "print":
                     printInvoice();
-                    ;
+                    break;
+                case "close":    
+                    $aatl_ib.viewController.mainController.closePanel(title);
                     break;
             }
         }

@@ -136,6 +136,26 @@ $aatl_ib.gui.ActionGroupComponent = (function () {
             getComponent().empty();
             actionItems.splice(0, actionItems.length);
         };
+        
+        this.removeActionItem = function(actionItem){
+            var control = getActionItemControl(actionItem.controlId);
+            
+            // JQuery always return object and by checking the length will known
+            // JQuery has element or not
+            if (control && control.length > 0) {
+                
+                control.remove();
+                
+                let index = actionItems.findIndex(function(value){
+                    
+                    return value.controlId === actionItem.controlId;
+                });
+                
+                if(index >= 0){
+                    actionItems.splice(index, 1);
+                }
+            }
+        };
     }
 
     return ActionGroupComponent;
