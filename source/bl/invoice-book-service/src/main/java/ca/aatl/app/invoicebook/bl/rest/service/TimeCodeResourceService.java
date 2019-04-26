@@ -16,6 +16,7 @@ import ca.aatl.app.invoicebook.bl.ejb.LookupService;
 import ca.aatl.app.invoicebook.bl.ejb.SalesItemService;
 import ca.aatl.app.invoicebook.bl.ejb.TimeCodeService;
 import ca.aatl.app.invoicebook.bl.rest.Authenticated;
+import ca.aatl.app.invoicebook.bl.rest.ResourceResponseInitiated;
 import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
 import ca.aatl.app.invoicebook.data.jpa.entity.Client;
 import ca.aatl.app.invoicebook.data.jpa.entity.ClientLocation;
@@ -78,6 +79,7 @@ public class TimeCodeResourceService extends ResponseService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Authenticated
+    @ResourceResponseInitiated
     public String save(@Context SecurityContext sc, String json) {
 
         try {
