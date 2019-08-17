@@ -242,6 +242,7 @@ $aatl_ib.gui.InvoiceDetailComponent = (function () {
 
             setInvoiceItems();
             updateInvoiceFooter();
+            itemRowEdit.reset();
             
             isDataLoading = false;
 

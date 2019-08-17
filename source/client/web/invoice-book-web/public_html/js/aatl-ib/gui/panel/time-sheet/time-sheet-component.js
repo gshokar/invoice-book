@@ -223,18 +223,18 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
                 yearMonthDate: "",
                 clientNumber: clientNumber
             }
-            
-            if(yearMonthDate instanceof Date){
+
+            if (yearMonthDate instanceof Date) {
                 criteria.yearMonthDate = yearMonthDate.toISOString().slice(0, 10);
             }
-            
+
             return criteria;
         }
 
         function refreshList() {
-            
+
             let criteria = createCriteria();
-            
+
             if (!$aatl_ib.utils.isStringEmpty(criteria.employeeNumber)
                     && !$aatl_ib.utils.isStringEmpty(criteria.yearMonthDate)) {
 
@@ -252,11 +252,11 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
 
             setPrintEnabled();
         }
-        
-        function afterRefresh(){
+
+        function afterRefresh() {
             setPrintEnabled();
         }
-        
+
         function loadTimeEntries() {
             timeEntryTable.clearRows();
             setTableRows();
@@ -265,14 +265,18 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
         function setTableRows() {
 
             let rows = [];
-
+            let totalHours = 0;
+            
             for (var i = 0; i < timeEntries.length; i++) {
 
                 rows.push(getTableRowData(timeEntries[i], i));
-
+                
+                totalHours += timeEntries[i].hours;
             }
 
             timeEntryTable.addRows(rows);
+            
+            updateTimeEntryFooter(totalHours);
         }
 
         function setPrintEnabled() {
@@ -283,6 +287,41 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             setButtonActionEnabled("print", enable);
         }
 
+        function getTableFooterRow(text, hours) {
+            return '<tr>'
+                    + '<td colspan="4">'
+                    + '</td>'
+                    + '<td>'
+                    + text
+                    + '</td>'
+                    + '<td>'
+                    + hours.toFixed(2)
+                    + '</td>'
+                    + '<td colspan="2">'
+                    + '</tr>';
+        }
+        function updateTimeEntryFooter(totalHours) {
+
+            if (totalHours) {
+
+                let rowElements = getTableFooterRow("Total:", totalHours);
+
+                timeEntryTable.addFooter(rowElements);
+
+            } else {
+                timeEntryTable.removeFooter();
+            }
+        }
+        
+        function calcTotalHours(){
+            let totalHours = 0.00;
+            
+            if(timeEntries && timeEntries.length > 0){
+                timeEntries.forEach(function(timeEntry){ totalHours += timeEntry.hours;});
+            }
+            
+            return totalHours;
+        }
         this.init = function () {
             $aatl_ib.ViewService.getViewContent("time-sheet", loadView);
 
@@ -395,6 +434,8 @@ $aatl_ib.gui.TimeSheetComponent = (function () {
             setElementsEnabled(true);
 
             errorComponent.hide();
+            
+            updateTimeEntryFooter(calcTotalHours());
         };
 
         this.setTimeEntries = function (list) {
