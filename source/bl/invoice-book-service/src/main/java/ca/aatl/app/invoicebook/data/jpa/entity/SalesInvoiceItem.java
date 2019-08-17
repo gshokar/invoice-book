@@ -44,7 +44,7 @@ public class SalesInvoiceItem extends BaseEntity{
     @Column(name = "LineNo", nullable = false)
     private Integer lineNumber;
     
-    @Column(name = "Description", nullable = false, length = 100)
+    @Column(name = "Description", nullable = false, length = 200)
     private String description;
     
     @Basic(optional = false)

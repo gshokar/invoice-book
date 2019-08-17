@@ -16,7 +16,7 @@ import ca.aatl.app.invoicebook.data.jpa.entity.ClientAddress;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoice;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItemTax;
-import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesTaxRate;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.util.AppUtils;
 import java.math.BigDecimal;
@@ -60,7 +60,7 @@ public class SalesInvoiceService {
 
     private void beforeSave(SalesInvoice entity) throws Exception {
         validate(entity);
-       
+
         if (entity.getId() == null) {
 
             entity.setAddedBy(entity.getLastUpdatedBy());
@@ -92,16 +92,38 @@ public class SalesInvoiceService {
 
                 sii.setLastUpdatedBy(entity.getLastUpdatedBy());
                 sii.setLastUpdatedDate(entity.getLastUpdatedDate());
+
+                if (sii.getTaxes() != null && !sii.getTaxes().isEmpty()) {
+
+                    for (SalesInvoiceItemTax it : sii.getTaxes()) {
+                        if (it != null) {
+                            if (it.getInvoiceItem() == null) {
+                                it.setInvoiceItem(sii);
+                            }
+
+                            if (it.getId() == null) {
+
+                                it.setAddedBy(entity.getLastUpdatedBy());
+                                it.setAddedDate(entity.getLastUpdatedDate());
+                                it.getGuid();
+
+                            }
+
+                            it.setLastUpdatedBy(entity.getLastUpdatedBy());
+                            it.setLastUpdatedDate(entity.getLastUpdatedDate());
+                        }
+                    }
+                }
             }
         }
-        
-        // This is here because getting presistence error
-         updateAmounts(entity);
 
-         for (SalesInvoiceItem sii : entity.getItems()) {
+        // This is here because getting presistence error
+        updateAmounts(entity);
+
+        for (SalesInvoiceItem sii : entity.getItems()) {
 
             if (sii != null) {
-        
+
                 for (SalesInvoiceItemTax siit : sii.getTaxes()) {
                     if (siit.getId() == null) {
 
@@ -218,7 +240,7 @@ public class SalesInvoiceService {
             provinceId = address.getAddress().getProvince().getId();
         }
 
-        List<SalesItemTaxRate> taxRates = salesItemTaxRateService.list(sit.getSalesItem().getId(), sit.getInvoice().getDate(), countryId, provinceId);
+        List<SalesTaxRate> taxRates = salesItemTaxRateService.list(sit.getSalesItem().getId(), sit.getInvoice().getDate(), countryId, provinceId);
 
         if (taxRates != null && !taxRates.isEmpty()) {
 
@@ -235,7 +257,7 @@ public class SalesInvoiceService {
             }
 
             // Add the tax items not in list
-            for (SalesItemTaxRate sitr : taxRates) {
+            for (SalesTaxRate sitr : taxRates) {
 
                 if (!isSalesItemTaxRateContains(sit.getTaxes(), sitr)) {
                     sit.getTaxes().add(createSalesInvoiceItemTax(sit, sitr));
@@ -260,11 +282,11 @@ public class SalesInvoiceService {
 
     }
 
-    private boolean isSalesItemTaxRateContainsInList(List<SalesItemTaxRate> taxRates, SalesItemTaxRate taxRate) {
+    private boolean isSalesItemTaxRateContainsInList(List<SalesTaxRate> taxRates, SalesTaxRate taxRate) {
         return taxRates.stream().anyMatch(tr -> tr.equals(taxRate));
     }
 
-    private boolean isSalesItemTaxRateContains(List<SalesInvoiceItemTax> taxes, SalesItemTaxRate sitr) {
+    private boolean isSalesItemTaxRateContains(List<SalesInvoiceItemTax> taxes, SalesTaxRate sitr) {
         boolean value = false;
 
         if (taxes != null && !taxes.isEmpty()) {
@@ -273,7 +295,7 @@ public class SalesInvoiceService {
         return value;
     }
 
-    private SalesInvoiceItemTax createSalesInvoiceItemTax(SalesInvoiceItem sit, SalesItemTaxRate sitr) {
+    private SalesInvoiceItemTax createSalesInvoiceItemTax(SalesInvoiceItem sit, SalesTaxRate sitr) {
         SalesInvoiceItemTax itemTax = new SalesInvoiceItemTax();
 
         itemTax.setInvoiceItem(sit);

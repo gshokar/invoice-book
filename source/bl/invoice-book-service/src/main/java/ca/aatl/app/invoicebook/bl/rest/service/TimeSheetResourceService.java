@@ -12,9 +12,11 @@ package ca.aatl.app.invoicebook.bl.rest.service;
 
 import ca.aatl.app.invoicebook.bl.rest.Authenticated;
 import ca.aatl.app.invoicebook.bl.rest.response.ErrorResponse;
+import ca.aatl.app.invoicebook.dto.ContactDto;
 import ca.aatl.app.invoicebook.dto.TimeSheetDto;
 import ca.aatl.app.invoicebook.exception.DataValidationException;
 import ca.aatl.app.invoicebook.reports.ReportManager;
+import ca.aatl.app.invoicebook.util.AppUtils;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,6 +73,8 @@ public class TimeSheetResourceService extends ResponseService{
             timeSheetDto.setClient(clientResource.getDto(clientNumber));
             timeSheetDto.setTimeEntries(timeEntryResource.getDtoList(employeeNumber, yearMonth, clientNumber));
             
+            formatPhoneNumbersForDisplay(timeSheetDto);
+            
             ReportManager reportManager = new ReportManager();
             
             byte[] pdf = reportManager.timeSheetPdf(this.getGson().toJson(timeSheetDto));
@@ -95,5 +99,23 @@ public class TimeSheetResourceService extends ResponseService{
         TimeSheetDto dto = new TimeSheetDto();
 
         return dto;
+    }
+
+    private void formatPhoneNumbersForDisplay(TimeSheetDto dto) {
+        if(dto != null){
+            if(dto.getClient() != null){
+                formatPhoneNumber(dto.getClient().getContact());
+            }
+            
+            if(dto.getCompany() != null){
+                formatPhoneNumber(dto.getCompany().getContact());
+            }
+        }
+    }
+
+    private void formatPhoneNumber(ContactDto contactDto) {
+        if(contactDto != null){
+            contactDto.setPhone(AppUtils.formatPhoneNumber(contactDto.getPhone()));
+        }
     }
 }

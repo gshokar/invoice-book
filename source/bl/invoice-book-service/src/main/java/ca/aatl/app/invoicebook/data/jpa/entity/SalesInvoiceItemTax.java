@@ -44,9 +44,9 @@ public class SalesInvoiceItemTax extends BaseEntity {
     @ManyToOne(optional = false)
     private SalesInvoiceItem invoiceItem;
 
-    @JoinColumn(name = "SalesItemTaxRateId", referencedColumnName = "SalesItemTaxRateId", nullable = false)
+    @JoinColumn(name = "SalesTaxRateId", referencedColumnName = "SalesTaxRateId", nullable = false)
     @ManyToOne(optional = false)
-    private SalesItemTaxRate taxRate;
+    private SalesTaxRate taxRate;
 
     public Long getId() {
         return id;
@@ -72,11 +72,11 @@ public class SalesInvoiceItemTax extends BaseEntity {
         this.invoiceItem = invoiceItem;
     }
 
-    public SalesItemTaxRate getTaxRate() {
+    public SalesTaxRate getTaxRate() {
         return taxRate;
     }
 
-    public void setTaxRate(SalesItemTaxRate taxRate) {
+    public void setTaxRate(SalesTaxRate taxRate) {
         this.taxRate = taxRate;
     }
 

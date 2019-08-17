@@ -24,7 +24,7 @@ import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItemTax;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceStatus;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesItem;
-import ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate;
+import ca.aatl.app.invoicebook.data.jpa.entity.SalesTaxRate;
 import ca.aatl.app.invoicebook.data.jpa.entity.SalesTax;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeCode;
 import ca.aatl.app.invoicebook.data.jpa.entity.TimeEntry;
@@ -467,6 +467,8 @@ public class MappingService {
                 SalesInvoiceTaxItemDto taxItemDto = new SalesInvoiceTaxItemDto();
 
                 updateSalesInvoiceTaxItemDto(taxItemDto, taxItem);
+                
+                dto.getTaxes().add(taxItemDto);
             }
         }
     }
@@ -522,7 +524,7 @@ public class MappingService {
         updateSalesItemTaxRateDto(dto.getSalesItemTaxRate(), entity.getTaxRate());
     }
 
-    public void updateSalesItemTaxRateDto(SalesItemTaxRateDto dto, SalesItemTaxRate entity) {
+    public void updateSalesItemTaxRateDto(SalesItemTaxRateDto dto, SalesTaxRate entity) {
 
 //        if(dto.getCountry() == null){
 //            dto.setCountry(new CountryDto());

@@ -25,18 +25,19 @@
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItemType</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.ItemUnit</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItem</class>
-    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesTax</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoice</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItem</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceItemTax</class>
     <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesInvoiceStatus</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesTaxRate</class>
+    <class>ca.aatl.app.invoicebook.data.jpa.entity.SalesItemTaxRate</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <shared-cache-mode>NONE</shared-cache-mode>
     <validation-mode>NONE</validation-mode>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
-      <!--property name="hibernate.show_sql" value="true" / -->
+      <!-- property name="hibernate.show_sql" value="true" / -->
     </properties>
   </persistence-unit>
 </persistence>

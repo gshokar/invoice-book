@@ -5,16 +5,13 @@
  * Revision History:
  * Date         Author          Detail
  * -----------  --------------  ------------------------------------------------
- * 2019-Feb-17  GShokar         Created
+ * 2019-Aug-11  GShokar         Created
  * =============================================================================
  */
 package ca.aatl.app.invoicebook.data.jpa.entity;
 
 import ca.aatl.app.invoicebook.data.jpa.entity.base.BaseEntity;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,8 +20,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
@@ -40,34 +35,22 @@ public class SalesItemTaxRate extends BaseEntity{
     @Column(name = "SalesItemTaxRateId", unique = true, nullable = false)
     private Integer id;
     
-    @Basic(optional = false)
-    @Column(name = "Rate", nullable = false, precision = 19, scale = 2)
-    private BigDecimal rate;
-    
-    @Basic(optional = false)
-    @Column(name = "FromDate", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fromDate;
-    
-    @Column(name = "ToDate", nullable = true)
-    @Temporal(TemporalType.DATE)
-    private Date toDate;
-    
     @JoinColumn(name = "SalesItemId", referencedColumnName = "SalesItemId", nullable = false)
     @ManyToOne(optional = false)
     private SalesItem item;
     
-    @JoinColumn(name = "SalesTaxId", referencedColumnName = "TypeId", nullable = false)
+    @JoinColumn(name = "SalesTaxRateId", referencedColumnName = "SalesTaxRateId", nullable = false)
     @ManyToOne(optional = false)
-    private SalesTax tax;
+    private SalesTaxRate taxRate;
     
-    @JoinColumn(name = "CountryId", referencedColumnName = "CountryId", nullable = true)
-    @ManyToOne(optional = true)
-    private Country country;
     
-    @JoinColumn(name = "ProvinceId", referencedColumnName = "ProvinceId", nullable = true)
-    @ManyToOne(optional = true)
-    private Province province;
+    public SalesItem getItem() {
+        return item;
+    }
+
+    public void setItem(SalesItem item) {
+        this.item = item;
+    }
 
     public Integer getId() {
         return id;
@@ -77,62 +60,14 @@ public class SalesItemTaxRate extends BaseEntity{
         this.id = id;
     }
 
-    public BigDecimal getRate() {
-        return rate;
+    public SalesTaxRate getTaxRate() {
+        return taxRate;
     }
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
+    public void setTaxRate(SalesTaxRate taxRate) {
+        this.taxRate = taxRate;
     }
-
-    public Date getFromDate() {
-        return fromDate;
-    }
-
-    public void setFromDate(Date fromDate) {
-        this.fromDate = fromDate;
-    }
-
-    public Date getToDate() {
-        return toDate;
-    }
-
-    public void setToDate(Date toDate) {
-        this.toDate = toDate;
-    }
-
-    public SalesItem getItem() {
-        return item;
-    }
-
-    public void setItem(SalesItem item) {
-        this.item = item;
-    }
-
-    public SalesTax getTax() {
-        return tax;
-    }
-
-    public void setTax(SalesTax tax) {
-        this.tax = tax;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public Province getProvince() {
-        return province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;
